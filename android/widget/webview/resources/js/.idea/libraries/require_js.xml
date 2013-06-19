@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="require.js" type="javaScript">
+    <properties>
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/../../../../launcher/assets/rootdocument/require.js" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../../../../launcher/assets/rootdocument/scripts/require.js" />
+      <root url="file://$PROJECT_DIR$/../../../../launcher/assets/rootdocument/require.js" />
+    </CLASSES>
+    <SOURCES />
+  </library>
+</component>

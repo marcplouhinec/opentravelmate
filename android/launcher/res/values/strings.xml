@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Open Travel Mate</string>
+    <string name="error_dialog_title">Error</string>
+    <string name="httpserver_error_unable_to_create_httpserver">Unable to create a HTTP server.</string>
+    <string name="httpserver_error_unable_to_initialize_connection">Unable to initialize a HTTP connection on the port %1$s.</string>
+    <string name="httpserver_error_connection_closed">Connection closed.</string>
+    <string name="httpserver_error_io_error">Input/Output error.</string>
+    <string name="httpserver_error_http_error">HTTP protocol violation.</string>
+    <string name="exit_confirm_dialog_title">Closing Application</string>
+    <string name="exit_confirm_dialog_message">Are you sure you want to close this application?</string>
+    <string name="exit_confirm_dialog_yes">Yes</string>
+    <string name="exit_confirm_dialog_no">No</string>
+
+</resources>
