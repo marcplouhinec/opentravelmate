@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 
 /**
  * Display the widgets according to their location on the HTML document.
@@ -12,16 +13,13 @@ import android.view.ViewGroup;
  */
 public class HtmlLayout extends ViewGroup {
 
-	public HtmlLayout(Context context) {
+	/**
+	 * 
+	 * @param context
+	 * @param baseWebView
+	 */
+	public HtmlLayout(Context context, WebView baseWebView) {
 		super(context);
-	}
-
-	public HtmlLayout(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
-
-	public HtmlLayout(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
 	}
 
 	@Override
