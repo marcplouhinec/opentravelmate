@@ -16,7 +16,7 @@ public interface LibraryManager {
 	 * Initialize the library.
 	 * 
 	 * @param activity
-	 *   Main Activity when the library is active.
+	 *   Main Activity where the library is active.
 	 * @param libraryRegistrar
 	 *   Place to register all the JavaScript libraries to inject in web views.
 	 * @param exceptionListener

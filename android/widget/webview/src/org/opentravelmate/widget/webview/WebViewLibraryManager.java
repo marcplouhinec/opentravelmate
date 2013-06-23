@@ -4,6 +4,7 @@ import org.opentravelmate.commons.LibraryManager;
 import org.opentravelmate.commons.LibraryRegistrar;
 import org.opentravelmate.commons.utils.ExceptionListener;
 import org.opentravelmate.commons.utils.InternationalizedException;
+import org.opentravelmate.commons.widget.HtmlViewGroup;
 import org.opentravelmate.widget.webview.js.WebViewJavaObject;
 import org.opentravelmate.widget.webview.view.HtmlLayout;
 
@@ -54,10 +55,9 @@ public class WebViewLibraryManager implements LibraryManager {
 	@Override
 	public void start() {
 		// Create the root web view
-		HtmlLayout htmlLayout = new HtmlLayout(activity);
-		htmlLayout.setId(123456789);
 		WebView rootWebView = createWebView("rootWebView");
-		htmlLayout.addView(rootWebView);
+		HtmlLayout htmlLayout = new HtmlLayout(activity, rootWebView);
+		htmlLayout.setId(HtmlViewGroup.VIEW_ID);
 		activity.setContentView(htmlLayout);
 		
 		// Display the root document in the root web view

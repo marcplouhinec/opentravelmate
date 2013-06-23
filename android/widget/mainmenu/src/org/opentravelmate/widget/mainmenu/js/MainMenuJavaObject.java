@@ -1,5 +1,7 @@
 package org.opentravelmate.widget.mainmenu.js;
 
+import org.opentravelmate.commons.widget.HtmlViewGroup;
+
 import android.app.Activity;
 import android.os.Handler;
 import android.view.ViewGroup;
@@ -23,17 +25,17 @@ public class MainMenuJavaObject {
 	/**
 	 * Create a new main menu at the location specified by the given element.
 	 * 
-	 * @param elementId Place holder for the main menu.
+	 * @param htmlElementId Place holder for the main menu.
 	 */
 	@JavascriptInterface
-	public void createMainMenu(String elementId) {
+	public void createMainMenu(final String htmlElementId) {
 		handler.post(new Runnable() {
 			@Override public void run() {
-				ViewGroup rootLayout = (ViewGroup) activity.findViewById(123456789);
+				HtmlViewGroup htmlViewGroup = (HtmlViewGroup) activity.findViewById(HtmlViewGroup.VIEW_ID);
 				
-				Button button = new Button(rootLayout.getContext());
+				Button button = new Button(htmlViewGroup.getContext());
 				button.setText("Coucou");
-				rootLayout.addView(button);
+				htmlViewGroup.addView(button, htmlElementId);
 			}
 		});
 	}

@@ -18,5 +18,23 @@ define([], function() {
     return '';
   };
 
+  /**
+   * Update the place-holders layout parameters.
+   *
+   * @param {number} windowWidth Window width.
+   * @param {number} windowHeight Window height.
+   * @param {object} placeholderLayoutParams Place-holders layout parameters.
+   */
+  webViewJavaObject.updatePlaceHolderLayoutParams = function(windowWidth, windowHeight, placeholderLayoutParams) {
+  };
+
+  /**
+   * Register the WebView class object.
+   *
+   * @param {object} WebViewClass WebView class.
+   */
+  webViewJavaObject.registerWebViewClass = function(webViewClass) {
+  };
+
   return webViewJavaObject;
 });

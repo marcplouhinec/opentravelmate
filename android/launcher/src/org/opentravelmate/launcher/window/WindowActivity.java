@@ -42,9 +42,9 @@ public class WindowActivity extends Activity {
 		// Create the WebView and the HtmlLayout
 		WebView webView = new WebView(this);
 		webView.setId(WEB_VIEW_ID);
-		HtmlLayout htmlLayout = new HtmlLayout(this);
+		HtmlLayout htmlLayout = new HtmlLayout(this, webView);
 		htmlLayout.setId(HTML_LAYOUT_ID);
-		htmlLayout.addView(rootWebView);
+		htmlLayout.addView(webView);
 		this.setContentView(htmlLayout);
 		
 		// Check if this window is the main one or a normal one
