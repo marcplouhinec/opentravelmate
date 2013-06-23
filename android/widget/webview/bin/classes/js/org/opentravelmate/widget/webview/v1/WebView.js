@@ -63,6 +63,7 @@ define([
         offset = $placeholder.offset();
 
         layoutParams.push({
+          'htmlElementId': $placeholder.attr('id'),
           'width': $placeholder.width(),
           'height': $placeholder.height(),
           'x': offset.left,
@@ -73,11 +74,11 @@ define([
     }
 
     $window = $(window);
-    webViewJavaObject.updatePlaceHolderLayoutParams($window.width(), $window.height(), layoutParams);
+    webViewJavaObject.updatePlaceHolderLayoutParams($window.width(), $window.height(), JSON.stringify(layoutParams));
   };
 
-  // Register this class to the Java side
-  webViewJavaObject.registerWebViewClass(WebView);
+  // Register this class as a global object
+  window.org_opentravelmate_widget_WebView = WebView;
 
   return WebView;
 });

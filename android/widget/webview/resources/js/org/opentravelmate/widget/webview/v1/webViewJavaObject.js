@@ -28,13 +28,5 @@ define([], function() {
   webViewJavaObject.updatePlaceHolderLayoutParams = function(windowWidth, windowHeight, placeholderLayoutParams) {
   };
 
-  /**
-   * Register the WebView class object.
-   *
-   * @param {object} WebViewClass WebView class.
-   */
-  webViewJavaObject.registerWebViewClass = function(webViewClass) {
-  };
-
   return webViewJavaObject;
 });

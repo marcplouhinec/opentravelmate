@@ -22,7 +22,7 @@ import android.webkit.WebViewClient;
  */
 public class WebViewLibraryManager implements LibraryManager {
 
-	private final WebViewJavaObject webViewJavaObject = new WebViewJavaObject();
+	private WebViewJavaObject webViewJavaObject = new WebViewJavaObject();
 	private Activity activity;
 	private WebViewLibraryRegistrar webViewLibraryRegistrar;
 	private ExceptionListener exceptionListener;
@@ -34,6 +34,7 @@ public class WebViewLibraryManager implements LibraryManager {
 		this.activity = activity;
 		this.webViewLibraryRegistrar = (WebViewLibraryRegistrar)libraryRegistrar;
 		this.exceptionListener = exceptionListener;
+		this.webViewJavaObject.setExceptionListener(exceptionListener);
 		
 		libraryRegistrar.registerResources("/js/org/opentravelmate/widget/webview/v1", "/org/opentravelmate/widget/webview/v1");
 		libraryRegistrar.registerJavaObject(
@@ -58,6 +59,7 @@ public class WebViewLibraryManager implements LibraryManager {
 		WebView rootWebView = createWebView("rootWebView");
 		HtmlLayout htmlLayout = new HtmlLayout(activity, rootWebView);
 		htmlLayout.setId(HtmlViewGroup.VIEW_ID);
+		this.webViewJavaObject.setHtmlLayout(htmlLayout);
 		activity.setContentView(htmlLayout);
 		
 		// Display the root document in the root web view

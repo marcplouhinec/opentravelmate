@@ -52,6 +52,7 @@ public class MainActivity extends Activity {
 		requestHandlerByPattern.put("/index.html", rootRequestHandler);
 		requestHandlerByPattern.put("/main.js", rootRequestHandler);
 		requestHandlerByPattern.put("/require.js", rootRequestHandler);
+		requestHandlerByPattern.put("/jquery.js", rootRequestHandler);
 		final JavascriptRequestHandler javascriptRequestHandler = new JavascriptRequestHandler();
 		requestHandlerByPattern.put("*", javascriptRequestHandler);
 		httpServer = new HttpServer(requestHandlerByPattern, exceptionListener);
