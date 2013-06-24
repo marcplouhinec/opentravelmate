@@ -1,12 +1,10 @@
 package org.opentravelmate.widget.mainmenu.js;
 
-import org.opentravelmate.commons.widget.HtmlViewGroup;
+import org.opentravelmate.widget.mainmenu.view.MainMenuController;
 
 import android.app.Activity;
 import android.os.Handler;
-import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
-import android.widget.Button;
 
 /**
  * Implementation of the mainMenuJavaObject interface.
@@ -31,11 +29,8 @@ public class MainMenuJavaObject {
 	public void createMainMenu(final String htmlElementId) {
 		handler.post(new Runnable() {
 			@Override public void run() {
-				HtmlViewGroup htmlViewGroup = (HtmlViewGroup) activity.findViewById(HtmlViewGroup.VIEW_ID);
-				
-				Button button = new Button(htmlViewGroup.getContext());
-				button.setText("Coucou");
-				htmlViewGroup.addView(button, htmlElementId);
+				MainMenuController mainMenuController = new MainMenuController(activity);
+				mainMenuController.onCreate(htmlElementId);
 			}
 		});
 	}

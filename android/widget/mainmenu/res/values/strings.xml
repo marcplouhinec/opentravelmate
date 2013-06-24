@@ -1,5 +1,7 @@
 <resources>
 
     <string name="app_name">opentravelmate-mainmenu</string>
+    <string name="mainmenu_logo">Open Travel Mate</string>
+    <string name="mainmenu_imageButtonOpenMenu_contentDescription">More</string>
 
 </resources>

@@ -13,26 +13,39 @@ public final class R {
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 
          */
-        public static final int activity_horizontal_margin=0x7f050000;
-        public static final int activity_vertical_margin=0x7f050001;
+        public static final int activity_horizontal_margin=0x7f060000;
+        public static final int activity_vertical_margin=0x7f060001;
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
+        public static final int button_selector=0x7f020000;
+        public static final int button_shape=0x7f020001;
+        public static final int button_shape_pressed=0x7f020002;
+        public static final int ic_btn_more=0x7f020003;
+        public static final int ic_launcher=0x7f020004;
+    }
+    public static final class id {
+        public static final int imageButtonOpenMenu=0x7f070001;
+        public static final int textViewMainMenuLogo=0x7f070000;
+    }
+    public static final class layout {
+        public static final int mainmenu_layout=0x7f030000;
     }
     public static final class string {
-        public static final int app_name=0x7f030000;
-        public static final int error_dialog_title=0x7f030003;
-        public static final int exit_confirm_dialog_message=0x7f03000a;
-        public static final int exit_confirm_dialog_no=0x7f03000c;
-        public static final int exit_confirm_dialog_title=0x7f030009;
-        public static final int exit_confirm_dialog_yes=0x7f03000b;
-        public static final int httpserver_error_connection_closed=0x7f030006;
-        public static final int httpserver_error_http_error=0x7f030008;
-        public static final int httpserver_error_io_error=0x7f030007;
-        public static final int httpserver_error_unable_to_create_httpserver=0x7f030004;
-        public static final int httpserver_error_unable_to_initialize_connection=0x7f030005;
-        public static final int webview_javascript_console_msg=0x7f030001;
-        public static final int webview_received_error=0x7f030002;
+        public static final int app_name=0x7f040000;
+        public static final int error_dialog_title=0x7f040005;
+        public static final int exit_confirm_dialog_message=0x7f04000c;
+        public static final int exit_confirm_dialog_no=0x7f04000e;
+        public static final int exit_confirm_dialog_title=0x7f04000b;
+        public static final int exit_confirm_dialog_yes=0x7f04000d;
+        public static final int httpserver_error_connection_closed=0x7f040008;
+        public static final int httpserver_error_http_error=0x7f04000a;
+        public static final int httpserver_error_io_error=0x7f040009;
+        public static final int httpserver_error_unable_to_create_httpserver=0x7f040006;
+        public static final int httpserver_error_unable_to_initialize_connection=0x7f040007;
+        public static final int mainmenu_imageButtonOpenMenu_contentDescription=0x7f040002;
+        public static final int mainmenu_logo=0x7f040001;
+        public static final int webview_javascript_console_msg=0x7f040003;
+        public static final int webview_received_error=0x7f040004;
     }
     public static final class style {
         /** 
@@ -116,7 +129,7 @@ public final class R {
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f040000;
+        public static final int AppBaseTheme=0x7f050000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
  Application theme. 
@@ -126,6 +139,6 @@ public final class R {
  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f040001;
+        public static final int AppTheme=0x7f050001;
     }
 }

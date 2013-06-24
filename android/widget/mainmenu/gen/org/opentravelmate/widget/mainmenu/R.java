@@ -11,10 +11,23 @@ public final class R {
     public static final class attr {
     }
     public static final class drawable {
-        public static int ic_launcher=0x7f020000;
+        public static int button_selector=0x7f020000;
+        public static int button_shape=0x7f020001;
+        public static int button_shape_pressed=0x7f020002;
+        public static int ic_btn_more=0x7f020003;
+        public static int ic_launcher=0x7f020004;
+    }
+    public static final class id {
+        public static int imageButtonOpenMenu=0x7f060001;
+        public static int textViewMainMenuLogo=0x7f060000;
+    }
+    public static final class layout {
+        public static int mainmenu_layout=0x7f030000;
     }
     public static final class string {
-        public static int app_name=0x7f030000;
+        public static int app_name=0x7f040000;
+        public static int mainmenu_imageButtonOpenMenu_contentDescription=0x7f040002;
+        public static int mainmenu_logo=0x7f040001;
     }
     public static final class style {
         /** 
@@ -58,12 +71,12 @@ public final class R {
     
  API 14 theme customizations can go here. 
          */
-        public static int AppBaseTheme=0x7f040000;
+        public static int AppBaseTheme=0x7f050000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static int AppTheme=0x7f040001;
+        public static int AppTheme=0x7f050001;
     }
 }

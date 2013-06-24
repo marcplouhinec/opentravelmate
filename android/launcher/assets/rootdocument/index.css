@@ -3,3 +3,12 @@ body {
 	padding: 0px;
 	background-color: black;
 }
+
+#mainmenu {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	right: 0px;
+	height: 58px;
+	background-color: #2e2e2e;
+}
