@@ -8,17 +8,17 @@ package org.opentravelmate.widget.mainmenu;
 
 public final class R {
 	public static final class id {
-		public static final int imageButtonOpenMenu = 0x7f070001;
-		public static final int textViewMainMenuLogo = 0x7f070000;
+		public static final int imageButtonOpenMenu = 0x7f040006;
+		public static final int textViewMainMenuLogo = 0x7f040005;
 	}
 	public static final class style {
-		public static final int AppBaseTheme = 0x7f050000;
-		public static final int AppTheme = 0x7f050001;
+		public static final int AppBaseTheme = 0x7f060000;
+		public static final int AppTheme = 0x7f060001;
 	}
 	public static final class string {
-		public static final int app_name = 0x7f040000;
-		public static final int mainmenu_imageButtonOpenMenu_contentDescription = 0x7f040002;
-		public static final int mainmenu_logo = 0x7f040001;
+		public static final int app_name = 0x7f050011;
+		public static final int mainmenu_imageButtonOpenMenu_contentDescription = 0x7f050013;
+		public static final int mainmenu_logo = 0x7f050012;
 	}
 	public static final class layout {
 		public static final int mainmenu_layout = 0x7f030000;

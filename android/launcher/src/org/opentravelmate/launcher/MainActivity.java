@@ -9,6 +9,8 @@ import org.opentravelmate.commons.LibraryManager;
 import org.opentravelmate.commons.LibraryRegistrar;
 import org.opentravelmate.commons.utils.ExceptionListener;
 import org.opentravelmate.commons.utils.InternationalizedException;
+import org.opentravelmate.launcher.R;
+import org.opentravelmate.launcher.R.string;
 import org.opentravelmate.launcher.httpserver.HttpServer;
 import org.opentravelmate.launcher.httpserver.JavascriptRequestHandler;
 import org.opentravelmate.launcher.httpserver.RootRequestHandler;
@@ -18,15 +20,15 @@ import org.opentravelmate.widget.webview.WebViewLibraryManager;
 import org.opentravelmate.widget.webview.WebViewLibraryRegistrar;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
-public class MainActivity extends Activity {
+public class MainActivity extends FragmentActivity {
 	
 	private static final String LOG_TAG = "MainActivity";
 	private Handler handler;

@@ -1,11 +1,10 @@
 package org.opentravelmate.widget.map.js;
 
-import org.opentravelmate.commons.widget.HtmlViewGroup;
+import org.opentravelmate.widget.map.view.MapController;
 
 import android.app.Activity;
 import android.os.Handler;
 import android.webkit.JavascriptInterface;
-import android.widget.Button;
 
 /**
  * Implementation of the mapJavaObject interface.
@@ -30,10 +29,8 @@ public class MapJavaObject {
 	public void createMap(final String htmlElementId) {
 		handler.post(new Runnable() {
 			@Override public void run() {
-				HtmlViewGroup htmlViewGroup = (HtmlViewGroup) activity.findViewById(HtmlViewGroup.VIEW_ID);
-				Button button = new Button(activity);
-				button.setText("Test");
-				htmlViewGroup.addView(button, htmlElementId);
+				MapController mapController = new MapController(activity);
+				mapController.onCreate(htmlElementId);
 			}
 		});
 	}
