@@ -13,6 +13,7 @@ import org.opentravelmate.launcher.httpserver.HttpServer;
 import org.opentravelmate.launcher.httpserver.JavascriptRequestHandler;
 import org.opentravelmate.launcher.httpserver.RootRequestHandler;
 import org.opentravelmate.widget.mainmenu.MainMenuLibraryManager;
+import org.opentravelmate.widget.map.MapLibraryManager;
 import org.opentravelmate.widget.webview.WebViewLibraryManager;
 import org.opentravelmate.widget.webview.WebViewLibraryRegistrar;
 
@@ -76,11 +77,15 @@ public class MainActivity extends Activity {
 		WebViewLibraryManager webViewLibraryManager = new WebViewLibraryManager();
 		webViewLibraryManager.initialize(this, libraryRegistrar, exceptionListener);
 		webViewLibraryManager.setHttpServerUrl("http://127.0.0.1:" + httpServer.getPort());
-		LibraryManager mainMenulibraryManager = new MainMenuLibraryManager();
-		mainMenulibraryManager.initialize(this, libraryRegistrar, exceptionListener);
+		LibraryManager mainMenuLibraryManager = new MainMenuLibraryManager();
+		mainMenuLibraryManager.initialize(this, libraryRegistrar, exceptionListener);
+		LibraryManager mapLibraryManager = new MapLibraryManager();
+		mapLibraryManager.initialize(this, libraryRegistrar, exceptionListener);
+		
 		
 		// Start the libraries
-		mainMenulibraryManager.start();
+		mainMenuLibraryManager.start();
+		mapLibraryManager.start();
 		webViewLibraryManager.start();
 		
 		// Execute the extensions

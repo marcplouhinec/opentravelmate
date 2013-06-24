@@ -12,3 +12,11 @@ body {
 	height: 58px;
 	background-color: #2e2e2e;
 }
+
+#map {
+	position: absolute;
+	left: 0px;
+	top: 59px;
+	right: 0px;
+	bottom: 0px;
+}

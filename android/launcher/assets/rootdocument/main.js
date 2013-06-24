@@ -12,8 +12,14 @@ requirejs.config({
     }
 });
 
-require(['org/opentravelmate/widget/webview/v1/WebView', 'org/opentravelmate/widget/mainmenu/v1/MainMenu', 'jquery'], function(WebView, MainMenu, $) {
+require([
+    'org/opentravelmate/widget/webview/v1/WebView',
+    'org/opentravelmate/widget/mainmenu/v1/MainMenu',
+    'org/opentravelmate/widget/map/v1/Map',
+    'jquery'],
+function(WebView, MainMenu, Map, $) {
 	var rootWebView = WebView.getRootWebView();
 	document.getElementById('test').innerHTML = 'rootWebView --> ' + rootWebView.getId() + ' width = ' + $(window).width();
 	MainMenu.createMainMenu('mainmenu');
+	Map.createMap('map');
 });
