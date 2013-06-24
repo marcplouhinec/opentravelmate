@@ -2,6 +2,7 @@ body {
 	margin: 0px;
 	padding: 0px;
 	background-color: black;
+	overflow: hidden;
 }
 
 #mainmenu {
@@ -16,7 +17,7 @@ body {
 #map {
 	position: absolute;
 	left: 0px;
-	top: 59px;
+	top: 58px;
 	right: 0px;
 	bottom: 0px;
 }
