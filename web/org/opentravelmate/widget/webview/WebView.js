@@ -8,8 +8,9 @@ define([
     'jquery',
     'underscore',
     'org/opentravelmate/widget/Widget',
-    'org/opentravelmate/widget/LayoutParams'
-], function($, _, Widget, LayoutParams) {
+    'org/opentravelmate/widget/LayoutParams',
+    'org/opentravelmate/widget/map/Map'
+], function($, _, Widget, LayoutParams, Map) {
     'use strict';
 
     /**
@@ -118,7 +119,8 @@ define([
 				childWebView.buildView(layoutParams);
                 break;
             case 'Map':
-				// TODO support more widgets
+				var childMap = new Map({ id: layoutParams.id });
+				childMap.buildView(layoutParams);
 				break;
         }
     };
@@ -139,7 +141,7 @@ define([
      * 
      * @param {LayoutParams} layoutParams
      */
-    Widget.prototype.buildView = function(layoutParams) {
+    WebView.prototype.buildView = function(layoutParams) {
 		var self = this;
 		
 		// Create an iframe
