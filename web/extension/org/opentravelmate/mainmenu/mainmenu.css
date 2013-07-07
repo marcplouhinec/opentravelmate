@@ -1,0 +1,55 @@
+body {
+	background-color: #4b4d4b;
+}
+
+#logo {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	bottom: 0px;
+	width: 280px;
+}
+
+#logo-text {
+	margin-top: 20px;
+	margin-left: 10px;
+	color: #e0e0e0;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: italic;
+	font-size: 24pt;
+}
+
+#button-panel {
+	position: absolute;
+	left: 290px;
+	right: 10px;
+	top: 10px;
+	bottom: 10px;
+}
+
+#button-panel button {
+	float: right;
+	display: block;
+	background-color: #2e2f2d;
+	border: none;
+	border-radius: 8px;
+	padding: 0px;
+}
+
+#button-panel button img {
+	margin-top: 5%;
+	width: 90%;
+	height: 90%;
+}
+
+#button-panel button:active {
+	background-color: #8e8f8d;
+}
+
+#button-panel button:focus {
+	outline : none;
+}
+#button-panel button::-moz-focus-inner {
+	border: none;
+}
