@@ -1,0 +1,11 @@
+-Update the class diagrams
+	-the main menu is now a simple extension
+-Document place-holders:
+<div
+	id="main-view"
+	data-otm-widget="WebView"
+	data-otm-url="extension/org/opentravelmate/mainview/mainview.html"
+	data-otm-entrypoint="extension/org/opentravelmate/mainview/mainview"/>
+-Check if Widget.prototype.onCreate and Widget.prototype.onDestroy shouldn't be static
+-When a window resize is detected, call Window.getCurrent().layout() from index.js
+-Put the extensions in a shared folder and create a link to it from the web directory.

@@ -1,9 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="utf-8"/>
     <title>Open Travel Mate</title>
+    <link rel="stylesheet" href="index.css" type="text/css" media="screen"/>
 </head>
 <body>
-    <script data-main="main" src="lib/require.min.js"></script>
+	<div
+		id="main-view"
+		data-otm-widget="WebView"
+		data-otm-url="extension/org/opentravelmate/mainview/mainview.html"
+		data-otm-entrypoint="extension/org/opentravelmate/mainview/mainview">
+	</div>
+    <script data-main="index" src="lib/require.min.js"></script>
 </body>
 </html>

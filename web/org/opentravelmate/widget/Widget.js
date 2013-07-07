@@ -6,7 +6,9 @@
 
 define([
     'org/opentravelmate/commons/I18nError',
-    'org/opentravelmate/commons/ErrorCode'], function(I18nError, ErrorCode) {
+    'org/opentravelmate/commons/ErrorCode',
+    'org/opentravelmate/widget/LayoutParams'],
+function(I18nError, ErrorCode, LayoutParams) {
     'use strict';
 
     /**
@@ -75,6 +77,15 @@ define([
     Widget.prototype.onDestroy = function(listener) {
         this._listeners.destroy.push(listener);
     };
+
+    /**
+     * Build the native view object for the current widget.
+     * 
+     * @param {LayoutParams} layoutParams
+     */
+    Widget.prototype.buildView = function(layoutParams) {
+		throw new I18nError({ code: ErrorCode.UNIMPLEMENTED_METHOD, i18nArgs: ['Widget.prototype.buildView'] });
+	};
 
     return Widget;
 });

@@ -12,7 +12,8 @@ define(function() {
      */
     var ErrorCode = {
         UNKNOWN_ERROR: 1,
-        INVALID_PARAMETER: 2
+        INVALID_PARAMETER: 2,
+        UNIMPLEMENTED_METHOD: 3
     };
 
     return ErrorCode;

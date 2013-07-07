@@ -8,14 +8,14 @@ define([
     'jquery',
     'underscore',
     'org/opentravelmate/widget/Widget',
-    'org/opentravelmate/widget/webview/LayoutParams'
+    'org/opentravelmate/widget/LayoutParams'
 ], function($, _, Widget, LayoutParams) {
     'use strict';
 
     /**
      * Create a WebView.
      *
-     * @param {{id: String, url: String, mainFunctionUrl: String}} options
+     * @param {{id: String, url: String, entrypoint: String, baseUrl: String}} options
      * @constructor
      */
     function WebView(options) {
@@ -24,7 +24,9 @@ define([
         /** @type {String} */
         this.url = options.url;
         /** @type {String} */
-        this.mainFunctionUrl = options.mainFunctionUrl;
+        this.entrypoint = options.entrypoint;
+        /** @type {String} */
+        this.baseUrl = options.baseUrl;
     }
 
     WebView.prototype = new Widget();
@@ -56,7 +58,7 @@ define([
         // Scan each place-holder
         /** @type {Array.<LayoutParams>} */
         var layoutParamsList = [];
-        $('*[data-widget]').each(function() {
+        $(document.body).children('*[data-otm-widget]').each(function() {
             var $placeholder = $(this);
             /** @type {{left: Number, top: Number}} */
             var offset = $placeholder.offset();
@@ -65,8 +67,8 @@ define([
             var attributes = $placeholder.get(0).attributes;
             for (var i = 0; i < attributes.length; i += 1) {
                 var attr = attributes.item(i);
-                if (attr.nodeName.indexOf('data-') === 0) {
-                    additionalParameters[attr.nodeName] = attr.nodeValue;
+                if (attr.nodeName.indexOf('data-otm-') === 0) {
+                    additionalParameters[attr.nodeName.substring('data-otm-'.length)] = attr.nodeValue;
                 }
             }
 
@@ -104,25 +106,20 @@ define([
      * @private
      */
     WebView.prototype._createChildWidget = function(layoutParams) {
-        switch (layoutParams.additionalParameters['data-widget']) {
+        switch (layoutParams.additionalParameters['widget']) {
             case 'WebView':
-                // Create a WebView
-                var iframeUrl = layoutParams.additionalParameters['data-url'];
-                var iframeCode = '<iframe ' +
-                    'id="child-widget-' + layoutParams.id + '" ' +
-                    'src="' + iframeUrl + '" ' +
-                    '/>';
-                $('body').append(iframeCode);
-                var iframe = document.getElementById(
-                    'child-widget-' + layoutParams.id);
-                iframe.style.position = 'absolute';
-                iframe.style.left = layoutParams.x + 'px';
-                iframe.style.top = layoutParams.y + 'px';
-                iframe.style.width = layoutParams.width + 'px';
-                iframe.style.height = layoutParams.height + 'px';
-                iframe.style.border = 'none';
+				// Create a WebView
+				var childWebView = new WebView({
+					id: layoutParams.id,
+					url: layoutParams.additionalParameters['url'],
+					entrypoint: layoutParams.additionalParameters['entrypoint'],
+					baseUrl: this.baseUrl
+				});
+				childWebView.buildView(layoutParams);
                 break;
-                // TODO support more widgets
+            case 'Map':
+				// TODO support more widgets
+				break;
         }
     };
 
@@ -136,6 +133,41 @@ define([
     WebView.prototype._updateChildWidget = function(layoutParams, widget) {
         // TODO
     };
+
+	/**
+     * Build the native view object for the current widget.
+     * 
+     * @param {LayoutParams} layoutParams
+     */
+    Widget.prototype.buildView = function(layoutParams) {
+		var self = this;
+		
+		// Create an iframe
+		var iframe = document.createElement('iframe');
+		iframe.id = 'webview-' + layoutParams.id;
+		iframe.src = self.baseUrl + layoutParams.additionalParameters['url'];
+		iframe.style.position = 'absolute';
+		iframe.style.left = layoutParams.x + 'px';
+		iframe.style.top = layoutParams.y + 'px';
+		iframe.style.width = layoutParams.width + 'px';
+		iframe.style.height = layoutParams.height + 'px';
+		iframe.style.border = 'none';
+		iframe.style.visibility = layoutParams.visible ? 'visible' : 'hidden';
+		
+		iframe.onload = function onLoad() {
+			// Inject the startup script
+			iframe.contentWindow.webviewId = layoutParams.id;
+			iframe.contentWindow.webviewUrl = layoutParams.additionalParameters['url'];
+			iframe.contentWindow.webviewEntrypoint = layoutParams.additionalParameters['entrypoint'];
+			iframe.contentWindow.webviewBaseUrl = self.baseUrl;
+			var script = iframe.contentDocument.createElement('script');
+			script.src = self.baseUrl + 'lib/require.min.js';
+			script.setAttribute('data-main', self.baseUrl + 'org/opentravelmate/widget/webview/startupScript');
+			iframe.contentDocument.body.appendChild(script);
+		};
+		
+		document.body.appendChild(iframe);
+	};
 
     return WebView;
 });
