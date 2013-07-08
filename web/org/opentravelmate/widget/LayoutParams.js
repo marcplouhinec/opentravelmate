@@ -13,7 +13,7 @@ define(function() {
      * @param {{id: String, width: Number, height: Number, x: Number, y: Number, visible: Boolean, additionalParameters: Object.<String, String>}} options
      * @constructor
      */
-    function Layoutparams(options) {
+    function LayoutParams(options) {
         /** @type {String} */
         this.id = options.id;
         /** @type {Number} */
@@ -30,5 +30,5 @@ define(function() {
         this.additionalParameters = options.additionalParameters;
     }
 
-    return Layoutparams;
+    return LayoutParams;
 });

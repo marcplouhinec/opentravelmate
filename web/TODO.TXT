@@ -1,5 +1,4 @@
 -Update the class diagrams
-	-the main menu is now a simple extension
 -Document place-holders:
 <div
 	id="main-view"

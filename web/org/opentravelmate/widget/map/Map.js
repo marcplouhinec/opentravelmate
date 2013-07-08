@@ -48,8 +48,7 @@ define([
      * @param {LayoutParams} layoutParams
      */
     Map.prototype.buildView = function(layoutParams) {
-		var self = this;
-		
+
 		// Create the div that will contain the map
 		var mapCanvas = document.createElement('div');
 		mapCanvas.id = layoutParams.id + '-canvas';

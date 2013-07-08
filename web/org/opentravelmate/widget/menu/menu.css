@@ -1,0 +1,56 @@
+.otm-menu {
+    background-color: #4b4d4b;
+    height: 100%;
+}
+
+.otm-menu-logo {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 280px;
+}
+
+.otm-menu-logo-text {
+    margin-top: 18px;
+    margin-left: 5px;
+    color: #e0e0e0;
+    font-family: Arial,sans-serif;
+    font-weight: bold;
+    font-style: italic;
+    font-size: 22px;
+}
+
+.otm-menu-button-panel {
+    position: absolute;
+    left: 290px;
+    right: 5px;
+    top: 5px;
+    bottom: 5px;
+}
+
+.otm-menu-button-panel button {
+    float: right;
+    display: block;
+    background-color: #2e2f2d;
+    border: none;
+    border-radius: 8px;
+    padding: 0;
+}
+
+.otm-menu-button-panel button img {
+    margin-top: 5%;
+    width: 90%;
+    height: 90%;
+}
+
+.otm-menu-button-panel button:active {
+    background-color: #8e8f8d;
+}
+
+.otm-menu-button-panel button:focus {
+    outline : none;
+}
+.otm-menu-button-panel button::-moz-focus-inner {
+    border: none;
+}

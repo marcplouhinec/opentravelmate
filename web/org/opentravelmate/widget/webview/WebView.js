@@ -9,8 +9,9 @@ define([
     'underscore',
     'org/opentravelmate/widget/Widget',
     'org/opentravelmate/widget/LayoutParams',
-    'org/opentravelmate/widget/map/Map'
-], function($, _, Widget, LayoutParams, Map) {
+    'org/opentravelmate/widget/map/Map'   ,
+    'org/opentravelmate/widget/menu/Menu'
+], function($, _, Widget, LayoutParams, Map, Menu) {
     'use strict';
 
     /**
@@ -59,7 +60,7 @@ define([
         // Scan each place-holder
         /** @type {Array.<LayoutParams>} */
         var layoutParamsList = [];
-        $(document.body).children('*[data-otm-widget]').each(function() {
+        $(document.body).find('*[data-otm-widget]').each(function() {
             var $placeholder = $(this);
             /** @type {{left: Number, top: Number}} */
             var offset = $placeholder.offset();
@@ -122,6 +123,10 @@ define([
 				var childMap = new Map({ id: layoutParams.id });
 				childMap.buildView(layoutParams);
 				break;
+            case 'Menu':
+                var childMenu =  new Menu({ id: layoutParams.id, baseUrl: this.baseUrl });
+                childMenu.buildView(layoutParams);
+                break;
         }
     };
 
