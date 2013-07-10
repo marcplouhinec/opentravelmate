@@ -4,7 +4,7 @@
  * @author marc.plouhinec@gmail.com (Marc Plouhinec)
  */
 
-define(function() {
+define(['async!http://maps.googleapis.com/maps/api/js?libraries=places&sensor=true!callback'], function() {
 	'use strict';
 	return window.google;
 });

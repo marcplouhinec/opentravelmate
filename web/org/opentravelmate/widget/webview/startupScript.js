@@ -9,7 +9,8 @@ requirejs.config({
 	baseUrl: window.webviewBaseUrl,
     paths: {
         'jquery': 'lib/jquery.min',
-        'underscore': 'lib/underscore.min'
+        'underscore': 'lib/underscore.min',
+        'async': 'lib/async'
     },
     shim: {
         'jquery': {
