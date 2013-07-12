@@ -7,7 +7,7 @@
 
 define([], function() {
 
-  var webViewJavaObject = {};
+    var webViewJavaObject = {};
 
   /**
    * Get the root web view ID.

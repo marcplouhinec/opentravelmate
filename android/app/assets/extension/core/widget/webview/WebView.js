@@ -9,9 +9,10 @@ define([
     'underscore',
     'org/opentravelmate/widget/Widget',
     'org/opentravelmate/widget/LayoutParams',
-    'org/opentravelmate/widget/map/Map',
-    'org/opentravelmate/widget/menu/Menu'
-], function($, _, Widget, LayoutParams, Map, Menu) {
+//    'org/opentravelmate/widget/map/Map',
+//    'org/opentravelmate/widget/menu/Menu',
+    'org/opentravelmate/java/widget/webview/javaWebView'
+], function($, _, Widget, LayoutParams, /*Map, Menu,*/ javaWebView) {
     'use strict';
 
     /**
@@ -119,14 +120,14 @@ define([
 				});
 				childWebView.buildView(layoutParams);
                 break;
-            case 'Map':
-				var childMap = new Map({ id: layoutParams.id });
-				childMap.buildView(layoutParams);
-				break;
-            case 'Menu':
-                var childMenu =  new Menu({ id: layoutParams.id, baseUrl: this.baseUrl });
-                childMenu.buildView(layoutParams);
-                break;
+//            case 'Map':
+//				var childMap = new Map({ id: layoutParams.id });
+//				childMap.buildView(layoutParams);
+//				break;
+//            case 'Menu':
+//                var childMenu =  new Menu({ id: layoutParams.id, baseUrl: this.baseUrl });
+//                childMenu.buildView(layoutParams);
+//                break;
         }
     };
 
@@ -147,33 +148,7 @@ define([
      * @param {LayoutParams} layoutParams
      */
     WebView.prototype.buildView = function(layoutParams) {
-		var self = this;
-		
-		// Create an iframe
-		var iframe = document.createElement('iframe');
-		iframe.id = 'webview-' + layoutParams.id;
-		iframe.src = self.baseUrl + layoutParams.additionalParameters['url'];
-		iframe.style.position = 'absolute';
-		iframe.style.left = layoutParams.x + 'px';
-		iframe.style.top = layoutParams.y + 'px';
-		iframe.style.width = layoutParams.width + 'px';
-		iframe.style.height = layoutParams.height + 'px';
-		iframe.style.border = 'none';
-		iframe.style.visibility = layoutParams.visible ? 'visible' : 'hidden';
-		
-		iframe.onload = function onLoad() {
-			// Inject the startup script
-			iframe.contentWindow.webviewId = layoutParams.id;
-			iframe.contentWindow.webviewUrl = layoutParams.additionalParameters['url'];
-			iframe.contentWindow.webviewEntrypoint = layoutParams.additionalParameters['entrypoint'];
-			iframe.contentWindow.webviewBaseUrl = self.baseUrl;
-			var script = iframe.contentDocument.createElement('script');
-			script.src = self.baseUrl + 'lib/require.min.js';
-			script.setAttribute('data-main', self.baseUrl + 'org/opentravelmate/widget/webview/startupScript');
-			iframe.contentDocument.body.appendChild(script);
-		};
-		
-		document.body.appendChild(iframe);
+    	javaWebView.buildView(JSON.stringify(layoutParams));
 	};
 
     return WebView;
