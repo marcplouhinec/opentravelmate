@@ -8,6 +8,7 @@ import org.opentravelmate.commons.I18nException;
 import org.opentravelmate.commons.UIThreadExecutor;
 import org.opentravelmate.widget.HtmlLayout;
 import org.opentravelmate.widget.HtmlLayoutParams;
+import org.opentravelmate.widget.map.NativeMap;
 import org.opentravelmate.widget.menu.NativeMenu;
 
 import android.annotation.SuppressLint;
@@ -30,15 +31,18 @@ public class NativeWebView {
 	private final HtmlLayout htmlLayout;
 	private final String baseUrl;
 	private final NativeMenu nativeMenu;
+	private final NativeMap nativeMap;
 	
 	/**
 	 * Create a NativeWebView object.
 	 */
-	public NativeWebView(ExceptionListener exceptionListener, HtmlLayout htmlLayout, String baseUrl, NativeMenu nativeMenu) {
+	public NativeWebView(
+			ExceptionListener exceptionListener, HtmlLayout htmlLayout, String baseUrl, NativeMenu nativeMenu, NativeMap nativeMap) {
 		this.exceptionListener = exceptionListener;
 		this.htmlLayout = htmlLayout;
 		this.baseUrl = baseUrl;
 		this.nativeMenu = nativeMenu;
+		this.nativeMap = nativeMap;
 	}
 	
 	/**
@@ -98,6 +102,7 @@ public class NativeWebView {
 		// Inject java objects
 		webView.addJavascriptInterface(this, NativeWebView.GLOBAL_OBJECT_NAME);
 		webView.addJavascriptInterface(this.nativeMenu, NativeMenu.GLOBAL_OBJECT_NAME);
+		webView.addJavascriptInterface(this.nativeMap, NativeMap.GLOBAL_OBJECT_NAME);
 		
 		// Set the URL
 		webView.loadUrl(layoutParams.additionalParameters.get("url"));

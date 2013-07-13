@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.http.protocol.HttpRequestHandler;
+import org.opentravelmate.R;
 import org.opentravelmate.commons.ExceptionListener;
 import org.opentravelmate.commons.I18nException;
 import org.opentravelmate.commons.UIThreadExecutor;
@@ -14,15 +15,16 @@ import org.opentravelmate.httpserver.HttpServer;
 import org.opentravelmate.httpserver.NativeRequestHandler;
 import org.opentravelmate.widget.HtmlLayout;
 import org.opentravelmate.widget.HtmlLayoutParams;
+import org.opentravelmate.widget.map.NativeMap;
 import org.opentravelmate.widget.menu.NativeMenu;
 import org.opentravelmate.widget.webview.NativeWebView;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
 /**
@@ -30,7 +32,7 @@ import android.util.Log;
  * 
  * @author marc.plouhinec@gmail.com (Marc Plouhinec)
  */
-public class MainActivity extends Activity {
+public class MainActivity extends FragmentActivity {
 	
 	private static final String LOG_TAG = MainActivity.class.getSimpleName();
 	private HttpServer httpServer;
@@ -54,6 +56,7 @@ public class MainActivity extends Activity {
 		final NativeRequestHandler nativeRequestHandler = new NativeRequestHandler();
 		nativeRequestHandler.registerInjectedJavaObject(NativeWebView.SCRIPT_URL, NativeWebView.GLOBAL_OBJECT_NAME);
 		nativeRequestHandler.registerInjectedJavaObject(NativeMenu.SCRIPT_URL, NativeMenu.GLOBAL_OBJECT_NAME);
+		nativeRequestHandler.registerInjectedJavaObject(NativeMap.SCRIPT_URL, NativeMap.GLOBAL_OBJECT_NAME);
 		requestHandlerByPattern.put("/native/*", nativeRequestHandler);
 		ExtensionRequestHandler extensionRequestHandler = new ExtensionRequestHandler(getAssets());
 		requestHandlerByPattern.put("/extension/*", extensionRequestHandler);
@@ -71,7 +74,8 @@ public class MainActivity extends Activity {
 		HtmlLayout htmlLayout = new HtmlLayout(this);
 		this.setContentView(htmlLayout);
 		NativeMenu nativeMenu = new NativeMenu(exceptionListener, htmlLayout, baseUrl);
-		NativeWebView nativeWebView = new NativeWebView(exceptionListener, htmlLayout, baseUrl, nativeMenu);
+		NativeMap nativeMap = new NativeMap(exceptionListener, htmlLayout, this.getSupportFragmentManager());
+		NativeWebView nativeWebView = new NativeWebView(exceptionListener, htmlLayout, baseUrl, nativeMenu, nativeMap);
 		
 		// Initialize the root web view
 		HtmlLayoutParams layoutParams = new HtmlLayoutParams(HtmlLayout.MAIN_WEBVIEW_ID, 0, 0, 1, 1, true, new HashMap<String, String>(){

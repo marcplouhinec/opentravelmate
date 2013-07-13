@@ -9,10 +9,10 @@ define([
     'underscore',
     'core/widget/Widget',
     'core/widget/LayoutParams',
-//    'core/widget/map/Map',
+    'core/widget/map/Map',
     'core/widget/menu/Menu',
     'nativeWebView'
-], function($, _, Widget, LayoutParams, /*Map,*/ Menu, nativeWebView) {
+], function($, _, Widget, LayoutParams, Map, Menu, nativeWebView) {
     'use strict';
 
     /**
@@ -125,10 +125,10 @@ define([
 				});
 				childWebView.buildView(layoutParams);
                 break;
-//            case 'Map':
-//				var childMap = new Map({ id: layoutParams.id });
-//				childMap.buildView(layoutParams);
-//				break;
+            case 'Map':
+				var childMap = new Map({ id: layoutParams.id });
+				childMap.buildView(layoutParams);
+				break;
             case 'Menu':
                 var childMenu =  new Menu({ id: layoutParams.id, baseUrl: this.baseUrl });
                 childMenu.buildView(layoutParams);

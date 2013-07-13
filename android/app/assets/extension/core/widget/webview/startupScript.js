@@ -12,7 +12,8 @@ requirejs.config({
         'underscore': 'core/lib/underscore.min',
         'async': 'core/lib/async',
         'nativeWebView': window.org_opentravelmate_widget_webview_webviewBaseUrl + 'native/widget/webview/nativeWebView',
-        'nativeMenu': window.org_opentravelmate_widget_webview_webviewBaseUrl + 'native/widget/menu/nativeMenu'
+        'nativeMenu': window.org_opentravelmate_widget_webview_webviewBaseUrl + 'native/widget/menu/nativeMenu',
+        'nativeMap': window.org_opentravelmate_widget_webview_webviewBaseUrl + 'native/widget/map/nativeMap'
     },
     shim: {
         'jquery': {
