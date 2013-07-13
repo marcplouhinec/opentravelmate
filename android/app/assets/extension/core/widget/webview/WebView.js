@@ -7,12 +7,12 @@
 define([
     'jquery',
     'underscore',
-    'org/opentravelmate/widget/Widget',
-    'org/opentravelmate/widget/LayoutParams',
-//    'org/opentravelmate/widget/map/Map',
-//    'org/opentravelmate/widget/menu/Menu',
-    'org/opentravelmate/java/widget/webview/javaWebView'
-], function($, _, Widget, LayoutParams, /*Map, Menu,*/ javaWebView) {
+    'core/widget/Widget',
+    'core/widget/LayoutParams',
+//    'core/widget/map/Map',
+    'core/widget/menu/Menu',
+    'nativeWebView'
+], function($, _, Widget, LayoutParams, /*Map,*/ Menu, nativeWebView) {
     'use strict';
 
     /**
@@ -56,11 +56,14 @@ define([
      * place-holders.
      */
     WebView.prototype.layout = function() {
-        var self = this;
+        var self = this,
+            $window = $(window),
+            windowWidth = $window.width(),
+            windowHeight = $window.height(),
+            layoutParamsList = [];
 
         // Scan each place-holder
         /** @type {Array.<LayoutParams>} */
-        var layoutParamsList = [];
         $(document.body).find('*[data-otm-widget]').each(function() {
             var $placeholder = $(this);
             /** @type {{left: Number, top: Number}} */
@@ -82,7 +85,9 @@ define([
                 'x': offset.left,
                 'y': offset.top,
                 'visible': $placeholder.is(':visible'),
-                'additionalParameters': additionalParameters
+                'additionalParameters': additionalParameters,
+                'windowWidth': windowWidth,
+                'windowHeight': windowHeight
             }));
         });
 
@@ -124,10 +129,10 @@ define([
 //				var childMap = new Map({ id: layoutParams.id });
 //				childMap.buildView(layoutParams);
 //				break;
-//            case 'Menu':
-//                var childMenu =  new Menu({ id: layoutParams.id, baseUrl: this.baseUrl });
-//                childMenu.buildView(layoutParams);
-//                break;
+            case 'Menu':
+                var childMenu =  new Menu({ id: layoutParams.id, baseUrl: this.baseUrl });
+                childMenu.buildView(layoutParams);
+                break;
         }
     };
 
@@ -148,8 +153,8 @@ define([
      * @param {LayoutParams} layoutParams
      */
     WebView.prototype.buildView = function(layoutParams) {
-    	javaWebView.buildView(JSON.stringify(layoutParams));
-	};
+    	nativeWebView.buildView(JSON.stringify(layoutParams));
+    };
 
     return WebView;
 });

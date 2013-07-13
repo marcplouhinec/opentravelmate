@@ -7,16 +7,16 @@
 package org.opentravelmate.widget.webview;
 
 public final class R {
-	public static final class style {
-		public static final int AppBaseTheme = 0x7f060000;
-		public static final int AppTheme = 0x7f060001;
+	public static final class drawable {
+		public static final int ic_launcher = 0x7f02001c;
 	}
 	public static final class string {
-		public static final int webview_javascript_console_msg = 0x7f050014;
-		public static final int app_name = 0x7f050011;
-		public static final int webview_received_error = 0x7f050015;
+		public static final int app_name = 0x7f060015;
+		public static final int webview_javascript_console_msg = 0x7f060018;
+		public static final int webview_received_error = 0x7f060019;
 	}
-	public static final class drawable {
-		public static final int ic_launcher = 0x7f020004;
+	public static final class style {
+		public static final int AppBaseTheme = 0x7f070000;
+		public static final int AppTheme = 0x7f070001;
 	}
 }

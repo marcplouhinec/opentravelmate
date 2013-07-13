@@ -5,8 +5,10 @@ import org.json.JSONObject;
 import org.opentravelmate.R;
 import org.opentravelmate.commons.ExceptionListener;
 import org.opentravelmate.commons.I18nException;
+import org.opentravelmate.commons.UIThreadExecutor;
 import org.opentravelmate.widget.HtmlLayout;
 import org.opentravelmate.widget.HtmlLayoutParams;
+import org.opentravelmate.widget.menu.NativeMenu;
 
 import android.annotation.SuppressLint;
 import android.webkit.ConsoleMessage;
@@ -20,20 +22,23 @@ import android.webkit.WebViewClient;
  * 
  * @author marc.plouhinec@gmail.com (Marc Plouhinec)
  */
-public class JavaWebView {
+public class NativeWebView {
 	
-	public static final String GLOBAL_OBJECT_NAME = "org_opentravelmate_native_widget_webview_javaWebView";
+	public static final String GLOBAL_OBJECT_NAME = "org_opentravelmate_native_widget_webview_nativeWebView";
+	public static final String SCRIPT_URL = "/native/widget/webview/nativeWebView.js";
 	private final ExceptionListener exceptionListener;
 	private final HtmlLayout htmlLayout;
+	private final String baseUrl;
+	private final NativeMenu nativeMenu;
 	
 	/**
-	 * Create a JavaWebView object.
-	 * 
-	 * @param exceptionListener
+	 * Create a NativeWebView object.
 	 */
-	public JavaWebView(ExceptionListener exceptionListener, HtmlLayout htmlLayout) {
+	public NativeWebView(ExceptionListener exceptionListener, HtmlLayout htmlLayout, String baseUrl, NativeMenu nativeMenu) {
 		this.exceptionListener = exceptionListener;
 		this.htmlLayout = htmlLayout;
+		this.baseUrl = baseUrl;
+		this.nativeMenu = nativeMenu;
 	}
 	
 	/**
@@ -42,12 +47,16 @@ public class JavaWebView {
 	 * @param jsonLayoutParams
 	 */
 	@JavascriptInterface
-	public void buildView(int windowWidth, int windowHeight, String jsonLayoutParams) {
-		try {
-			buildView(HtmlLayoutParams.fromJsonLayoutParams(windowWidth, windowHeight, new JSONObject(jsonLayoutParams)));
-		} catch (JSONException e) {
-			exceptionListener.onException(false, e);
-		}
+	public void buildView(final String jsonLayoutParams) {
+		UIThreadExecutor.execute(new Runnable() {
+			@Override public void run() {
+				try {
+					buildView(HtmlLayoutParams.fromJsonLayoutParams(new JSONObject(jsonLayoutParams)));
+				} catch (JSONException e) {
+					exceptionListener.onException(false, e);
+				}
+			}
+		});
 	}
 	
 	/**
@@ -87,7 +96,8 @@ public class JavaWebView {
 		});
 		
 		// Inject java objects
-		webView.addJavascriptInterface(this, JavaWebView.GLOBAL_OBJECT_NAME);
+		webView.addJavascriptInterface(this, NativeWebView.GLOBAL_OBJECT_NAME);
+		webView.addJavascriptInterface(this.nativeMenu, NativeMenu.GLOBAL_OBJECT_NAME);
 		
 		// Set the URL
 		webView.loadUrl(layoutParams.additionalParameters.get("url"));
@@ -109,10 +119,10 @@ public class JavaWebView {
 				"  window.org_opentravelmate_widget_webview_webviewId='" + layoutParams.id + "';" +
 				"  window.org_opentravelmate_widget_webview_webviewUrl='" + layoutParams.additionalParameters.get("url") + "';" +
 				"  window.org_opentravelmate_widget_webview_webviewEntrypoint='" + layoutParams.additionalParameters.get("entrypoint") + "';" +
-				"  window.org_opentravelmate_widget_webview_webviewBaseUrl='';" +
+				"  window.org_opentravelmate_widget_webview_webviewBaseUrl='" + this.baseUrl + "';" +
 				"  var script = document.createElement('script');" +
-				"  script.src = '/extension/core/lib/require.min.js';" +
-				"  script.setAttribute('data-main', '/extension/core/widget/webview/startupScript');" +
+				"  script.src = '" + this.baseUrl + "extension/core/lib/require.min.js';" +
+				"  script.setAttribute('data-main', '" + this.baseUrl + "extension/core/widget/webview/startupScript');" +
 				"  document.body.appendChild(script);" +
 				"})();");
 	}

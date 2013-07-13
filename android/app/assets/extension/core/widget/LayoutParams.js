@@ -10,7 +10,17 @@ define(function() {
     /**
      * Create a set of layout parameters.
      *
-     * @param {{id: String, width: Number, height: Number, x: Number, y: Number, visible: Boolean, additionalParameters: Object.<String, String>}} options
+     * @param {{
+     *   id: String,
+     *   width: Number,
+     *   height: Number,
+     *   x: Number,
+     *   y: Number,
+     *   visible: Boolean,
+     *   additionalParameters: Object.<String, String>,
+     *   windowWidth: Number,
+     *   windowHeight: Number,
+     * }} options
      * @constructor
      */
     function LayoutParams(options) {
@@ -28,6 +38,10 @@ define(function() {
         this.visible = options.visible;
         /** @type {Object.<String, String>} */
         this.additionalParameters = options.additionalParameters;
+        /** @type {Number} */
+        this.windowWidth = options.windowWidth;
+        /** @type {Number} */
+        this.windowHeight = options.windowHeight;
     }
 
     return LayoutParams;

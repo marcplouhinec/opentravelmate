@@ -6,11 +6,13 @@
 
 // Define AMD incompatible libraries
 requirejs.config({
-	baseUrl: window.webviewBaseUrl,
+	baseUrl: window.org_opentravelmate_widget_webview_webviewBaseUrl + 'extension/',
     paths: {
-        'jquery': 'lib/jquery.min',
-        'underscore': 'lib/underscore.min',
-        'async': 'lib/async'
+        'jquery': 'core/lib/jquery.min',
+        'underscore': 'core/lib/underscore.min',
+        'async': 'core/lib/async',
+        'nativeWebView': window.org_opentravelmate_widget_webview_webviewBaseUrl + 'native/widget/webview/nativeWebView',
+        'nativeMenu': window.org_opentravelmate_widget_webview_webviewBaseUrl + 'native/widget/menu/nativeMenu'
     },
     shim: {
         'jquery': {
@@ -23,19 +25,19 @@ requirejs.config({
 });
 
 require([
-	'org/opentravelmate/widget/webview/WebView',
-	window.webviewEntrypoint],
+	'core/widget/webview/WebView',
+	window.org_opentravelmate_widget_webview_webviewEntrypoint],
 function(WebView, entrypoint) {
     'use strict';
     
     // Create the current WebView
     WebView.setCurrent(new WebView({
-		id: window.webviewId,
-		url: window.webviewUrl,
-		entrypoint: window.webviewEntrypoint,
-		baseUrl: webviewBaseUrl
-	}));
+        id: window.org_opentravelmate_widget_webview_webviewId,
+        url: window.org_opentravelmate_widget_webview_webviewUrl,
+        entrypoint: window.org_opentravelmate_widget_webview_webviewEntrypoint,
+        baseUrl: org_opentravelmate_widget_webview_webviewBaseUrl
+    }));
     
     // Call the entry point
-	entrypoint();
+    entrypoint();
 });

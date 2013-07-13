@@ -1,5 +1,8 @@
 package org.opentravelmate.widget;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
@@ -14,7 +17,11 @@ import android.webkit.WebView;
 @SuppressLint("ViewConstructor")
 public class HtmlLayout extends ViewGroup {
 	
+	public static final String MAIN_WEBVIEW_ID = "mainWebView";
+	
 	private WebView cachedMainWebView = null;
+	private Map<String, Integer> viewIdByPlaceHolderId = new HashMap<String, Integer>();
+	private int nextViewId = Integer.MAX_VALUE / 42;
 
 	/**
 	 * Create a HtmlLayout.
@@ -24,6 +31,33 @@ public class HtmlLayout extends ViewGroup {
 	 */
 	public HtmlLayout(Context context) {
 		super(context);
+	}
+
+	@Override
+	public void addView(View child) {
+		if (child != null && child.getLayoutParams() instanceof HtmlLayoutParams) {
+			HtmlLayoutParams layoutParams = (HtmlLayoutParams)child.getLayoutParams();
+			int generatedViewId = nextViewId++;
+			String placeHolderId = layoutParams.id;
+			viewIdByPlaceHolderId.put(placeHolderId, generatedViewId);
+			child.setId(generatedViewId);
+		}
+		
+		super.addView(child);
+	}
+	
+	/**
+	 * Find a view by its place holder ID.
+	 * 
+	 * @param placeHolderId
+	 * @return view or null if not found
+	 */
+	public View findViewByPlaceHolderId(String placeHolderId) {
+		if (viewIdByPlaceHolderId.containsKey(placeHolderId)) {
+			int viewId = viewIdByPlaceHolderId.get(placeHolderId);
+			return this.findViewById(viewId);
+		}
+		return null;
 	}
 
 	@Override
@@ -117,7 +151,7 @@ public class HtmlLayout extends ViewGroup {
 			if (childView instanceof WebView && childView.getLayoutParams() instanceof HtmlLayoutParams) {
 				WebView webView = (WebView) childView;
 				HtmlLayoutParams layoutParams = (HtmlLayoutParams)childView.getLayoutParams();
-				if ("rootWebView".equals(layoutParams.id)) {
+				if (MAIN_WEBVIEW_ID.equals(layoutParams.id)) {
 					this.cachedMainWebView = webView;
 					return webView;
 				}

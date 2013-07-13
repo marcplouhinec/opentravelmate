@@ -4,7 +4,7 @@
  * @author marc.plouhinec@gmail.com (Marc Plouhinec)
  */
 
-define(['org/opentravelmate/commons/ErrorCode'], function(ErrorCode) {
+define(['core/commons/ErrorCode'], function(ErrorCode) {
     'use strict';
 
     /**

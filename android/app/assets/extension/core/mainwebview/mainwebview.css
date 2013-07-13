@@ -1,3 +1,7 @@
+body {
+	background-color: black;
+}
+
 #main-menu {
 	position: absolute;
 	left: 0;

@@ -5,7 +5,7 @@
  */
 
 define([
-    'org/opentravelmate/widget/webview/WebView'
+    'core/widget/webview/WebView'
 ], function(WebView) {
     'use strict';
 

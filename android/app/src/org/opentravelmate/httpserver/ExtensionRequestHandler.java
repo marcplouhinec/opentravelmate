@@ -10,6 +10,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.entity.EntityTemplate;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpRequestHandler;
+import org.opentravelmate.commons.IOUtils;
 
 import android.content.res.AssetManager;
 
@@ -35,6 +36,9 @@ public class ExtensionRequestHandler implements HttpRequestHandler {
 	public void handle(HttpRequest request, HttpResponse response, HttpContext context) throws HttpException, IOException {
 		String target = request.getRequestLine().getUri();
 		String url = URLDecoder.decode(target, "UTF-8");
+		if (url != null && url.startsWith("/")) {
+			url = url.substring(1);
+		}
 		
 		InputStream inputStream = null;
 		byte[] content;

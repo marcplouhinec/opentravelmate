@@ -8,12 +8,14 @@ import java.util.Map;
 import org.apache.http.protocol.HttpRequestHandler;
 import org.opentravelmate.commons.ExceptionListener;
 import org.opentravelmate.commons.I18nException;
+import org.opentravelmate.commons.UIThreadExecutor;
 import org.opentravelmate.httpserver.ExtensionRequestHandler;
 import org.opentravelmate.httpserver.HttpServer;
 import org.opentravelmate.httpserver.NativeRequestHandler;
 import org.opentravelmate.widget.HtmlLayout;
 import org.opentravelmate.widget.HtmlLayoutParams;
-import org.opentravelmate.widget.webview.JavaWebView;
+import org.opentravelmate.widget.menu.NativeMenu;
+import org.opentravelmate.widget.webview.NativeWebView;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -21,7 +23,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 
 /**
@@ -32,7 +33,6 @@ import android.util.Log;
 public class MainActivity extends Activity {
 	
 	private static final String LOG_TAG = MainActivity.class.getSimpleName();
-	private Handler handler;
 	private HttpServer httpServer;
 
 	@SuppressLint("NewApi")
@@ -40,7 +40,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		handler = new Handler();
+		UIThreadExecutor.init();
 		I18nException.setContext(this);
 		
 		// Hide the action bar
@@ -52,7 +52,8 @@ public class MainActivity extends Activity {
 		ExceptionListener exceptionListener = new DefaultExceptionListener();
 		Map<String, HttpRequestHandler> requestHandlerByPattern = new LinkedHashMap<String, HttpRequestHandler>();
 		final NativeRequestHandler nativeRequestHandler = new NativeRequestHandler();
-		nativeRequestHandler.registerInjectedJavaObject("/native/widget/webview/javaWebView.js", JavaWebView.GLOBAL_OBJECT_NAME);
+		nativeRequestHandler.registerInjectedJavaObject(NativeWebView.SCRIPT_URL, NativeWebView.GLOBAL_OBJECT_NAME);
+		nativeRequestHandler.registerInjectedJavaObject(NativeMenu.SCRIPT_URL, NativeMenu.GLOBAL_OBJECT_NAME);
 		requestHandlerByPattern.put("/native/*", nativeRequestHandler);
 		ExtensionRequestHandler extensionRequestHandler = new ExtensionRequestHandler(getAssets());
 		requestHandlerByPattern.put("/extension/*", extensionRequestHandler);
@@ -65,17 +66,21 @@ public class MainActivity extends Activity {
 			return;
 		}
 		
-		// Initialize the root web view
+		// Initialize native objects to inject in the web views
+		String baseUrl = "http://localhost:" + httpServer.getPort() + "/";
 		HtmlLayout htmlLayout = new HtmlLayout(this);
 		this.setContentView(htmlLayout);
-		JavaWebView javaWebView = new JavaWebView(exceptionListener, htmlLayout);
-		HtmlLayoutParams layoutParams = new HtmlLayoutParams("mainWebView", 0, 0, 1, 1, true, new HashMap<String, String>(){
+		NativeMenu nativeMenu = new NativeMenu(exceptionListener, htmlLayout, baseUrl);
+		NativeWebView nativeWebView = new NativeWebView(exceptionListener, htmlLayout, baseUrl, nativeMenu);
+		
+		// Initialize the root web view
+		HtmlLayoutParams layoutParams = new HtmlLayoutParams(HtmlLayout.MAIN_WEBVIEW_ID, 0, 0, 1, 1, true, new HashMap<String, String>(){
 			private static final long serialVersionUID = -2001726600946643058L;
 		{
-			put("url", "extension/org/opentravelmate/mainwebview/mainwebview.html");
-			put("entrypoint", "extension/org/opentravelmate/mainwebview/mainwebview");
+			put("url", "http://localhost:" + httpServer.getPort() + "/extension/core/mainwebview/mainwebview.html");
+			put("entrypoint", "core/mainwebview/mainwebview");
 		}});
-		javaWebView.buildView(layoutParams);
+		nativeWebView.buildView(layoutParams);
 	}
 	
 	/**
@@ -115,7 +120,7 @@ public class MainActivity extends Activity {
 		@Override
 		public void onException(boolean isUnrecoverable, Exception e) {
 			Log.e(LOG_TAG, e.getMessage(), e);
-			handler.post(new DefaultExceptionListenerInActivityThread(isUnrecoverable, e));
+			UIThreadExecutor.execute(new DefaultExceptionListenerInActivityThread(isUnrecoverable, e));
 		}
 	}
 	

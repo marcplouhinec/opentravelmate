@@ -54,7 +54,8 @@ public class HtmlLayoutParams extends ViewGroup.LayoutParams {
 	/**
 	 * Create a new LayoutParams object.
 	 */
-	public HtmlLayoutParams(String id, double x, double y, double width, double height, boolean visible, Map<String, String> additionalParameters) {
+	public HtmlLayoutParams(
+			String id, double x, double y, double width, double height, boolean visible, Map<String, String> additionalParameters) {
 		super(0, 0);
 		this.id = id;
 		this.x = x;
@@ -66,15 +67,15 @@ public class HtmlLayoutParams extends ViewGroup.LayoutParams {
 	}
 	
 	/**
-	 * Build a HtmlLayoutParams from a JSON-serialized version.
+	 * Build a HtmlLayoutParams from a JSON-serialized LayoutParams.
 	 * 
-	 * @param windowWidth
-	 * @param windowHeight
 	 * @param jsonLayoutParams
 	 * @return HtmlLayoutParams
 	 * @throws JSONException
 	 */
-	public static HtmlLayoutParams fromJsonLayoutParams(int windowWidth, int windowHeight, JSONObject jsonLayoutParams) throws JSONException {
+	public static HtmlLayoutParams fromJsonLayoutParams(JSONObject jsonLayoutParams) throws JSONException {
+		int windowWidth = jsonLayoutParams.getInt("windowWidth");
+		int windowHeight = jsonLayoutParams.getInt("windowHeight");
 		String id = jsonLayoutParams.getString("id");
 		double x = jsonLayoutParams.getDouble("x") / windowWidth;
 		double y = jsonLayoutParams.getDouble("y") / windowHeight;
@@ -91,4 +92,11 @@ public class HtmlLayoutParams extends ViewGroup.LayoutParams {
 		return new HtmlLayoutParams(id, x, y, width, height, visible, additionalParameters);
 	}
 
+	@Override
+	public String toString() {
+		return "HtmlLayoutParams [id=" + id + ", x=" + x + ", y=" + y
+				+ ", width=" + width + ", height=" + height + ", visible="
+				+ visible + ", additionalParameters=" + additionalParameters
+				+ "]";
+	}
 }

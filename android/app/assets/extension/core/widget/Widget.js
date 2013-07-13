@@ -5,9 +5,9 @@
  */
 
 define([
-    'org/opentravelmate/commons/I18nError',
-    'org/opentravelmate/commons/ErrorCode',
-    'org/opentravelmate/widget/LayoutParams'],
+    'core/commons/I18nError',
+    'core/commons/ErrorCode',
+    'core/widget/LayoutParams'],
 function(I18nError, ErrorCode, LayoutParams) {
     'use strict';
 

@@ -12,8 +12,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.entity.EntityTemplate;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpRequestHandler;
-
-import android.util.Log;
+import org.opentravelmate.commons.IOUtils;
 
 /**
  * Handle requests to JavaScript APIs implemented in Java.
@@ -74,7 +73,6 @@ public class NativeRequestHandler implements HttpRequestHandler {
 		}
 		
 		// Send the resource
-		Log.i("TEST", new String(content));
 		EntityTemplate entity = new EntityTemplate(new SimpleContentProducer(content));
 		response.setEntity(entity);
 	}
