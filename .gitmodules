@@ -1,0 +1,3 @@
+[submodule "android/app/assets/extensions"]
+	path = android/app/assets/extensions
+	url = https://github.com/marcplouhinec/opentravelmate-extensions.git

@@ -126,8 +126,8 @@ public class NativeWebView {
 				"  window.org_opentravelmate_widget_webview_webviewEntrypoint='" + layoutParams.additionalParameters.get("entrypoint") + "';" +
 				"  window.org_opentravelmate_widget_webview_webviewBaseUrl='" + this.baseUrl + "';" +
 				"  var script = document.createElement('script');" +
-				"  script.src = '" + this.baseUrl + "extension/core/lib/require.min.js';" +
-				"  script.setAttribute('data-main', '" + this.baseUrl + "extension/core/widget/webview/startupScript');" +
+				"  script.src = '" + this.baseUrl + "extensions/core/lib/require.min.js';" +
+				"  script.setAttribute('data-main', '" + this.baseUrl + "extensions/core/widget/webview/startupScript');" +
 				"  document.body.appendChild(script);" +
 				"})();");
 	}

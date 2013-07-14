@@ -59,7 +59,7 @@ public class MainActivity extends FragmentActivity {
 		nativeRequestHandler.registerInjectedJavaObject(NativeMap.SCRIPT_URL, NativeMap.GLOBAL_OBJECT_NAME);
 		requestHandlerByPattern.put("/native/*", nativeRequestHandler);
 		ExtensionRequestHandler extensionRequestHandler = new ExtensionRequestHandler(getAssets());
-		requestHandlerByPattern.put("/extension/*", extensionRequestHandler);
+		requestHandlerByPattern.put("/extensions/*", extensionRequestHandler);
 		httpServer = new HttpServer(requestHandlerByPattern, exceptionListener);
 		try {
 			httpServer.start();
@@ -81,7 +81,7 @@ public class MainActivity extends FragmentActivity {
 		HtmlLayoutParams layoutParams = new HtmlLayoutParams(HtmlLayout.MAIN_WEBVIEW_ID, 0, 0, 1, 1, true, new HashMap<String, String>(){
 			private static final long serialVersionUID = -2001726600946643058L;
 		{
-			put("url", "http://localhost:" + httpServer.getPort() + "/extension/core/mainwebview/mainwebview.html");
+			put("url", "http://localhost:" + httpServer.getPort() + "/extensions/core/mainwebview/mainwebview.html");
 			put("entrypoint", "core/mainwebview/mainwebview");
 		}});
 		nativeWebView.buildView(layoutParams);

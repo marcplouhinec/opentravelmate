@@ -74,7 +74,7 @@ public class NativeMenu {
 		htmlLayout.addView(view);
 		
 		// Add the 'more' button
-		this.addMenuItem(layoutParams.id, new MenuItem("More", "More", this.baseUrl + "extension/core/widget/menu/image/ic_btn_more.png"));
+		this.addMenuItem(layoutParams.id, new MenuItem("More", "More", this.baseUrl + "extensions/core/widget/menu/image/ic_btn_more.png"));
 	}
 	
 	/**
