@@ -24,6 +24,8 @@ Installation
 The first step is to clone the project on your harddisk:
 
         git clone https://github.com/marcplouhinec/opentravelmate.git
+        git submodule init
+        git submodule update
 
 The next steps depends on your target platform.
 
