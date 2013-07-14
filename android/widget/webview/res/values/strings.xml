@@ -1,7 +1,0 @@
-<resources>
-
-    <string name="app_name">opentravelmate-webview</string>
-    <string name="webview_javascript_console_msg">WebView %1$s message: %2$s - from line %3$d of %1$s.</string>
-    <string name="webview_received_error">WebView %1$s error: %2$s</string>
-
-</resources>
