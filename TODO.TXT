@@ -1,4 +1,3 @@
--Update the class diagrams
 -Document place-holders:
 <div
 	id="main-view"
