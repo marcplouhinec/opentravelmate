@@ -21,11 +21,31 @@ in order to improve the visibility of their services.
 
 Installation
 ------------
+The first step is to clone the project on your harddisk:
 
-TODO
+        git clone https://github.com/marcplouhinec/opentravelmate.git
 
+The next steps depends on your target platform.
 
-Licence
--------
+### Web platform
+Simply double-click on `index.html`.
 
-TODO
+### Android platform
+To access Google Maps v2, it is necessary to create a binding for the
+Google Play services client library:
+
+1. Use the Android SDK Manager to install Google Play Services.
+2. Copy the directory located at `extras/google/google_play_services/libproject/google-play-services_lib`
+   into `<opentravelmate-path>/android`.
+3. In your IDE (for example Eclipse), create two project from sources
+   located at `<opentravelmate-path>/android/google-play-services_lib`
+   and `<opentravelmate-path>/android/app`
+4. [Obtain a new API Key](https://developers.google.com/maps/documentation/android/start#the_google_maps_api_key)
+   for Google Maps v2.
+5. In the file `<opentravelmate-path>/android/AndroidManifest.xml`,
+   put your key in the following XML element:
+   
+        <!-- Google Maps debug key -->
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyAUaKuJMg_WgYbgxnMK8-8PvJwgP84AEkA" />
