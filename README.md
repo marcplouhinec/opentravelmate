@@ -14,8 +14,8 @@ application is made of 2 layers:
    JavaScript interfaces.
 
 The project target is to be a platform where transport information
-providers (Transport organisation authority, Taxi company, Car-share
-solutions providers, ...) can put their information at the same place,
+providers (transport organisation authority, taxi company, car-share
+solutions provider, ...) can put their information at the same place,
 in order to improve the visibility of their services.
 
 

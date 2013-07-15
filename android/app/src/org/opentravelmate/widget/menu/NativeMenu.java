@@ -17,7 +17,7 @@ import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.JavascriptInterface;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 /**
@@ -73,6 +73,11 @@ public class NativeMenu {
 		view.setLayoutParams(layoutParams);
 		htmlLayout.addView(view);
 		
+		// Set the logo
+		ImageView imageViewMenuLogo = (ImageView)view.findViewById(R.id.imageViewMenuLogo);
+		imageViewMenuLogo.setImageBitmap(null);
+		loadImageForImageView(imageViewMenuLogo, this.baseUrl + "extensions/core/widget/menu/image/ic_logo.png");
+		
 		// Add the 'more' button
 		this.addMenuItem(layoutParams.id, new MenuItem("More", "More", this.baseUrl + "extensions/core/widget/menu/image/ic_btn_more.png"));
 	}
@@ -116,23 +121,23 @@ public class NativeMenu {
 		}});
 		menuItemButton.setContentDescription(menuItem.title);
 		menuItemButton.setImageBitmap(null);
-		loadImageForMenuItem(menuItemButton, menuItem.iconUrl);
+		loadImageForImageView(menuItemButton, menuItem.iconUrl);
 	}
 	
 	/**
 	 * Load the menu item image in background.
 	 * 
-	 * @param menuItemButton
+	 * @param imageView
 	 * @param iconUrl
 	 */
-	private void loadImageForMenuItem(final ImageButton menuItemButton, final String iconUrl) {
+	private void loadImageForImageView(final ImageView imageView, final String iconUrl) {
 		BgThreadExecutor.execute(new Runnable() {
 			@Override public void run() {
 				try {
 					final Bitmap bitmap = IOUtils.toBitmap(iconUrl);
 					UIThreadExecutor.execute(new Runnable() {
 						@Override public void run() {
-							menuItemButton.setImageBitmap(bitmap);
+							imageView.setImageBitmap(bitmap);
 						}
 					});
 				} catch (IOException e) {

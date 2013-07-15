@@ -2,19 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ff2e2e2e" >
+    android:background="#ff4b4c49" >
 
-    <TextView
-        android:id="@+id/textViewMainMenuLogo"
-        android:layout_width="wrap_content"
+    <ImageView
+        android:id="@+id/imageViewMenuLogo"
+        android:layout_width="80dp"
         android:layout_height="fill_parent"
+        android:layout_gravity="left"
         android:layout_weight="1"
+        android:contentDescription="@string/app_name"
         android:gravity="center_vertical"
+        android:paddingBottom="0dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:text="@string/app_name"
-        android:textSize="21sp"
-        android:textStyle="bold" />
+        android:paddingTop="0dp"
+        android:src="@drawable/ic_launcher" />
     
     <LinearLayout
         android:id="@+id/linearLayoutMainMenuButtonPanel"
