@@ -1,5 +1,5 @@
 .otm-menu {
-    background-color: #4b4d4b;
+    background-color: #4b4c49;
     height: 100%;
 }
 
@@ -11,14 +11,10 @@
     width: 280px;
 }
 
-.otm-menu-logo-text {
-    margin-top: 18px;
+.otm-menu-logo-img {
+    margin-top: 2%;
     margin-left: 5px;
-    color: #e0e0e0;
-    font-family: Arial,sans-serif;
-    font-weight: bold;
-    font-style: italic;
-    font-size: 22px;
+    height: 80%;
 }
 
 .otm-menu-button-panel {

@@ -43,12 +43,15 @@ define(['jquery'], function($) {
 			// Paint some HTMl content in the canvas
 			$.get(baseUrl + 'native/widget/menu/menu.html', function(data, textStatus, jqXHR) {
 				$(menuContainer).append(jqXHR.responseText);
+				
+				// Set the logo
+				$(menuContainer).find('img.otm-menu-logo-img').attr('src', baseUrl + 'extensions/core/widget/menu/image/ic_logo.png');
 
 				// Add the 'More' button
 				self.addMenuItem(layoutParams.id, JSON.stringify({
 					title: 'More',
 					tooltip: 'More',
-					iconUrl: baseUrl + 'native/widget/menu/image/ic_btn_more.png'
+					iconUrl: baseUrl + 'extensions/core/widget/menu/image/ic_btn_more.png'
 				}));
 			});
         },
