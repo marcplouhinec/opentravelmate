@@ -116,7 +116,7 @@ public class NativeMenu {
 		
 		LinearLayout buttonPanel = (LinearLayout)menuView.findViewById(R.id.linearLayoutMainMenuButtonPanel);
 		final MenuItemView menuItemButton = (MenuItemView)layoutInflater.inflate(R.layout.menu_item_layout, htmlLayout, false);
-		buttonPanel.addView(menuItemButton, new LinearLayout.LayoutParams(50, 50){{
+		buttonPanel.addView(menuItemButton, 0, new LinearLayout.LayoutParams(50, 50){{
 			setMargins(0, menuItemButton.getMarginTop(), menuItemButton.getMarginRight(), menuItemButton.getMarginBottom());
 		}});
 		menuItemButton.setContentDescription(menuItem.title);
