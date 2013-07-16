@@ -51,3 +51,33 @@ Google Play services client library:
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyAUaKuJMg_WgYbgxnMK8-8PvJwgP84AEkA" />
+
+
+Licence
+-------
+Copyright (C) 2013, Marc Plouhinec (marc.plouhinec@gmail.com)
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+![LGPL-v3 logo](http://www.gnu.org/graphics/lgplv3-147x51.png)
+
+
+Credits
+-------
+
+ * The application is developped under [Gentoo](http://www.gentoo.org/) and
+   [Arch Linux](https://www.archlinux.org/) with [Eclipse](http://www.eclipse.org/)
+   and [WebStorm](http://www.jetbrains.com/webstorm/) IDEs.
+ * The logo has been created with [Gimp](http://www.gimp.org/) by using
+   the [Galindo font](http://www.google.com/fonts/specimen/Galindo).
