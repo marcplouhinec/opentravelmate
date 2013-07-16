@@ -8,7 +8,7 @@
     left: 0;
     top: 0;
     bottom: 0;
-    width: 280px;
+    width: 200px;
 }
 
 .otm-menu-logo-img {
@@ -19,7 +19,7 @@
 
 .otm-menu-button-panel {
     position: absolute;
-    left: 290px;
+    left: 210px;
     right: 5px;
     top: 5px;
     bottom: 5px;
