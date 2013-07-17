@@ -28,6 +28,7 @@ define(function() {
 			iframe.style.height = layoutParams.height + 'px';
 			iframe.style.border = 'none';
 			iframe.style.visibility = layoutParams.visible ? 'visible' : 'hidden';
+            iframe.style.overflow = 'auto';
 			
 			iframe.onload = function onLoad() {
 				// Inject the startup script

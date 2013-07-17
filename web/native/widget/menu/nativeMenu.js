@@ -10,7 +10,7 @@ define(['jquery'], function($) {
     /**
      * Array of menu items to add when the menu is completely initialized.
      *
-     * @type {Object.<String, Array.<{title: String, tooltip: String, iconUrl: String}>>}
+     * @type {Object.<String, Array.<{id: Number, title: String, tooltip: String, iconUrl: String}>>}
      */
     var menuItemsToAddByPlaceHolderId = {};
 
@@ -65,6 +65,7 @@ define(['jquery'], function($) {
 
             // Add the 'More' button
             this.addMenuItem(layoutParams.id, JSON.stringify({
+                id: -1,
                 title: 'More',
                 tooltip: 'More',
                 iconUrl: baseUrl + 'extensions/core/widget/menu/image/ic_btn_more.png'
@@ -78,7 +79,7 @@ define(['jquery'], function($) {
          * @param {String} jsonMenuItem JSON-serialized MenuItem
          */
         'addMenuItem': function(menuPlaceHolderId, jsonMenuItem) {
-            /** @type {{title: String, tooltip: String, iconUrl: String}} */
+            /** @type {{id: Number, title: String, tooltip: String, iconUrl: String}} */
 			var item = JSON.parse(jsonMenuItem);
 			var $menuContainer = $('#' + this._getMenuContainerId(menuPlaceHolderId));
 			var $buttonPanel = $menuContainer.find('.otm-menu-button-panel');
@@ -94,6 +95,7 @@ define(['jquery'], function($) {
                 return;
             }
 
+            // Create a button and add it to the panel
 			var button = document.createElement('button');
 			button.setAttribute('title', item.tooltip);
 			var buttonImage = document.createElement('img');
@@ -103,8 +105,16 @@ define(['jquery'], function($) {
 			var buttonSize = $buttonPanel.height();
 			button.style.width = buttonSize + 'px';
 			button.style.height = buttonSize + 'px';
-
 			$buttonPanel.append(button);
+
+            // Handle the click event
+            $(button).click(function handleMenuItemClick() {
+                require(['core/widget/Widget'], function (Widget) {
+                    /** @type {Menu} */
+                    var menu = Widget.findById(menuPlaceHolderId);
+                    menu.fireClickEvent(item.id);
+                });
+            });
         },
         
         /**
