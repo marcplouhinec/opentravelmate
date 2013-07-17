@@ -1,8 +1,13 @@
+/**
+ * Menu panel
+ */
 .otm-menu {
-    background-color: #4b4c49;
     height: 100%;
 }
 
+/**
+ * Menu logo
+ */
 .otm-menu-logo {
     position: absolute;
     left: 0;
@@ -17,6 +22,9 @@
     height: 80%;
 }
 
+/**
+ * Menu items
+ */
 .otm-menu-button-panel {
     position: absolute;
     left: 210px;
@@ -25,34 +33,8 @@
     bottom: 5px;
 }
 
-.otm-menu-button-panel button {
+.otm-menu-button-panel button.otm-menu-button {
     float: right;
-    display: block;
-    background-color: #2e2f2d;
-    border: none;
-    border-radius: 8px;
-    padding: 0;
-    margin: 0 0 0 5px;
-    cursor: pointer;
+    margin-left: 5px;
 }
 
-.otm-menu-button-panel button img {
-    margin-top: 5%;
-    width: 90%;
-    height: 90%;
-}
-
-.otm-menu-button-panel button:hover {
-    background-color: #363735;
-}
-
-.otm-menu-button-panel button:active {
-    background-color: #8e8f8d;
-}
-
-.otm-menu-button-panel button:focus {
-    outline : none;
-}
-.otm-menu-button-panel button::-moz-focus-inner {
-    border: none;
-}

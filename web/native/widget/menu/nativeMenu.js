@@ -27,13 +27,21 @@ define(['jquery'], function($) {
 
 			// Load the menu CSS if necessary
 			if ($('#otm-menu-stylesheet').length === 0) {
+                var $head = $('head');
 				var menuLink = document.createElement('link');
 				menuLink.id = 'otm-menu-stylesheet';
 				menuLink.setAttribute('rel', 'stylesheet');
 				menuLink.setAttribute('href', baseUrl + 'native/widget/menu/menu.css');
 				menuLink.setAttribute('type', 'text/css');
 				menuLink.setAttribute('media', 'screen');
-				$('head').append(menuLink);
+                $head.append(menuLink);
+
+                var commonLink = document.createElement('link');
+                commonLink.setAttribute('rel', 'stylesheet');
+                commonLink.setAttribute('href', baseUrl + 'extensions/core/commons/common.css');
+                commonLink.setAttribute('type', 'text/css');
+                commonLink.setAttribute('media', 'screen');
+                $head.append(commonLink);
 			}
 
 			// Create a container for the menu
@@ -97,6 +105,7 @@ define(['jquery'], function($) {
 
             // Create a button and add it to the panel
 			var button = document.createElement('button');
+            button.setAttribute('class', 'otm-button otm-menu-button');
 			button.setAttribute('title', item.tooltip);
 			var buttonImage = document.createElement('img');
 			buttonImage.src = item.iconUrl;

@@ -81,3 +81,4 @@ Credits
    and [WebStorm](http://www.jetbrains.com/webstorm/) IDEs.
  * The logo has been created with [Gimp](http://www.gimp.org/) by using
    the [Galindo font](http://www.google.com/fonts/specimen/Galindo).
+ * The common styles use the ["Roboto regular" font](http://www.google.com/fonts/specimen/Roboto).
