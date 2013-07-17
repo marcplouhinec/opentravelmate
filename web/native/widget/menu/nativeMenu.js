@@ -7,6 +7,13 @@
 define(['jquery'], function($) {
     'use strict';
 
+    /**
+     * Array of menu items to add when the menu is completely initialized.
+     *
+     * @type {Object.<String, Array.<{title: String, tooltip: String, iconUrl: String}>>}
+     */
+    var menuItemsToAddByPlaceHolderId = {};
+
     var nativeMenu = {
         /**
          * Build the native view object for the current widget.
@@ -47,13 +54,21 @@ define(['jquery'], function($) {
 				// Set the logo
 				$(menuContainer).find('img.otm-menu-logo-img').attr('src', baseUrl + 'extensions/core/widget/menu/image/ic_logo.png');
 
-				// Add the 'More' button
-				self.addMenuItem(layoutParams.id, JSON.stringify({
-					title: 'More',
-					tooltip: 'More',
-					iconUrl: baseUrl + 'extensions/core/widget/menu/image/ic_btn_more.png'
-				}));
+                // Add the menu items that have been potentially added when the menu was not initialized yet
+                var menuItemsToAdd = menuItemsToAddByPlaceHolderId[layoutParams.id];
+                if (_.isArray(menuItemsToAdd)) {
+                    _.each(menuItemsToAdd, function addMenuItem(menuItemToAdd) {
+                        self.addMenuItem(layoutParams.id, JSON.stringify(menuItemToAdd));
+                    });
+                }
 			});
+
+            // Add the 'More' button
+            this.addMenuItem(layoutParams.id, JSON.stringify({
+                title: 'More',
+                tooltip: 'More',
+                iconUrl: baseUrl + 'extensions/core/widget/menu/image/ic_btn_more.png'
+            }));
         },
 
         /**
@@ -63,9 +78,21 @@ define(['jquery'], function($) {
          * @param {String} jsonMenuItem JSON-serialized MenuItem
          */
         'addMenuItem': function(menuPlaceHolderId, jsonMenuItem) {
-			var item = JSON.parse(jsonMenuItem),
-				$menuContainer = $('#' + this._getMenuContainerId(menuPlaceHolderId)),
-				$buttonPanel = $menuContainer.find('.otm-menu-button-panel');
+            /** @type {{title: String, tooltip: String, iconUrl: String}} */
+			var item = JSON.parse(jsonMenuItem);
+			var $menuContainer = $('#' + this._getMenuContainerId(menuPlaceHolderId));
+			var $buttonPanel = $menuContainer.find('.otm-menu-button-panel');
+
+            // if the menu is not initialized yet, add the item in a todo-list
+            if ($buttonPanel.length === 0) {
+                var menuItemsToAdd = menuItemsToAddByPlaceHolderId[menuPlaceHolderId];
+                if (!_.isArray(menuItemsToAdd)) {
+                    menuItemsToAdd = [];
+                    menuItemsToAddByPlaceHolderId[menuPlaceHolderId] = menuItemsToAdd;
+                }
+                menuItemsToAdd.push(item);
+                return;
+            }
 
 			var button = document.createElement('button');
 			button.setAttribute('title', item.tooltip);
