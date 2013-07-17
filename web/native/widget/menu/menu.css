@@ -36,5 +36,6 @@
 .otm-menu-button-panel button.otm-menu-button {
     float: right;
     margin-left: 5px;
+    padding: 2px;
 }
 
