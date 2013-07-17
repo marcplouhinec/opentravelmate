@@ -9,6 +9,12 @@ import org.json.JSONObject;
  * @author marc.plouhinec@gmail.com (Marc Plouhinec)
  */
 public class MenuItem {
+	
+	/**
+	 * Item ID.
+	 */
+	public final int id;
+	
 	/**
 	 * Item title.
 	 */
@@ -27,11 +33,13 @@ public class MenuItem {
 	/**
 	 * Create a menu item.
 	 * 
+	 * @param id
 	 * @param title
 	 * @param tooltip
 	 * @param iconUrl
 	 */
-	public MenuItem(String title, String tooltip, String iconUrl) {
+	public MenuItem(int id, String title, String tooltip, String iconUrl) {
+		this.id = id;
 		this.title = title;
 		this.tooltip = tooltip;
 		this.iconUrl = iconUrl;
@@ -45,15 +53,16 @@ public class MenuItem {
 	 * @throws JSONException
 	 */
 	public static MenuItem fromJsonMenuItem(JSONObject jsonMenuItem) throws JSONException {
+		int id = jsonMenuItem.getInt("id");
 		String title = jsonMenuItem.getString("title");
 		String tooltip = jsonMenuItem.getString("tooltip");
 		String iconUrl = jsonMenuItem.getString("iconUrl");
-		return new MenuItem(title, tooltip, iconUrl);
+		return new MenuItem(id, title, tooltip, iconUrl);
 	}
 
 	@Override
 	public String toString() {
-		return "MenuItem [title=" + title + ", tooltip=" + tooltip
-				+ ", iconUrl=" + iconUrl + "]";
+		return "MenuItem [id=" + id + ", title=" + title + ", tooltip="
+				+ tooltip + ", iconUrl=" + iconUrl + "]";
 	}
 }

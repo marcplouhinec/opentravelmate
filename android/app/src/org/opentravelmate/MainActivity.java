@@ -81,7 +81,7 @@ public class MainActivity extends FragmentActivity {
 		HtmlLayoutParams layoutParams = new HtmlLayoutParams(HtmlLayout.MAIN_WEBVIEW_ID, 0, 0, 1, 1, true, new HashMap<String, String>(){
 			private static final long serialVersionUID = -2001726600946643058L;
 		{
-			put("url", "http://localhost:" + httpServer.getPort() + "/extensions/core/mainwebview/mainwebview.html");
+			put("url", "extensions/core/mainwebview/mainwebview.html");
 			put("entrypoint", "core/mainwebview/mainwebview");
 		}});
 		nativeWebView.buildView(layoutParams);

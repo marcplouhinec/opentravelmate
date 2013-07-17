@@ -105,7 +105,7 @@ public class NativeWebView {
 		webView.addJavascriptInterface(this.nativeMap, NativeMap.GLOBAL_OBJECT_NAME);
 		
 		// Set the URL
-		webView.loadUrl(layoutParams.additionalParameters.get("url"));
+		webView.loadUrl(this.baseUrl + layoutParams.additionalParameters.get("url"));
 	}
 	
 	/**

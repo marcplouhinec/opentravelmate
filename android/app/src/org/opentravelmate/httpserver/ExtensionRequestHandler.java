@@ -39,7 +39,6 @@ public class ExtensionRequestHandler implements HttpRequestHandler {
 		if (url != null && url.startsWith("/")) {
 			url = url.substring(1);
 		}
-		
 		InputStream inputStream = null;
 		byte[] content;
 		try {

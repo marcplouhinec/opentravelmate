@@ -17,6 +17,7 @@ import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -79,7 +80,7 @@ public class NativeMenu {
 		loadImageForImageView(imageViewMenuLogo, this.baseUrl + "extensions/core/widget/menu/image/ic_logo.png");
 		
 		// Add the 'more' button
-		this.addMenuItem(layoutParams.id, new MenuItem("More", "More", this.baseUrl + "extensions/core/widget/menu/image/ic_btn_more.png"));
+		this.addMenuItem(layoutParams.id, new MenuItem(-1, "More", "More", this.baseUrl + "extensions/core/widget/menu/image/ic_btn_more.png"));
 	}
 	
 	/**
@@ -107,7 +108,7 @@ public class NativeMenu {
 	 * @param menuPlaceHolderId
 	 * @param menuItem
 	 */
-	public void addMenuItem(String menuPlaceHolderId, MenuItem menuItem) {
+	public void addMenuItem(final String menuPlaceHolderId, final MenuItem menuItem) {
 		View menuView = htmlLayout.findViewByPlaceHolderId(menuPlaceHolderId);
 		if (menuView == null) {
 			exceptionListener.onException(false, new IllegalStateException("Unknown menu: " + menuPlaceHolderId));
@@ -122,6 +123,20 @@ public class NativeMenu {
 		menuItemButton.setContentDescription(menuItem.title);
 		menuItemButton.setImageBitmap(null);
 		loadImageForImageView(menuItemButton, menuItem.iconUrl);
+		
+		// Handle the click event
+		menuItemButton.setOnClickListener(new View.OnClickListener() {
+			@Override public void onClick(View v) {
+				WebView webView = (WebView)htmlLayout.findViewByPlaceHolderId(HtmlLayout.MAIN_WEBVIEW_ID);
+				webView.loadUrl("javascript:" +
+						"(function handleMenuItemClick() {" +
+						"    require(['core/widget/Widget'], function (Widget) {" +
+						"        var menu = Widget.findById('" + menuPlaceHolderId + "');" +
+						"        menu.fireClickEvent(" + menuItem.id + ");" +
+						"    });" +
+						"})();");
+			}
+		});
 	}
 	
 	/**
