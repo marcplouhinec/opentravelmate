@@ -40,9 +40,40 @@ define(function() {
 				script.src = baseUrl + 'extensions/core/lib/require.min.js';
 				script.setAttribute('data-main', baseUrl + 'extensions/core/widget/webview/startupScript');
 				iframe.contentDocument.body.appendChild(script);
+
+                // Fire the create event
+                require(['core/widget/webview/WebView'], function(WebView) {
+                    WebView.fireCreateEvent(layoutParams.id);
+                });
 			};
 			
 			document.body.appendChild(iframe);
+        },
+
+        /**
+         * Fire an event to a listener that is outside of the WebView.
+         *
+         * @param {String} webViewPlaceHolderId
+         * @param {String} eventName
+         * @param {String} jsonPayload
+         */
+        'fireExternalEvent': function(webViewPlaceHolderId, eventName, jsonPayload) {
+            window.parent.require(['core/widget/Widget'], function (Widget) {
+                /** @type {WebView} */
+                var webView = Widget.findById(webViewPlaceHolderId);
+                var payload = JSON.parse(jsonPayload);
+                webView.fireInternalEvent(eventName, payload);
+            });
+        },
+
+        /**
+         * Remove the view with the given ID.
+         *
+         * @param {String} id
+         *     Place holder ID.
+         */
+        'removeView': function(id) {
+            $('#webview-' + id).remove();
         }
     };
 

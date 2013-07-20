@@ -4,15 +4,10 @@
  * @author marc.plouhinec@gmail.com (Marc Plouhinec)
  */
 
-define(['jquery'], function($) {
+define(['jquery', 'core/commons/FunctionDam'], function($, FunctionDam) {
     'use strict';
 
-    /**
-     * Array of menu items to add when the menu is completely initialized.
-     *
-     * @type {Object.<String, Array.<{id: Number, title: String, tooltip: String, iconUrl: String}>>}
-     */
-    var menuItemsToAddByPlaceHolderId = {};
+    var menuReadyDam = new FunctionDam();
 
     var nativeMenu = {
         /**
@@ -63,12 +58,7 @@ define(['jquery'], function($) {
 				$(menuContainer).find('img.otm-menu-logo-img').attr('src', baseUrl + 'extensions/core/widget/menu/image/ic_logo.png');
 
                 // Add the menu items that have been potentially added when the menu was not initialized yet
-                var menuItemsToAdd = menuItemsToAddByPlaceHolderId[layoutParams.id];
-                if (_.isArray(menuItemsToAdd)) {
-                    _.each(menuItemsToAdd, function addMenuItem(menuItemToAdd) {
-                        self.addMenuItem(layoutParams.id, JSON.stringify(menuItemToAdd));
-                    });
-                }
+                menuReadyDam.setOpened(true);
 			});
 
             // Add the 'More' button
@@ -87,21 +77,20 @@ define(['jquery'], function($) {
          * @param {String} jsonMenuItem JSON-serialized MenuItem
          */
         'addMenuItem': function(menuPlaceHolderId, jsonMenuItem) {
+            var self = this;
+
+            // if the menu is not initialized yet, execute this function later
+            if (!menuReadyDam.isOpened()) {
+                menuReadyDam.executeWhenOpen(function() {
+                    self.addMenuItem(menuPlaceHolderId, jsonMenuItem);
+                });
+                return;
+            }
+
             /** @type {{id: Number, title: String, tooltip: String, iconUrl: String}} */
 			var item = JSON.parse(jsonMenuItem);
 			var $menuContainer = $('#' + this._getMenuContainerId(menuPlaceHolderId));
 			var $buttonPanel = $menuContainer.find('.otm-menu-button-panel');
-
-            // if the menu is not initialized yet, add the item in a todo-list
-            if ($buttonPanel.length === 0) {
-                var menuItemsToAdd = menuItemsToAddByPlaceHolderId[menuPlaceHolderId];
-                if (!_.isArray(menuItemsToAdd)) {
-                    menuItemsToAdd = [];
-                    menuItemsToAddByPlaceHolderId[menuPlaceHolderId] = menuItemsToAdd;
-                }
-                menuItemsToAdd.push(item);
-                return;
-            }
 
             // Create a button and add it to the panel
 			var button = document.createElement('button');
