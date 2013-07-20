@@ -71,6 +71,15 @@ define(['jquery', 'core/commons/FunctionDam'], function($, FunctionDam) {
         },
 
         /**
+         * Remove the native view object for the current widget.
+         *
+         * @param {String} id Place holder ID
+         */
+        'removeView': function(id) {
+            $(this._getMenuContainerId(id)).remove();
+        },
+
+        /**
          * Add the menu item to the native widget.
          * 
          * @param {String} menuPlaceHolderId Place-holder ID of the menu.

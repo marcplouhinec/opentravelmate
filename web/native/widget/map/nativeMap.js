@@ -4,7 +4,7 @@
  * @author marc.plouhinec@gmail.com (Marc Plouhinec)
  */
 
-define(['../native/widget/map/google'], function(google) {
+define(['jquery', '../native/widget/map/google'], function($, google) {
     'use strict';
     
     /**
@@ -31,7 +31,8 @@ define(['../native/widget/map/google'], function(google) {
          * @param {String} jsonLayoutParams JSON-serialized LayoutParams
          */
         'buildView': function(jsonLayoutParams) {
-			var layoutParams = JSON.parse(jsonLayoutParams);
+			var layoutParams = JSON.parse(jsonLayoutParams),
+                baseUrl = layoutParams.additionalParameters['baseUrl'];
 			
 			// Create the div that will contain the map
 			var mapCanvas = document.createElement('div');
@@ -45,11 +46,20 @@ define(['../native/widget/map/google'], function(google) {
 			document.body.appendChild(mapCanvas);
 			
 			// Initialize the map
-			new google.maps.Map(mapCanvas, {
-				'zoom': DEFAULT_ZOOM,
-				'center': new google.maps.LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE),
-				'mapTypeId': google.maps.MapTypeId.ROADMAP
-			});
+            new google.maps.Map(mapCanvas, {
+                'zoom': DEFAULT_ZOOM,
+                'center': new google.maps.LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE),
+                'mapTypeId': google.maps.MapTypeId.ROADMAP
+            });
+        },
+
+        /**
+         * Remove the native view object for the current widget.
+         *
+         * @param {String} id Place holder ID
+         */
+        'removeView': function(id) {
+            $(id + '-canvas').remove();
         }
     };
 
