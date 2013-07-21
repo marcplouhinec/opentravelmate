@@ -9,4 +9,5 @@
 
 -Update the UML diagrams for the widgets (onCreate() and onDestroy() have been moved from Widget to WebView, add Widget.removeById())
 
+-Create a AutoCompleteTextInput widget and finish the autoCompletionDialog.
 
