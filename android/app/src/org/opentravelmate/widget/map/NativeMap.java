@@ -68,6 +68,23 @@ public class NativeMap {
 	}
 	
 	/**
+	 * Remove the native view object for the current widget.
+	 * 
+	 * @param id Place holder ID
+	 */
+	@JavascriptInterface
+	public void removeView(final String id) {
+		UIThreadExecutor.execute(new Runnable() {
+			@Override public void run() {
+				View view = htmlLayout.findViewByPlaceHolderId(id);
+				if (view != null) {
+					htmlLayout.removeView(view);
+				}
+			}
+		});
+	}
+	
+	/**
 	 * Build the native view object for the current widget.
 	 * 
 	 * @param layoutParams

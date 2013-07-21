@@ -12,6 +12,7 @@ import org.opentravelmate.widget.map.NativeMap;
 import org.opentravelmate.widget.menu.NativeMenu;
 
 import android.annotation.SuppressLint;
+import android.view.View;
 import android.webkit.ConsoleMessage;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
@@ -59,6 +60,46 @@ public class NativeWebView {
 				} catch (JSONException e) {
 					exceptionListener.onException(false, e);
 				}
+			}
+		});
+	}
+	
+	/**
+	 * Remove the native view object for the current widget.
+	 * 
+	 * @param id Place holder ID
+	 */
+	@JavascriptInterface
+	public void removeView(final String id) {
+		UIThreadExecutor.execute(new Runnable() {
+			@Override public void run() {
+				View view = htmlLayout.findViewByPlaceHolderId(id);
+				if (view != null) {
+					htmlLayout.removeView(view);
+				}
+			}
+		});
+	}
+	
+	/**
+	 * Fire an event to a listener that is outside of the WebView.
+	 * 
+	 * @param webViewPlaceHolderId
+	 * @param eventName
+	 * @param jsonPayload
+	 */
+	@JavascriptInterface
+	public void fireExternalEvent(final String webViewPlaceHolderId, final String eventName, final String jsonPayload) {
+		UIThreadExecutor.execute(new Runnable() {
+			@Override public void run() {
+				WebView mainWebView = (WebView)htmlLayout.findViewByPlaceHolderId(HtmlLayout.MAIN_WEBVIEW_ID);
+				mainWebView.loadUrl("javascript:(function(){" +
+						"    require(['core/widget/Widget'], function (Widget) {" +
+						"        var webView = Widget.findById('" + webViewPlaceHolderId + "');" +
+						"        var payload = JSON.parse('" + jsonPayload.replace("\"", "\\\"") + "');" +
+						"        webView.fireInternalEvent('" + eventName + "', payload);" +
+						"    });" +
+						"})();");
 			}
 		});
 	}
@@ -130,6 +171,16 @@ public class NativeWebView {
 				"  script.setAttribute('data-main', '" + this.baseUrl + "extensions/core/widget/webview/startupScript');" +
 				"  document.body.appendChild(script);" +
 				"})();");
+		
+		// Fire the create event to the parent view
+		if (!layoutParams.id.equals(HtmlLayout.MAIN_WEBVIEW_ID)) {
+			WebView mainWebView = (WebView)htmlLayout.findViewByPlaceHolderId(HtmlLayout.MAIN_WEBVIEW_ID);
+			mainWebView.loadUrl("javascript:(function(){" +
+					"  window.require(['core/widget/webview/WebView'], function(WebView) {" +
+					"    WebView.fireCreateEvent('" + layoutParams.id + "');" +
+					"  });" +
+					"})();");
+		}
 	}
 
 }
