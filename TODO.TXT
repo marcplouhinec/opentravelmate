@@ -5,8 +5,6 @@
 	data-otm-url="extension/org/opentravelmate/mainview/mainview.html"
 	data-otm-entrypoint="extension/org/opentravelmate/mainview/mainview"/>
 
--When a window resize is detected, call Window.getCurrent().layout() from index.js
-
 -Add params to nativeMap.buildView in order to set the default latitude/longitude/zoom.
 
 -Update the UML diagrams for the widgets (onCreate() and onDestroy() have been moved from Widget to WebView, add Widget.removeById())

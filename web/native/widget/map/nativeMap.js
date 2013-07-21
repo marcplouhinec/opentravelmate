@@ -54,6 +54,22 @@ define(['jquery', '../native/widget/map/google'], function($, google) {
         },
 
         /**
+         * Update the native view object for the current widget.
+         *
+         * @param {String} jsonLayoutParams JSON-serialized LayoutParams
+         */
+        'updateView': function(jsonLayoutParams) {
+            var layoutParams = JSON.parse(jsonLayoutParams);
+
+            var mapCanvas = document.getElementById(layoutParams.id + '-canvas');
+            mapCanvas.style.left = layoutParams.x + 'px';
+            mapCanvas.style.top = layoutParams.y + 'px';
+            mapCanvas.style.width = layoutParams.width + 'px';
+            mapCanvas.style.height = layoutParams.height + 'px';
+            mapCanvas.style.visibility = layoutParams.visible ? 'visible' : 'hidden';
+        },
+
+        /**
          * Remove the native view object for the current widget.
          *
          * @param {String} id Place holder ID

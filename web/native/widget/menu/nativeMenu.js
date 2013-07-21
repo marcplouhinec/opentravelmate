@@ -71,6 +71,32 @@ define(['jquery', 'core/commons/FunctionDam'], function($, FunctionDam) {
         },
 
         /**
+         * Update the native view object for the current widget.
+         *
+         * @param {String} jsonLayoutParams JSON-serialized LayoutParams
+         */
+        'updateView': function(jsonLayoutParams) {
+            var layoutParams = JSON.parse(jsonLayoutParams);
+
+            // Resize the container
+            var menuContainer = document.getElementById(this._getMenuContainerId(layoutParams.id));
+            menuContainer.style.left = layoutParams.x + 'px';
+            menuContainer.style.top = layoutParams.y + 'px';
+            menuContainer.style.width = layoutParams.width + 'px';
+            menuContainer.style.height = layoutParams.height + 'px';
+            menuContainer.style.visibility = layoutParams.visible ? 'visible' : 'hidden';
+
+            // Resize the buttons
+            var $buttonPanel = $(menuContainer).find('.otm-menu-button-panel');
+            var buttonSize = $buttonPanel.height();
+            var $buttons = $buttonPanel.children('button.otm-menu-button');
+            $buttons.each(function(i, button) {
+                button.style.width = buttonSize + 'px';
+                button.style.height = buttonSize + 'px';
+            });
+        },
+
+        /**
          * Remove the native view object for the current widget.
          *
          * @param {String} id Place holder ID

@@ -51,6 +51,22 @@ define(function() {
         },
 
         /**
+         * Update the native view object for the current widget.
+         *
+         * @param {String} jsonLayoutParams JSON-serialized LayoutParams
+         */
+        'updateView': function(jsonLayoutParams) {
+            var layoutParams = JSON.parse(jsonLayoutParams);
+
+            var iframe = document.getElementById('webview-' + layoutParams.id);
+            iframe.style.left = layoutParams.x + 'px';
+            iframe.style.top = layoutParams.y + 'px';
+            iframe.style.width = layoutParams.width + 'px';
+            iframe.style.height = layoutParams.height + 'px';
+            iframe.style.visibility = layoutParams.visible ? 'visible' : 'hidden';
+        },
+
+        /**
          * Remove the native view object for the current widget.
          *
          * @param {String} id Place holder ID
