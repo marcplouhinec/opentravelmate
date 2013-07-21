@@ -65,6 +65,29 @@ public class NativeWebView {
 	}
 	
 	/**
+	 * Update the native view object for the current widget.
+	 * 
+	 * @param jsonLayoutParams
+	 */
+	@JavascriptInterface
+	public void updateView(final String jsonLayoutParams) {
+		UIThreadExecutor.execute(new Runnable() {
+			@Override public void run() {
+				try {
+					HtmlLayoutParams layoutParams = HtmlLayoutParams.fromJsonLayoutParams(new JSONObject(jsonLayoutParams));
+					View view = htmlLayout.findViewByPlaceHolderId(layoutParams.id);
+					if (view != null) {
+						view.setLayoutParams(layoutParams);
+					}
+				} catch (JSONException e) {
+					exceptionListener.onException(false, e);
+				}
+				
+			}
+		});
+	}
+	
+	/**
 	 * Remove the native view object for the current widget.
 	 * 
 	 * @param id Place holder ID
