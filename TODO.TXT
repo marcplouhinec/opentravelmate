@@ -11,7 +11,4 @@
 
 -Update the UML diagrams for the widgets (onCreate() and onDestroy() have been moved from Widget to WebView, add Widget.removeById())
 
--Implement nativeWebView.fireExternalEvent() and native*.removeView() in the Android version
-
--In the Android version, call WebView.fireCreateEvent()
 
