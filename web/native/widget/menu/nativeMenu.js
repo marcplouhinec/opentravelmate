@@ -115,7 +115,10 @@ define(['jquery', 'core/commons/FunctionDam'], function($, FunctionDam) {
 			$buttonPanel.append(button);
 
             // Handle the click event
-            $(button).click(function handleMenuItemClick() {
+            $(button).bind('touchstart click', function(event) {
+                event.stopPropagation();
+                event.preventDefault();
+
                 require(['core/widget/Widget'], function (Widget) {
                     /** @type {Menu} */
                     var menu = Widget.findById(menuPlaceHolderId);
