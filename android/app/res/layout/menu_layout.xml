@@ -12,10 +12,10 @@
         android:layout_weight="1"
         android:contentDescription="@string/app_name"
         android:gravity="center_vertical"
-        android:paddingBottom="0dp"
+        android:paddingBottom="5dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:paddingTop="0dp"
+        android:paddingTop="5dp"
         android:src="@drawable/ic_launcher" />
     
     <LinearLayout
