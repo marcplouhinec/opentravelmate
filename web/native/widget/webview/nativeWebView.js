@@ -18,7 +18,7 @@ define(function() {
 				baseUrl = layoutParams.additionalParameters['baseUrl'];
 		
 			// Create an iframe
-			var iframe = document.createElement('iframe');
+			var iframe = /** @type {HTMLIFrameElement} */document.createElement('iframe');
 			iframe.id = 'webview-' + layoutParams.id;
 			iframe.src = baseUrl + layoutParams.additionalParameters['url'];
 			iframe.style.position = 'absolute';
@@ -36,15 +36,10 @@ define(function() {
 				iframe.contentWindow.org_opentravelmate_widget_webview_webviewUrl = layoutParams.additionalParameters['url'];
 				iframe.contentWindow.org_opentravelmate_widget_webview_webviewEntrypoint = layoutParams.additionalParameters['entrypoint'];
 				iframe.contentWindow.org_opentravelmate_widget_webview_webviewBaseUrl = baseUrl;
-				var script = iframe.contentDocument.createElement('script');
+				var script = /** @type {HTMLScriptElement} */ iframe.contentDocument.createElement('script');
 				script.src = baseUrl + 'extensions/core/lib/require.min.js';
 				script.setAttribute('data-main', baseUrl + 'extensions/core/widget/webview/startupScript');
-				iframe.contentDocument.body.appendChild(script);
-
-                // Fire the create event
-                require(['core/widget/webview/WebView'], function(WebView) {
-                    WebView.fireCreateEvent(layoutParams.id);
-                });
+                iframe.contentDocument.body.appendChild(script);
 			};
 			
 			document.body.appendChild(iframe);
@@ -84,11 +79,27 @@ define(function() {
          */
         'fireExternalEvent': function(webViewPlaceHolderId, eventName, jsonPayload) {
             window.parent.require(['core/widget/Widget'], function (Widget) {
-                /** @type {WebView} */
-                var webView = Widget.findById(webViewPlaceHolderId);
+                var webView = /** @type {WebView} */ Widget.findById(webViewPlaceHolderId);
                 var payload = JSON.parse(jsonPayload);
-                webView.fireInternalEvent(eventName, payload);
+                webView.fireEvent(eventName, payload);
             });
+        },
+
+        /**
+         * Fire an event to a listener that is inside the WebView.
+         *
+         * @param {String} webViewPlaceHolderId
+         * @param {String} eventName
+         * @param {String} jsonPayload
+         */
+        'fireInternalEvent': function(webViewPlaceHolderId, eventName, jsonPayload) {
+            var iframe = /** @type{HTMLIFrameElement} */ document.getElementById('webview-' + webViewPlaceHolderId);
+            if (iframe && iframe.contentWindow && iframe.contentWindow.require) {
+                iframe.contentWindow.require(['core/widget/webview/WebView'], function (WebView) {
+                    var payload = JSON.parse(jsonPayload);
+                    WebView.getCurrent().fireEvent(eventName, payload);
+                });
+            }
         }
     };
 
