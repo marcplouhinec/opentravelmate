@@ -79,9 +79,9 @@ define(function() {
          */
         'fireExternalEvent': function(webViewPlaceHolderId, eventName, jsonPayload) {
             window.parent.require(['core/widget/Widget'], function (Widget) {
-                var webView = /** @type {WebView} */ Widget.findById(webViewPlaceHolderId);
+                var subWebView = /** @type {SubWebView} */ Widget.findById(webViewPlaceHolderId);
                 var payload = JSON.parse(jsonPayload);
-                webView.fireEvent(eventName, payload);
+                subWebView.fireEventFromInternal(eventName, payload);
             });
         },
 
@@ -95,9 +95,9 @@ define(function() {
         'fireInternalEvent': function(webViewPlaceHolderId, eventName, jsonPayload) {
             var iframe = /** @type{HTMLIFrameElement} */ document.getElementById('webview-' + webViewPlaceHolderId);
             if (iframe && iframe.contentWindow && iframe.contentWindow.require) {
-                iframe.contentWindow.require(['core/widget/webview/WebView'], function (WebView) {
+                iframe.contentWindow.require(['core/widget/webview/webview'], function (webview) {
                     var payload = JSON.parse(jsonPayload);
-                    WebView.getCurrent().fireEvent(eventName, payload);
+                    webview.fireEventFromExternal(eventName, payload);
                 });
             }
         }

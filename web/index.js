@@ -34,21 +34,16 @@ requirejs.config({
 });
 
 require([
-    'jquery',
-    'core/widget/webview/WebView'
-], function($, WebView) {
+    'core/widget/webview/webview'
+], function(webview) {
     'use strict';
 
     $(document).ready(function() {
         // Create manually the current WebView
-        WebView.setCurrent(new WebView({
-            id: 'root',
-            url: String(document.URL),
-            entrypoint: 'index',
-            baseUrl: baseUrl
-        }));
+        webview.id = 'mainWebView';
+        webview.baseUrl = baseUrl;
 
         // Layout the main view
-        WebView.getCurrent().layout();
+        webview.layout();
     });
 });
