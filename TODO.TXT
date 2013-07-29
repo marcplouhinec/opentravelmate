@@ -16,3 +16,5 @@
 -Implement nativeWebView.fireInternalEvent() (android and web)
 
 -In the android version, change the way the create event is fired
+
+-Handle the window resize event (again)

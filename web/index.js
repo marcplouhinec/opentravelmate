@@ -45,5 +45,10 @@ require([
 
         // Layout the main view
         webview.layout();
+
+        // Update the layout when the page is resized
+        $(window).resize(function resizeWindow() {
+            webview.layout();
+        });
     });
 });
