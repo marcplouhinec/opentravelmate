@@ -1,3 +1,6 @@
+Tasks
+-----
+
 -Document place-holders:
 <div
 	id="main-view"
@@ -10,4 +13,30 @@
 -Update the UML diagrams for the widgets (add Widget.removeById())
 
 -Create a AutoCompleteTextInput widget, finish the autoCompletionDialog and clean the "place-finder".
+ - Document it
 
+-Create 2 generic panels:
+ - menu panel: displayed under the menu (shown on demand for small screens, always displayed for big screens)
+ - details panel: displayed like a new activity on mobile, displayed on the left on big screens
+
+- Find a better name for FunctionDam
+
+- in the place-finder and the auto complete dialog, put the shared constants in a separate file (not in the internal controller).
+
+Develoment tasks
+----------------
+
+1. Refactor the place-finder
+2. Refactor the autocompletion dialog
+2b. Split core/commons into core/utils and core/style
+3. Create an autocompletion input widget and use it in the place-finder
+4. Display found places on the map
+5. Display the Luxembourg bus lines on the map
+6. Handle bus stop or found place selection on the map
+7. Create the "show/hide satellite" map button
+8. Create the "show current location" map button
+9. Correctly handle the main menu (show the items until there is no place left and put other items in the "more" panel)
+10. On big screens, show the menu item title
+11. Create the generic "menu panel" and add an arrow under the selected menu item. The place finder must be refactored to use this panel.
+
+Next tasks: itinerary panel, find itinerary menu item, place details, ...
