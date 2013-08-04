@@ -7,12 +7,7 @@
 
 -Add params to nativeMap.buildView in order to set the default latitude/longitude/zoom.
 
--Update the UML diagrams for the widgets (onCreate() and onDestroy() have been moved from Widget to WebView, add Widget.removeById())
+-Update the UML diagrams for the widgets (add Widget.removeById())
 
 -Create a AutoCompleteTextInput widget, finish the autoCompletionDialog and clean the "place-finder".
 
--Update android extensions and rename the call to WebView.fireInternalEvent() by WebView.fireEvent()
-
--Implement nativeWebView.fireInternalEvent() (android and web)
-
--In the android version, change the way the create event is fired

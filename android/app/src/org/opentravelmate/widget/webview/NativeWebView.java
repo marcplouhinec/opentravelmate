@@ -118,9 +118,32 @@ public class NativeWebView {
 				WebView mainWebView = (WebView)htmlLayout.findViewByPlaceHolderId(HtmlLayout.MAIN_WEBVIEW_ID);
 				mainWebView.loadUrl("javascript:(function(){" +
 						"    require(['core/widget/Widget'], function (Widget) {" +
-						"        var webView = Widget.findById('" + webViewPlaceHolderId + "');" +
+						"        var subWebView = Widget.findById('" + webViewPlaceHolderId + "');" +
+						"        if (!subWebView) { return; };" +
 						"        var payload = JSON.parse('" + jsonPayload.replace("\"", "\\\"") + "');" +
-						"        webView.fireInternalEvent('" + eventName + "', payload);" +
+						"        subWebView.fireEventFromInternal('" + eventName + "', payload);" +
+						"    });" +
+						"})();");
+			}
+		});
+	}
+	
+	/**
+	 * Fire an event to a listener that is inside the WebView.
+	 * 
+	 * @param webViewPlaceHolderId
+	 * @param eventName
+	 * @param jsonPayload
+	 */
+	@JavascriptInterface
+	public void fireInternalEvent(final String webViewPlaceHolderId, final String eventName, final String jsonPayload) {
+		UIThreadExecutor.execute(new Runnable() {
+			@Override public void run() {
+				WebView webView = (WebView)htmlLayout.findViewByPlaceHolderId(webViewPlaceHolderId);
+				webView.loadUrl("javascript:(function(){" +
+						"    require(['core/widget/webview/webview'], function (webview) {" +
+						"        var payload = JSON.parse('" + jsonPayload.replace("\"", "\\\"") + "');" +
+						"        webview.fireEventFromExternal('" + eventName + "', payload);" +
 						"    });" +
 						"})();");
 			}
@@ -194,16 +217,6 @@ public class NativeWebView {
 				"  script.setAttribute('data-main', '" + this.baseUrl + "extensions/core/widget/webview/startupScript');" +
 				"  document.body.appendChild(script);" +
 				"})();");
-		
-		// Fire the create event to the parent view
-		if (!layoutParams.id.equals(HtmlLayout.MAIN_WEBVIEW_ID)) {
-			WebView mainWebView = (WebView)htmlLayout.findViewByPlaceHolderId(HtmlLayout.MAIN_WEBVIEW_ID);
-			mainWebView.loadUrl("javascript:(function(){" +
-					"  window.require(['core/widget/webview/WebView'], function(WebView) {" +
-					"    WebView.fireCreateEvent('" + layoutParams.id + "');" +
-					"  });" +
-					"})();");
-		}
 	}
 
 }
