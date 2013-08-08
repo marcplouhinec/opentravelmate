@@ -82,3 +82,9 @@ Credits
  * The logo has been created with [Gimp](http://www.gimp.org/) by using
    the [Galindo font](http://www.google.com/fonts/specimen/Galindo).
  * The common styles use the ["Roboto regular" font](http://www.google.com/fonts/specimen/Roboto).
+ * The application uses the following libraries:
+     * [RequireJS](http://requirejs.org/)
+     * [RequireJS Async Load Plugin](https://github.com/millermedeiros/requirejs-plugins)
+     * [JQuery](http://jquery.com/)
+     * [JQuery Fast Button Plugin](https://github.com/alexblack/google-fastbutton)
+     * [Underscore.js](http://underscorejs.org/)
