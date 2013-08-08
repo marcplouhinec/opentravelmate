@@ -25,10 +25,6 @@ Tasks
 
 - Handle the auto completion dialog overflow-y and resize (when window is resized)
 
-- On the Android version, solve the following error that happen when the autocomplete-dialog is opened a second time:
-08-04 14:54:08.720: E/MainActivity(18712): org.opentravelmate.commons.I18nException: WebView autocompletion-subwebview-webview message: Uncaught ReferenceError: require is not defined - from line 1 of autocompletion-subwebview-webview.
-
-- Change the signature of SubWebView.onCreate and SubWebView.onDestroy: add the parameter calledOnce: Boolean
 
 Develoment tasks
 ----------------
