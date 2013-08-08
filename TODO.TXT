@@ -23,8 +23,6 @@ Tasks
 
 - In the place-finder and the auto complete dialog, put the shared constants in a separate file (not in the internal controller).
 
-- Handle the auto completion dialog overflow-y and resize (when window is resized)
-
 
 Develoment tasks
 ----------------
