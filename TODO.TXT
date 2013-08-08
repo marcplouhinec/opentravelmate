@@ -21,23 +21,21 @@ Tasks
 
 - Find a better name for FunctionDam
 
-- In the place-finder and the auto complete dialog, put the shared constants in a separate file (not in the internal controller).
-
 
 Develoment tasks
 ----------------
 
-1. Refactor the place-finder
-2. Refactor the autocompletion dialog
-2b. Split core/commons into core/utils and core/style
-3. Create an autocompletion input widget and use it in the place-finder
-4. Display found places on the map
-5. Display the Luxembourg bus lines on the map
-6. Handle bus stop or found place selection on the map
-7. Create the "show/hide satellite" map button
-8. Create the "show current location" map button
-9. Correctly handle the main menu (show the items until there is no place left and put other items in the "more" panel)
-10. On big screens, show the menu item title
-11. Create the generic "menu panel" and add an arrow under the selected menu item. The place finder must be refactored to use this panel.
+1.  [X] Refactor the place-finder
+2.  [X] Refactor the autocompletion dialog
+2b. [X] Split core/commons into core/utils and core/style
+3.  [ ] Create an autocompletion input widget and use it in the place-finder
+4.  [ ] Display found places on the map
+5.  [ ] Display the Luxembourg bus lines on the map
+6.  [ ] Handle bus stop or found place selection on the map
+7.  [ ] Create the "show/hide satellite" map button
+8.  [ ] Create the "show current location" map button
+9.  [ ] Correctly handle the main menu (show the items until there is no place left and put other items in the "more" panel)
+10. [ ] On big screens, show the menu item title
+11. [ ] Create the generic "menu panel" and add an arrow under the selected menu item. The place finder must be refactored to use this panel.
 
 Next tasks: itinerary panel, find itinerary menu item, place details, ...

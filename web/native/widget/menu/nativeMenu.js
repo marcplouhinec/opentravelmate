@@ -4,7 +4,7 @@
  * @author marc.plouhinec@gmail.com (Marc Plouhinec)
  */
 
-define(['jquery', 'core/commons/FunctionDam'], function($, FunctionDam) {
+define(['jquery', 'core/utils/FunctionDam'], function($, FunctionDam) {
     'use strict';
 
     var menuReadyDam = new FunctionDam();
@@ -33,7 +33,7 @@ define(['jquery', 'core/commons/FunctionDam'], function($, FunctionDam) {
 
                 var commonLink = document.createElement('link');
                 commonLink.setAttribute('rel', 'stylesheet');
-                commonLink.setAttribute('href', baseUrl + 'extensions/core/commons/common.css');
+                commonLink.setAttribute('href', baseUrl + 'extensions/core/style/common.css');
                 commonLink.setAttribute('type', 'text/css');
                 commonLink.setAttribute('media', 'screen');
                 $head.append(commonLink);
