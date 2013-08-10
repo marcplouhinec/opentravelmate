@@ -20,6 +20,10 @@ Tasks
 
 - Find a better name for FunctionDam
 
+- On Android, typing text in an Auto-complete input make the auto-complete dialog to "blink". It is because
+  AutoCompleteTextInput._setDialogLayoutParams() is called each time a key is typed.
+  --> Call this method ONLY if the layout change.
+
 
 Develoment tasks
 ----------------
