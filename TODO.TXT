@@ -24,6 +24,17 @@ Tasks
   AutoCompleteTextInput._setDialogLayoutParams() is called each time a key is typed.
   --> Call this method ONLY if the layout change.
 
+- Rename SvgMarkerIcon to SvgPathMarkerIcon.
+
+- Add a Map.removeMarker() method to the UML diagram.
+
+- Implement nativeMap.panTo & addMarker & removeMarker on the Android and Web platforms.
+
+- Add Marker.id to the UML diagram
+
+- Check if it is not better to put the functions Marker.onClick, onMouseEnter and onMouseLeave on the Map widget.
+
+- Use a SparseArray in the Android's NativeMap.
 
 Develoment tasks
 ----------------

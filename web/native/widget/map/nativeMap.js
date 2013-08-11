@@ -23,6 +23,16 @@ define(['jquery', '../native/widget/map/google'], function($, google) {
 	 */
 	var DEFAULT_LONGITUDE = 6.131;
 
+    /**
+     * @type {Object.<String, google.maps.Map>}
+     */
+    var gmapByPlaceHolderId = {};
+
+    /**
+     * @type {Object.<Number, google.maps.Marker>}
+     */
+    var gmarkerById = {};
+
 
     var nativeMap = {
         /**
@@ -46,11 +56,12 @@ define(['jquery', '../native/widget/map/google'], function($, google) {
 			document.body.appendChild(mapCanvas);
 			
 			// Initialize the map
-            new google.maps.Map(mapCanvas, {
+            var gmap = new google.maps.Map(mapCanvas, {
                 'zoom': DEFAULT_ZOOM,
                 'center': new google.maps.LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE),
                 'mapTypeId': google.maps.MapTypeId.ROADMAP
             });
+            gmapByPlaceHolderId[layoutParams.id] = gmap;
         },
 
         /**
@@ -76,6 +87,63 @@ define(['jquery', '../native/widget/map/google'], function($, google) {
          */
         'removeView': function(id) {
             $(id + '-canvas').remove();
+        },
+
+        /**
+         * Move the map center to the given location.
+         *
+         * @param {String} id
+         *     Map place holder ID.
+         * @param {String} jsonCenter
+         *     JSON serialized LatLng.
+         */
+        'panTo': function(id, jsonCenter) {
+            var center = JSON.parse(jsonCenter);
+
+            var gmap = gmapByPlaceHolderId[id];
+            gmap.panTo(new google.maps.LatLng(center.lat, center.lng));
+        },
+
+        /**
+         * Add a marker on the map.
+         *
+         * @param {String} id
+         *     Map place holder ID.
+         * @param {String} jsonMarker
+         *     JSON serialized Marker.
+         */
+        'addMarker': function(id, jsonMarker) {
+            var marker = JSON.parse(jsonMarker);
+            var gmap = gmapByPlaceHolderId[id];
+
+            var gmarker = new google.maps.Marker({
+                position: new google.maps.LatLng(marker.position.lat, marker.position.lng),
+                title: marker.title
+            });
+            if (marker.anchorPoint) {
+                gmarker.setOptions({
+                    anchorPoint: new google.maps.Point(marker.anchorPoint.x, marker.anchorPoint.y)
+                });
+            }
+
+            gmarkerById[marker.id] = gmarker;
+            gmarker.setMap(gmap);
+        },
+
+        /**
+         * Remove a marker from the map.
+         *
+         * @param {String} id
+         *     Map place holder ID.
+         * @param {String} jsonMarker
+         *     JSON serialized Marker.
+         */
+        'removeMarker': function(id, jsonMarker) {
+            var marker = JSON.parse(jsonMarker);
+            var gmarker = gmarkerById[marker.id];
+            delete gmarkerById[marker.id];
+
+            gmarker.setMap(null);
         }
     };
 

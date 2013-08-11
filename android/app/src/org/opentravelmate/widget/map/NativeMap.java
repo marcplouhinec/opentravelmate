@@ -1,5 +1,8 @@
 package org.opentravelmate.widget.map;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opentravelmate.R;
@@ -12,7 +15,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
+
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -38,6 +42,8 @@ public class NativeMap {
 	private final HtmlLayout htmlLayout;
 	private final LayoutInflater layoutInflater;
 	private final FragmentManager fragmentManager;
+	private final Map<Integer, com.google.android.gms.maps.model.Marker> gmarkerById =
+			new HashMap<Integer, com.google.android.gms.maps.model.Marker>();
 	
 	/**
 	 * Create a NativeMap object.
@@ -85,7 +91,6 @@ public class NativeMap {
 				} catch (JSONException e) {
 					exceptionListener.onException(false, e);
 				}
-				
 			}
 		});
 	}
@@ -120,9 +125,90 @@ public class NativeMap {
 		
 		GoogleMap map = ((SupportMapFragment) fragmentManager.findFragmentById(R.id.map)).getMap();
 		CameraPosition cameraPosition = new CameraPosition.Builder()
-			.target(new LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE))
+			.target(new com.google.android.gms.maps.model.LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE))
 			.zoom(DEFAULT_ZOOM)
 			.build();
 		map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+	}
+	
+	/**
+	 * Move the map center to the given location.
+	 * 
+	 * @param id
+	 *     Map place holder ID.
+	 * @param jsonCenter
+	 *     JSON serialized LatLng.
+	 */
+	@JavascriptInterface
+	public void panTo(final String id, final String jsonCenter) {
+		UIThreadExecutor.execute(new Runnable() {
+			@Override public void run() {
+				try {
+					LatLng center = LatLng.fromJsonLatLng(new JSONObject(jsonCenter));
+					GoogleMap map = ((SupportMapFragment) fragmentManager.findFragmentById(R.id.map)).getMap();
+					CameraPosition cameraPosition = new CameraPosition.Builder()
+						.target(new com.google.android.gms.maps.model.LatLng(center.lat, center.lng))
+						.zoom(map.getCameraPosition().zoom)
+						.build();
+					map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+				} catch (JSONException e) {
+					exceptionListener.onException(false, e);
+				}
+			}
+		});
+	}
+	
+	/**
+	 * Add a marker on the map.
+	 * 
+	 * @param id
+	 *     Map place holder ID.
+	 * @param jsonMarker
+     *     JSON serialized Marker.
+	 */
+	@JavascriptInterface
+	public void addMarker(final String id, final String jsonMarker) {
+		UIThreadExecutor.execute(new Runnable() {
+			@Override public void run() {
+				try {
+					Marker marker = Marker.fromJsonMarker(new JSONObject(jsonMarker));
+					GoogleMap map = ((SupportMapFragment) fragmentManager.findFragmentById(R.id.map)).getMap();
+					
+					MarkerOptions markerOptions = new MarkerOptions()
+						.position(new com.google.android.gms.maps.model.LatLng(marker.position.lat, marker.position.lng))
+						.title(marker.title); 
+					if (marker.anchorPoint != null) {
+						markerOptions.anchor((float)marker.anchorPoint.x, (float)marker.anchorPoint.y);
+					}
+					
+					gmarkerById.put(marker.id, map.addMarker(markerOptions));
+				} catch (JSONException e) {
+					exceptionListener.onException(false, e);
+				}
+			}
+		});
+	}
+	
+	/**
+	 * Remove a marker from the map.
+	 * 
+	 * @param id
+	 *     Map place holder ID.
+	 * @param jsonMarker
+     *     JSON serialized Marker.
+	 */
+	@JavascriptInterface
+	public void removeMarker(final String id, final String jsonMarker) {
+		UIThreadExecutor.execute(new Runnable() {
+			@Override public void run() {
+				try {
+					Marker marker = Marker.fromJsonMarker(new JSONObject(jsonMarker));
+					gmarkerById.get(marker.id).remove();
+					gmarkerById.remove(marker.id);
+				} catch (JSONException e) {
+					exceptionListener.onException(false, e);
+				}
+			}
+		});
 	}
 }
