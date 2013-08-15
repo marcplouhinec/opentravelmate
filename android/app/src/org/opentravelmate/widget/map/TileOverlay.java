@@ -21,11 +21,6 @@ public class TileOverlay {
 	public final float zIndex;
 	
 	/**
-	 * true = visible, false = invisible.
-	 */
-	public final boolean isVisible;
-	
-	/**
 	 * URL to a given tile with the ${zoom}, ${x} and ${y} place-holders.
 	 */
 	public final String tileUrlPattern;
@@ -35,13 +30,11 @@ public class TileOverlay {
 	 * 
 	 * @param id
 	 * @param zIndex
-	 * @param isVisible
 	 * @param tileUrlPattern
 	 */
-	public TileOverlay(int id, float zIndex, boolean isVisible, String tileUrlPattern) {
+	public TileOverlay(int id, float zIndex, String tileUrlPattern) {
 		this.id = id;
 		this.zIndex = zIndex;
-		this.isVisible = isVisible;
 		this.tileUrlPattern = tileUrlPattern;
 	}
 	
@@ -56,7 +49,6 @@ public class TileOverlay {
 		return new TileOverlay(
 				jsonTileOverlay.getInt("id"),
 				(float)jsonTileOverlay.getDouble("zIndex"),
-				jsonTileOverlay.getBoolean("isVisible"),
 				jsonTileOverlay.getString("tileUrlPattern"));
 	}
 }

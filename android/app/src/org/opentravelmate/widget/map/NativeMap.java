@@ -154,7 +154,6 @@ public class NativeMap {
 					TileProvider tileProvider = new UrlPatternTileProvider(tileOverlay.tileUrlPattern);
 					map.addTileOverlay(new TileOverlayOptions()
 						.tileProvider(tileProvider)
-						.visible(tileOverlay.isVisible)
 						.zIndex(tileOverlay.zIndex));
 				} catch (JSONException e) {
 					exceptionListener.onException(false, e);
