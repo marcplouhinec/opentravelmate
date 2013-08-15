@@ -54,7 +54,7 @@ Develoment tasks
 2b. [X] Split core/commons into core/utils and core/style
 3.  [X] Create an autocompletion input widget and use it in the place-finder
 4.  [X] Display found places on the map
-5.  [ ] Display the Luxembourg bus lines on the map
+5.  [X] Display the Luxembourg bus lines on the map
 6.  [ ] Handle bus stop or found place selection on the map
 7.  [ ] Create the "show/hide satellite" map button
 8.  [ ] Create the "show current location" map button
