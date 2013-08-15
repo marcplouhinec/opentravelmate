@@ -36,6 +36,16 @@ Tasks
 
 - Use a SparseArray in the Android's NativeMap.
 
+- In the UML diagram, rename TileOverlayOptions to TileOverlay
+
+- Replace TileOverlay.tileProvider: Function by TileOverlay.tileUrlPattern: String to the UML diagram.
+
+- Add TileOverlay.id to the UML diagram
+
+- Add Map.onTileDisplayed(listener: function(zoom,x,y)) and Map.onTileReleased(listener: function(zoom,x,y)) to the UML diagram and implement it
+
+- Add TileOverlay.removeTileOverlay to the UML diagram and implement it
+
 Develoment tasks
 ----------------
 
@@ -43,7 +53,7 @@ Develoment tasks
 2.  [X] Refactor the autocompletion dialog
 2b. [X] Split core/commons into core/utils and core/style
 3.  [X] Create an autocompletion input widget and use it in the place-finder
-4.  [ ] Display found places on the map
+4.  [X] Display found places on the map
 5.  [ ] Display the Luxembourg bus lines on the map
 6.  [ ] Handle bus stop or found place selection on the map
 7.  [ ] Create the "show/hide satellite" map button

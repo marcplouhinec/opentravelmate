@@ -90,6 +90,49 @@ define(['jquery', '../native/widget/map/google'], function($, google) {
         },
 
         /**
+         * Add an overlay to the map.
+         *
+         * @param {String} id
+         *     Map place holder ID.
+         * @param {String} jsonTileOverlay
+         *     JSON serialized TileOverlay.
+         */
+        'addTileOverlay': function(id, jsonTileOverlay) {
+            var tileOverlay = JSON.parse(jsonTileOverlay);
+            var gmap = gmapByPlaceHolderId[id];
+
+            gmap.overlayMapTypes.insertAt(tileOverlay.zIndex, {
+                tileSize: new google.maps.Size(256, 256),
+
+                /**
+                 * This object implements the interface google.maps.MapType in order to determine which waypoints to loads.
+                 *
+                 * @see https://developers.google.com/maps/documentation/javascript/maptypes
+                 *
+                 * @param {{x: Number, y: Number}} coord
+                 * @param {Number} zoom
+                 * @param {HTMLDocument} ownerDocument
+                 * @return {HTMLElement}
+                 */
+                getTile: function (coord, zoom, ownerDocument) {
+                    var tileUrl = tileOverlay.tileUrlPattern
+                        .replace('${zoom}', zoom)
+                        .replace('${x}', coord.x)
+                        .replace('${y}', coord.y);
+
+                    // Create a div block with the tile picture as a background picture (the web browser will load it automatically)
+                    var divTile = /** @type {HTMLElement} */ ownerDocument.createElement('DIV');
+                    divTile.setAttribute('id', zoom + '_' + coord.x + '_' + coord.y);
+                    divTile.style.width = '256px';
+                    divTile.style.height = '256px';
+                    divTile.style.backgroundImage = 'url(' + tileUrl + ')';
+                    divTile.style.backgroundSize = '256px 256px';
+                    return divTile;
+                }
+            });
+        },
+
+        /**
          * Move the map center to the given location.
          *
          * @param {String} id

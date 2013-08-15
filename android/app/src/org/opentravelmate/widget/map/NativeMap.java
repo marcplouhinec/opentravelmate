@@ -1,5 +1,7 @@
 package org.opentravelmate.widget.map;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,19 +13,21 @@ import org.opentravelmate.commons.UIThreadExecutor;
 import org.opentravelmate.widget.HtmlLayout;
 import org.opentravelmate.widget.HtmlLayoutParams;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
-
-import com.google.android.gms.maps.model.MarkerOptions;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.JavascriptInterface;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.android.gms.maps.model.TileProvider;
+import com.google.android.gms.maps.model.UrlTileProvider;
 
 /**
  * Injected object.
@@ -132,6 +136,34 @@ public class NativeMap {
 	}
 	
 	/**
+	 * Add an overlay to the map.
+	 * 
+	 * @param id
+     *     Map place holder ID.
+	 * @param jsonTileOverlay
+	 *     JSON serialized TileOverlay.
+	 */
+	@JavascriptInterface
+	public void addTileOverlay(final String id, final String jsonTileOverlay) {
+		UIThreadExecutor.execute(new Runnable() {
+			@Override public void run() {
+				try {
+					TileOverlay tileOverlay = TileOverlay.fromJsonTileOverlay(new JSONObject(jsonTileOverlay));
+					GoogleMap map = ((SupportMapFragment) fragmentManager.findFragmentById(R.id.map)).getMap();
+					
+					TileProvider tileProvider = new UrlPatternTileProvider(tileOverlay.tileUrlPattern);
+					map.addTileOverlay(new TileOverlayOptions()
+						.tileProvider(tileProvider)
+						.visible(tileOverlay.isVisible)
+						.zIndex(tileOverlay.zIndex));
+				} catch (JSONException e) {
+					exceptionListener.onException(false, e);
+				}
+			}
+		});
+	}
+	
+	/**
 	 * Move the map center to the given location.
 	 * 
 	 * @param id
@@ -210,5 +242,37 @@ public class NativeMap {
 				}
 			}
 		});
+	}
+	
+	/**
+	 * TileProvider based on TileOverlay.tileUrlPattern.
+	 */
+	private class UrlPatternTileProvider extends UrlTileProvider {
+		
+		private final String tileUrlPattern;
+
+		/**
+		 * Create a new UrlPatternTileProvider.
+		 * 
+		 * @param tileUrlPattern
+		 */
+		public UrlPatternTileProvider(String tileUrlPattern) {
+			super(256, 256);
+			this.tileUrlPattern = tileUrlPattern;
+		}
+
+		@Override
+		public URL getTileUrl(final int x, final int y, final int zoom) {
+			String url = tileUrlPattern
+					.replace("${zoom}", String.valueOf(zoom))
+					.replace("${x}", String.valueOf(x))
+					.replace("${y}", String.valueOf(y));
+			try {
+				return new URL(url);
+			} catch (MalformedURLException e) {
+				exceptionListener.onException(false, e);
+				return null;
+			}
+		}
 	}
 }
