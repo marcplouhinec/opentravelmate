@@ -78,7 +78,7 @@ define(function() {
          * @param {String} jsonPayload
          */
         'fireExternalEvent': function(webViewPlaceHolderId, eventName, jsonPayload) {
-            window.parent.require(['core/widget/Widget'], function (Widget) {
+            window.parent.require(['extensions/core/widget/Widget'], function (Widget) {
                 var subWebView = /** @type {SubWebView} */ Widget.findById(webViewPlaceHolderId);
                 if (subWebView) {
                     var payload = JSON.parse(jsonPayload);
@@ -97,7 +97,7 @@ define(function() {
         'fireInternalEvent': function(webViewPlaceHolderId, eventName, jsonPayload) {
             var iframe = /** @type{HTMLIFrameElement} */ document.getElementById('webview-' + webViewPlaceHolderId);
             if (iframe && iframe.contentWindow && iframe.contentWindow.require) {
-                iframe.contentWindow.require(['core/widget/webview/webview'], function (webview) {
+                iframe.contentWindow.require(['extensions/core/widget/webview/webview'], function (webview) {
                     var payload = JSON.parse(jsonPayload);
                     webview.fireEventFromExternal(eventName, payload);
                 });

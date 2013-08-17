@@ -4,7 +4,7 @@
  * @author marc.plouhinec@gmail.com (Marc Plouhinec)
  */
 
-define(['jquery', 'core/utils/FunctionDam'], function($, FunctionDam) {
+define(['jquery', 'extensions/core/utils/FunctionDam'], function($, FunctionDam) {
     'use strict';
 
     var menuReadyDam = new FunctionDam();
@@ -145,7 +145,7 @@ define(['jquery', 'core/utils/FunctionDam'], function($, FunctionDam) {
                 event.stopPropagation();
                 event.preventDefault();
 
-                require(['core/widget/Widget'], function (Widget) {
+                require(['extensions/core/widget/Widget'], function (Widget) {
                     /** @type {Menu} */
                     var menu = Widget.findById(menuPlaceHolderId);
                     menu.fireClickEvent(item.id);

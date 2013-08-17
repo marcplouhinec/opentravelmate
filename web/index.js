@@ -14,7 +14,7 @@ if (indexOfSlash !== baseUrl.length - 1) {
 // Set global variables
 window.org_opentravelmate_widget_webview_webviewId = 'mainWebViewWrapper';
 window.org_opentravelmate_widget_webview_webviewUrl = baseUrl;
-window.org_opentravelmate_widget_webview_webviewEntrypoint = '../entryPoint';
+window.org_opentravelmate_widget_webview_webviewEntrypoint = './entryPoint';
 window.org_opentravelmate_widget_webview_webviewBaseUrl = baseUrl;
 
 // Load the core startup script

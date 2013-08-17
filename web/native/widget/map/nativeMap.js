@@ -4,7 +4,7 @@
  * @author marc.plouhinec@gmail.com (Marc Plouhinec)
  */
 
-define(['jquery', '../native/widget/map/google'], function($, google) {
+define(['jquery', 'native/widget/map/google'], function($, google) {
     'use strict';
     
     /**

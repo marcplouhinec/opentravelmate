@@ -117,7 +117,7 @@ public class NativeWebView {
 			@Override public void run() {
 				WebView mainWebView = (WebView)htmlLayout.findViewByPlaceHolderId(HtmlLayout.MAIN_WEBVIEW_ID);
 				mainWebView.loadUrl("javascript:(function(){" +
-						"    require(['core/widget/Widget'], function (Widget) {" +
+						"    require(['extensions/core/widget/Widget'], function (Widget) {" +
 						"        var subWebView = Widget.findById('" + webViewPlaceHolderId + "');" +
 						"        if (!subWebView) { return; };" +
 						"        var payload = JSON.parse('" + jsonPayload.replace("\"", "\\\"") + "');" +
@@ -141,7 +141,7 @@ public class NativeWebView {
 			@Override public void run() {
 				WebView webView = (WebView)htmlLayout.findViewByPlaceHolderId(webViewPlaceHolderId);
 				webView.loadUrl("javascript:(function(){" +
-						"    require(['core/widget/webview/webview'], function (webview) {" +
+						"    require(['extensions/core/widget/webview/webview'], function (webview) {" +
 						"        var payload = JSON.parse('" + jsonPayload.replace("\"", "\\\"") + "');" +
 						"        webview.fireEventFromExternal('" + eventName + "', payload);" +
 						"    });" +

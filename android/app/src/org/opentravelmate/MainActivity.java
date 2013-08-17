@@ -82,7 +82,7 @@ public class MainActivity extends FragmentActivity {
 			private static final long serialVersionUID = -2001726600946643058L;
 		{
 			put("url", "extensions/core/mainwebview/mainwebview.html");
-			put("entrypoint", "core/mainwebview/mainwebview");
+			put("entrypoint", "extensions/core/mainwebview/mainwebview");
 		}});
 		nativeWebView.buildView(layoutParams);
 	}

@@ -170,7 +170,7 @@ public class NativeMenu {
 				WebView webView = (WebView)htmlLayout.findViewByPlaceHolderId(HtmlLayout.MAIN_WEBVIEW_ID);
 				webView.loadUrl("javascript:" +
 						"(function handleMenuItemClick() {" +
-						"    require(['core/widget/Widget'], function (Widget) {" +
+						"    require(['extensions/core/widget/Widget'], function (Widget) {" +
 						"        var menu = Widget.findById('" + menuPlaceHolderId + "');" +
 						"        menu.fireClickEvent(" + menuItem.id + ");" +
 						"    });" +
