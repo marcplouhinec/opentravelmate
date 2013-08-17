@@ -4,51 +4,21 @@
  * @author marc.plouhinec@gmail.com (Marc Plouhinec)
  */
 
-// Set the baseUrl
-/** @type {String} */
+// Compute the baseUrl
 var baseUrl = String(document.URL);
 var indexOfSlash = baseUrl.lastIndexOf('/');
 if (indexOfSlash !== baseUrl.length - 1) {
-	baseUrl = baseUrl.substring(0, indexOfSlash + 1);
+    baseUrl = baseUrl.substring(0, indexOfSlash + 1);
 }
 
-// Define AMD incompatible libraries
-requirejs.config({
-    baseUrl: baseUrl + 'extensions/',
-    paths: {
-        'jquery': 'core/lib/jquery.min',
-        'underscore': 'core/lib/underscore.min',
-        'async': 'core/lib/async',
-        'nativeWebView': baseUrl + 'native/widget/webview/nativeWebView',
-        'nativeMenu': baseUrl + 'native/widget/menu/nativeMenu',
-        'nativeMap': baseUrl + 'native/widget/map/nativeMap'
-    },
-    shim: {
-        'jquery': {
-            exports: '$'
-        },
-        'underscore': {
-            exports: '_'
-        }
-    }
-});
+// Set global variables
+window.org_opentravelmate_widget_webview_webviewId = 'mainWebViewWrapper';
+window.org_opentravelmate_widget_webview_webviewUrl = baseUrl;
+window.org_opentravelmate_widget_webview_webviewEntrypoint = '../entryPoint';
+window.org_opentravelmate_widget_webview_webviewBaseUrl = baseUrl;
 
-require([
-    'core/widget/webview/webview'
-], function(webview) {
-    'use strict';
+// Load the core startup script
+require(['./extensions/core/widget/webview/startupScript']);
 
-    $(document).ready(function() {
-        // Create manually the current WebView
-        webview.id = 'mainWebView';
-        webview.baseUrl = baseUrl;
 
-        // Layout the main view
-        webview.layout();
 
-        // Update the layout when the page is resized
-        $(window).resize(function resizeWindow() {
-            webview.layout();
-        });
-    });
-});

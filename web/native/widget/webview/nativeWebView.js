@@ -80,8 +80,10 @@ define(function() {
         'fireExternalEvent': function(webViewPlaceHolderId, eventName, jsonPayload) {
             window.parent.require(['core/widget/Widget'], function (Widget) {
                 var subWebView = /** @type {SubWebView} */ Widget.findById(webViewPlaceHolderId);
-                var payload = JSON.parse(jsonPayload);
-                subWebView.fireEventFromInternal(eventName, payload);
+                if (subWebView) {
+                    var payload = JSON.parse(jsonPayload);
+                    subWebView.fireEventFromInternal(eventName, payload);
+                }
             });
         },
 

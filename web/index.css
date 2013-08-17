@@ -5,7 +5,7 @@ body {
     overflow: hidden;
 }
 
-#main-view {
+#main-view-wrapper {
 	position: absolute;
 	top: 0;
 	left: 0;
