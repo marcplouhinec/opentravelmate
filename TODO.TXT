@@ -26,7 +26,9 @@ Tasks
 
 - Use a SparseArray in the Android's NativeMap.
 
-- Implement Map.onTileDisplayed(listener: function(zoom,x,y)) and Map.onTileReleased(listener: function(zoom,x,y)).
+- On the UML diagram, rename Map.onTileDisplayed to Map.onTilesDisplayed and change the signature (do the same for onTileReleased). 
+
+- Implement Map.onTilesDisplayed and Map.onTilesReleased.
 
 - Implement TileOverlay.removeTileOverlay.
 

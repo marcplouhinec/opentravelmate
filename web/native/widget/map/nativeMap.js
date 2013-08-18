@@ -4,7 +4,9 @@
  * @author marc.plouhinec@gmail.com (Marc Plouhinec)
  */
 
-define(['jquery', 'native/widget/map/google'], function($, google) {
+define([
+    'jquery', 'native/widget/map/google', 'native/widget/map/TileObserver'
+], function($, google, TileObserver) {
     'use strict';
     
     /**
@@ -38,6 +40,11 @@ define(['jquery', 'native/widget/map/google'], function($, google) {
      * @type {Object.<Number, google.maps.Marker>}
      */
     var gmarkerById = {};
+
+    /**
+     * @type {Object.<String, TileObserver>}
+     */
+    var tileObserverByPlaceHolderId = {};
 
 
     var nativeMap = {
@@ -193,6 +200,50 @@ define(['jquery', 'native/widget/map/google'], function($, google) {
             delete gmarkerById[marker.id];
 
             gmarker.setMap(null);
+        },
+
+        /**
+         * Start observing tiles and forward the TILES_DISPLAYED and TILES_RELEASED events to the
+         * map defined by the given place-holder ID.
+         * Note: this function does nothing if the tiles are already observed.
+         *
+         * @param {String} id
+         *     Map place holder ID.
+         */
+        'observeTiles': function(id) {
+            var tileObserver = tileObserverByPlaceHolderId[id];
+
+            // Create the TileObserver if necessary
+            if (!tileObserver) {
+                var gmap = gmapByPlaceHolderId[id];
+                tileObserver = new TileObserver(gmap);
+                tileObserverByPlaceHolderId[id] = tileObserver;
+
+                require(['extensions/core/widget/Widget'], function (Widget) {
+                    var map = /** @type {Map} */ Widget.findById(id);
+
+                    tileObserver.onTilesDisplayed(function(tileCoordinates) {
+                        map.fireTileEvent('TILES_DISPLAYED', tileCoordinates);
+                    });
+
+                    tileObserver.onTilesReleased(function(tileCoordinates) {
+                        map.fireTileEvent('TILES_RELEASED', tileCoordinates);
+                    });
+                });
+            }
+        },
+
+        /**
+         * Get all the visible tile coordinates.
+         * Note: the function observeTiles() must be called before executing this one.
+         *
+         * @param {String} id
+         *     Map place holder ID.
+         * @return {Array.<{zoom: Number, x: Number, y: Number}>}
+         */
+        'getDisplayedTileCoordinates': function(id) {
+            var tileObserver = tileObserverByPlaceHolderId[id];
+            return tileObserver ? tileObserver.getDisplayedTileCoordinates() : null;
         }
     };
 
