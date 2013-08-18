@@ -239,11 +239,11 @@ define([
          *
          * @param {String} id
          *     Map place holder ID.
-         * @return {Array.<{zoom: Number, x: Number, y: Number}>}
+         * @return {String} JSON-serialized Array.<{zoom: Number, x: Number, y: Number}>
          */
         'getDisplayedTileCoordinates': function(id) {
             var tileObserver = tileObserverByPlaceHolderId[id];
-            return tileObserver ? tileObserver.getDisplayedTileCoordinates() : null;
+            return JSON.stringify(tileObserver ? tileObserver.getDisplayedTileCoordinates() : null);
         }
     };
 

@@ -3,8 +3,10 @@ package org.opentravelmate.widget.map;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opentravelmate.R;
@@ -19,13 +21,13 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Tile;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.maps.model.TileProvider;
 import com.google.android.gms.maps.model.UrlTileProvider;
@@ -49,6 +51,7 @@ public class NativeMap {
 	private final FragmentManager fragmentManager;
 	private final Map<Integer, com.google.android.gms.maps.model.Marker> gmarkerById =
 			new HashMap<Integer, com.google.android.gms.maps.model.Marker>();
+	private final Map<String, TileObserver> tileObserverByPlaceHolderId = new HashMap<String, TileObserver>();
 	
 	/**
 	 * Create a NativeMap object.
@@ -242,6 +245,87 @@ public class NativeMap {
 				}
 			}
 		});
+	}
+	
+	/**
+	 * Start observing tiles and forward the TILES_DISPLAYED and TILES_RELEASED events to the
+     * map defined by the given place-holder ID.
+     * Note: this function does nothing if the tiles are already observed.
+     * 
+	 * @param id
+	 *     Map place holder ID.
+	 */
+	@JavascriptInterface
+	public void observeTiles(final String id) {
+		UIThreadExecutor.execute(new Runnable() {
+			@Override public void run() {
+				TileObserver tileObserver = tileObserverByPlaceHolderId.get(id);
+				
+				if (tileObserver == null) {
+					GoogleMap map = ((SupportMapFragment) fragmentManager.findFragmentById(R.id.map)).getMap();
+					tileObserver = new TileObserver(map, fragmentManager.findFragmentById(R.id.map).getView());
+					tileObserverByPlaceHolderId.put(id, tileObserver);
+					
+					tileObserver.onTilesDisplayed(new TileObserver.TilesListener() {
+						@Override public void on(List<TileCoordinates> tileCoordinates) {
+							WebView mainWebView = (WebView)htmlLayout.findViewByPlaceHolderId(HtmlLayout.MAIN_WEBVIEW_ID);
+							try {
+								JSONArray jsonTileCoordinates = TileCoordinates.toJson(tileCoordinates);
+								mainWebView.loadUrl("javascript:(function(){" +
+										"    require(['extensions/core/widget/Widget'], function (Widget) {" +
+										"        var map = Widget.findById('" + id + "');" +
+										"         map.fireTileEvent('TILES_DISPLAYED', " + jsonTileCoordinates.toString(2) + ");" +
+										"    });" +
+										"})();");
+							} catch(JSONException e) {
+								exceptionListener.onException(false, e);
+							}
+						}
+					});
+					tileObserver.onTilesReleased(new TileObserver.TilesListener() {
+						@Override public void on(List<TileCoordinates> tileCoordinates) {
+							WebView mainWebView = (WebView)htmlLayout.findViewByPlaceHolderId(HtmlLayout.MAIN_WEBVIEW_ID);
+							try {
+								JSONArray jsonTileCoordinates = TileCoordinates.toJson(tileCoordinates);
+								mainWebView.loadUrl("javascript:(function(){" +
+										"    require(['extensions/core/widget/Widget'], function (Widget) {" +
+										"        var map = Widget.findById('" + id + "');" +
+										"         map.fireTileEvent('TILES_RELEASED', " + jsonTileCoordinates.toString(2) + ");" +
+										"    });" +
+										"})();");
+							} catch(JSONException e) {
+								exceptionListener.onException(false, e);
+							}
+						}
+					});
+				}
+			}
+		});
+	}
+	
+	/**
+	 * Get all the visible tile coordinates.
+     * Note: the function observeTiles() must be called before executing this one.
+     * 
+     * @param id
+	 *     Map place holder ID.
+	 * @return JSON-serialized Array.<{zoom: Number, x: Number, y: Number}>
+	 */
+	@JavascriptInterface
+	public String getDisplayedTileCoordinates(final String id) {
+		TileObserver tileObserver = tileObserverByPlaceHolderId.get(id);
+		
+		if (tileObserver != null) {
+			List<TileCoordinates> displayedTileCoordinates = tileObserver.getDisplayedTileCoordinates();
+			try {
+				JSONArray jsonDisplayedTileCoordinates = TileCoordinates.toJson(displayedTileCoordinates);
+				return jsonDisplayedTileCoordinates.toString(2);
+			} catch (JSONException e) {
+				exceptionListener.onException(false, e);
+			}
+		}
+		
+		return "[]";
 	}
 	
 	/**

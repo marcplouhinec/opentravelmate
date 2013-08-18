@@ -32,6 +32,12 @@ Tasks
 
 - Implement TileOverlay.removeTileOverlay.
 
+- Change the implementation of NativeMap.getDisplayedTileCoordinates to make it runnable in the UI thread on Android.
+
+- In the Android NativeMap, the GoogleMap is found like this:
+  GoogleMap map = ((SupportMapFragment) fragmentManager.findFragmentById(R.id.map)).getMap();
+  It must be found with the place-holder ID.
+
 
 Develoment tasks
 ----------------
