@@ -24,6 +24,12 @@ define(['jquery', 'native/widget/map/google'], function($, google) {
 	var DEFAULT_LONGITUDE = 6.131;
 
     /**
+     * @constant
+     * @type {Number}
+     */
+    var TILE_EVENT_MAPTYPE_INDEX = 42;
+
+    /**
      * @type {Object.<String, google.maps.Map>}
      */
     var gmapByPlaceHolderId = {};
