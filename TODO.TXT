@@ -22,10 +22,6 @@ Tasks
   AutoCompleteTextInput._setDialogLayoutParams() is called each time a key is typed.
   --> Call this method ONLY if the layout change.
 
-- Check if it is not better to put the functions Marker.onClick, onMouseEnter and onMouseLeave on the Map widget.
-
-- On the UML diagram, rename Map.onTileDisplayed to Map.onTilesDisplayed and change the signature (do the same for onTileReleased).
-
 - Implement TileOverlay.removeTileOverlay.
 
 

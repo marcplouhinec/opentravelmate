@@ -88,9 +88,9 @@
 <XPD:OBJ name="OwnedViews[1]" type="UMLClassView" guid="XI+OWSXR9U2Hozg3bm20DwAA">
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
-<XPD:ATTR name="Left" type="integer">324</XPD:ATTR>
-<XPD:ATTR name="Top" type="integer">412</XPD:ATTR>
-<XPD:ATTR name="Width" type="integer">369</XPD:ATTR>
+<XPD:ATTR name="Left" type="integer">356</XPD:ATTR>
+<XPD:ATTR name="Top" type="integer">316</XPD:ATTR>
+<XPD:ATTR name="Width" type="integer">513</XPD:ATTR>
 <XPD:ATTR name="Height" type="integer">238</XPD:ATTR>
 <XPD:REF name="Model">9ScC0Qkmrkm6KIZFnBm5yQAA</XPD:REF>
 <XPD:OBJ name="NameCompartment" type="UMLNameCompartmentView" guid="DmT6bXY6EECuals2Z5s5wwAA">
@@ -119,7 +119,7 @@
 <XPD:OBJ name="OwnedViews[2]" type="UMLGeneralizationView" guid="dC6QwrB9KEyTjMFJm6sNbwAA">
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
-<XPD:ATTR name="Points" type="Points">492,412;462,180</XPD:ATTR>
+<XPD:ATTR name="Points" type="Points">553,316;484,180</XPD:ATTR>
 <XPD:REF name="Model">UUBOPU/oz0Kf8BrmYpUQsQAA</XPD:REF>
 <XPD:REF name="Head">BdKK/gUJEUuSjWb3HYhH0wAA</XPD:REF>
 <XPD:REF name="Tail">XI+OWSXR9U2Hozg3bm20DwAA</XPD:REF>
@@ -317,7 +317,7 @@
 <XPD:OBJ name="OwnedViews[7]" type="UMLClassView" guid="IWtZr10EekiyRfaK1P86fQAA">
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
-<XPD:ATTR name="Left" type="integer">800</XPD:ATTR>
+<XPD:ATTR name="Left" type="integer">944</XPD:ATTR>
 <XPD:ATTR name="Top" type="integer">352</XPD:ATTR>
 <XPD:ATTR name="Width" type="integer">117</XPD:ATTR>
 <XPD:ATTR name="Height" type="integer">82</XPD:ATTR>
@@ -348,7 +348,7 @@
 <XPD:OBJ name="OwnedViews[8]" type="UMLAssociationView" guid="nSJ2YRSqAki2E3830XnaNQAA">
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
-<XPD:ATTR name="Points" type="Points">800,415;692,458</XPD:ATTR>
+<XPD:ATTR name="Points" type="Points">944,398;868,406</XPD:ATTR>
 <XPD:REF name="Model">r5ZNZWPukkSfoEpeIg7NBQAA</XPD:REF>
 <XPD:REF name="Head">XI+OWSXR9U2Hozg3bm20DwAA</XPD:REF>
 <XPD:REF name="Tail">IWtZr10EekiyRfaK1P86fQAA</XPD:REF>
@@ -432,7 +432,7 @@
 <XPD:OBJ name="OwnedViews[9]" type="UMLClassView" guid="bLJ5XSP2d0qJCNpvr0urhgAA">
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
-<XPD:ATTR name="Left" type="integer">760</XPD:ATTR>
+<XPD:ATTR name="Left" type="integer">932</XPD:ATTR>
 <XPD:ATTR name="Top" type="integer">464</XPD:ATTR>
 <XPD:ATTR name="Width" type="integer">86</XPD:ATTR>
 <XPD:ATTR name="Height" type="integer">69</XPD:ATTR>
@@ -463,8 +463,8 @@
 <XPD:OBJ name="OwnedViews[10]" type="UMLClassView" guid="EbqbQRuPYEm4Chvc5Ale0wAA">
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
-<XPD:ATTR name="Left" type="integer">760</XPD:ATTR>
-<XPD:ATTR name="Top" type="integer">548</XPD:ATTR>
+<XPD:ATTR name="Left" type="integer">572</XPD:ATTR>
+<XPD:ATTR name="Top" type="integer">616</XPD:ATTR>
 <XPD:ATTR name="Width" type="integer">268</XPD:ATTR>
 <XPD:ATTR name="Height" type="integer">108</XPD:ATTR>
 <XPD:REF name="Model">bj5JHNT1o0W/K9kTNUTFXAAA</XPD:REF>
@@ -494,7 +494,7 @@
 <XPD:OBJ name="OwnedViews[11]" type="UMLAssociationView" guid="yM9QFEoZF0OFhmoZsCkkVQAA">
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
-<XPD:ATTR name="Points" type="Points">760,576;692,564</XPD:ATTR>
+<XPD:ATTR name="Points" type="Points">684,616;659,553</XPD:ATTR>
 <XPD:REF name="Model">EwrB+EfE1Umhl9tMfwncfwAA</XPD:REF>
 <XPD:REF name="Head">XI+OWSXR9U2Hozg3bm20DwAA</XPD:REF>
 <XPD:REF name="Tail">EbqbQRuPYEm4Chvc5Ale0wAA</XPD:REF>
@@ -578,7 +578,7 @@
 <XPD:OBJ name="OwnedViews[12]" type="UMLClassView" guid="T65htvZiJEa2NJP5n8DcpgAA">
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
-<XPD:ATTR name="Left" type="integer">868</XPD:ATTR>
+<XPD:ATTR name="Left" type="integer">1044</XPD:ATTR>
 <XPD:ATTR name="Top" type="integer">464</XPD:ATTR>
 <XPD:ATTR name="Width" type="integer">86</XPD:ATTR>
 <XPD:ATTR name="Height" type="integer">69</XPD:ATTR>
@@ -609,8 +609,8 @@
 <XPD:OBJ name="OwnedViews[13]" type="UMLClassView" guid="gRAh1WRjJkqqxFXXnxu+RAAA">
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
-<XPD:ATTR name="Left" type="integer">1096</XPD:ATTR>
-<XPD:ATTR name="Top" type="integer">572</XPD:ATTR>
+<XPD:ATTR name="Left" type="integer">932</XPD:ATTR>
+<XPD:ATTR name="Top" type="integer">580</XPD:ATTR>
 <XPD:ATTR name="Width" type="integer">89</XPD:ATTR>
 <XPD:ATTR name="Height" type="integer">43</XPD:ATTR>
 <XPD:REF name="Model">E5Z0eQS5RUKpUQ6Sr+CMcwAA</XPD:REF>
@@ -640,7 +640,7 @@
 <XPD:OBJ name="OwnedViews[14]" type="UMLAssociationView" guid="ejDZTEYXdUmY9INDnwauOAAA">
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
-<XPD:ATTR name="Points" type="Points">1096,594;1027,596</XPD:ATTR>
+<XPD:ATTR name="Points" type="Points">932,612;839,635</XPD:ATTR>
 <XPD:REF name="Model">LCES+ozXykqugAvNCj8lzAAA</XPD:REF>
 <XPD:REF name="Head">EbqbQRuPYEm4Chvc5Ale0wAA</XPD:REF>
 <XPD:REF name="Tail">gRAh1WRjJkqqxFXXnxu+RAAA</XPD:REF>
@@ -724,8 +724,8 @@
 <XPD:OBJ name="OwnedViews[15]" type="UMLClassView" guid="3AhkfKdRzUmaBEhGovm6qQAA">
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
-<XPD:ATTR name="Left" type="integer">1000</XPD:ATTR>
-<XPD:ATTR name="Top" type="integer">680</XPD:ATTR>
+<XPD:ATTR name="Left" type="integer">864</XPD:ATTR>
+<XPD:ATTR name="Top" type="integer">664</XPD:ATTR>
 <XPD:ATTR name="Width" type="integer">93</XPD:ATTR>
 <XPD:ATTR name="Height" type="integer">108</XPD:ATTR>
 <XPD:REF name="Model">66R/f/vWi0GqB95SsKhyKQAA</XPD:REF>
@@ -755,7 +755,7 @@
 <XPD:OBJ name="OwnedViews[16]" type="UMLGeneralizationView" guid="hehIwDRV302Xut+KA2NRrAAA">
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
-<XPD:ATTR name="Points" type="Points">1082,680;1126,614</XPD:ATTR>
+<XPD:ATTR name="Points" type="Points">940,664;964,622</XPD:ATTR>
 <XPD:REF name="Model">7NCKxHxnb0mk48DYpXObswAA</XPD:REF>
 <XPD:REF name="Head">gRAh1WRjJkqqxFXXnxu+RAAA</XPD:REF>
 <XPD:REF name="Tail">3AhkfKdRzUmaBEhGovm6qQAA</XPD:REF>
@@ -781,8 +781,8 @@
 <XPD:OBJ name="OwnedViews[17]" type="UMLClassView" guid="A6w+QEuCt0yGoeUVwvLkJQAA">
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
-<XPD:ATTR name="Left" type="integer">1144</XPD:ATTR>
-<XPD:ATTR name="Top" type="integer">680</XPD:ATTR>
+<XPD:ATTR name="Left" type="integer">1000</XPD:ATTR>
+<XPD:ATTR name="Top" type="integer">664</XPD:ATTR>
 <XPD:ATTR name="Width" type="integer">121</XPD:ATTR>
 <XPD:ATTR name="Height" type="integer">160</XPD:ATTR>
 <XPD:REF name="Model">THz+fu0zrEWTtalmkdRyVQAA</XPD:REF>
@@ -812,7 +812,7 @@
 <XPD:OBJ name="OwnedViews[18]" type="UMLGeneralizationView" guid="FkjZ8c7ykUWD4noK6R+gCwAA">
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
-<XPD:ATTR name="Points" type="Points">1174,680;1148,614</XPD:ATTR>
+<XPD:ATTR name="Points" type="Points">1013,664;988,622</XPD:ATTR>
 <XPD:REF name="Model">IMSwWJjE5UeO9yruCVkjKwAA</XPD:REF>
 <XPD:REF name="Head">gRAh1WRjJkqqxFXXnxu+RAAA</XPD:REF>
 <XPD:REF name="Tail">A6w+QEuCt0yGoeUVwvLkJQAA</XPD:REF>
@@ -838,7 +838,7 @@
 <XPD:OBJ name="OwnedViews[19]" type="UMLClassView" guid="9Bt25see1USQLczzL0dyfwAA">
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
-<XPD:ATTR name="Left" type="integer">980</XPD:ATTR>
+<XPD:ATTR name="Left" type="integer">1156</XPD:ATTR>
 <XPD:ATTR name="Top" type="integer">464</XPD:ATTR>
 <XPD:ATTR name="Width" type="integer">91</XPD:ATTR>
 <XPD:ATTR name="Height" type="integer">69</XPD:ATTR>
@@ -869,8 +869,8 @@
 <XPD:OBJ name="OwnedViews[20]" type="UMLClassView" guid="vnjMBTvAdUqyVgopOIHO2wAA">
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
-<XPD:ATTR name="Left" type="integer">760</XPD:ATTR>
-<XPD:ATTR name="Top" type="integer">680</XPD:ATTR>
+<XPD:ATTR name="Left" type="integer">356</XPD:ATTR>
+<XPD:ATTR name="Top" type="integer">608</XPD:ATTR>
 <XPD:ATTR name="Width" type="integer">142</XPD:ATTR>
 <XPD:ATTR name="Height" type="integer">82</XPD:ATTR>
 <XPD:REF name="Model">VBP1N1l0YUaMKcdqHxsL+QAA</XPD:REF>
@@ -900,7 +900,7 @@
 <XPD:OBJ name="OwnedViews[21]" type="UMLAssociationView" guid="mwNQznxGI0K4w/2AMf1biAAA">
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
-<XPD:ATTR name="Points" type="Points">762,680;692,639</XPD:ATTR>
+<XPD:ATTR name="Points" type="Points">461,608;509,553</XPD:ATTR>
 <XPD:REF name="Model">9qY2NZo7/ES1JnSUKEK73wAA</XPD:REF>
 <XPD:REF name="Head">XI+OWSXR9U2Hozg3bm20DwAA</XPD:REF>
 <XPD:REF name="Tail">vnjMBTvAdUqyVgopOIHO2wAA</XPD:REF>
@@ -1383,22 +1383,22 @@
 </XPD:OBJ>
 </XPD:OBJ>
 <XPD:OBJ name="Operations[10]" type="UMLOperation" guid="nGQsAYcg2Eu81PEUDgjyHQAA">
-<XPD:ATTR name="Name" type="string">onTileDisplayed</XPD:ATTR>
+<XPD:ATTR name="Name" type="string">onTilesDisplayed</XPD:ATTR>
 <XPD:REF name="Owner">9ScC0Qkmrkm6KIZFnBm5yQAA</XPD:REF>
 <XPD:ATTR name="#Parameters" type="integer">1</XPD:ATTR>
 <XPD:OBJ name="Parameters[0]" type="UMLParameter" guid="IBEjM4oxkEGuyHMwBO3tKgAA">
 <XPD:ATTR name="Name" type="string">listener</XPD:ATTR>
-<XPD:ATTR name="TypeExpression" type="string">function(zoom: Integer, x: Integer, y: Integer)</XPD:ATTR>
+<XPD:ATTR name="TypeExpression" type="string">function(tileCoordinates: Array.&lt;{zoom: Number, x: Number, y: Number}&gt;)</XPD:ATTR>
 <XPD:REF name="BehavioralFeature">nGQsAYcg2Eu81PEUDgjyHQAA</XPD:REF>
 </XPD:OBJ>
 </XPD:OBJ>
 <XPD:OBJ name="Operations[11]" type="UMLOperation" guid="2Tr3P5IBBEag7OmOLa4SmwAA">
-<XPD:ATTR name="Name" type="string">onTileReleased</XPD:ATTR>
+<XPD:ATTR name="Name" type="string">onTilesReleased</XPD:ATTR>
 <XPD:REF name="Owner">9ScC0Qkmrkm6KIZFnBm5yQAA</XPD:REF>
 <XPD:ATTR name="#Parameters" type="integer">1</XPD:ATTR>
 <XPD:OBJ name="Parameters[0]" type="UMLParameter" guid="5mtQOIQ+WUWu73a4q117HwAA">
 <XPD:ATTR name="Name" type="string">listener</XPD:ATTR>
-<XPD:ATTR name="TypeExpression" type="string">function(zoom: Integer, x: Integer, y: Integer)</XPD:ATTR>
+<XPD:ATTR name="TypeExpression" type="string">function(tileCoordinates: Array.&lt;{zoom: Number, x: Number, y: Number}&gt;)</XPD:ATTR>
 <XPD:REF name="BehavioralFeature">2Tr3P5IBBEag7OmOLa4SmwAA</XPD:REF>
 </XPD:OBJ>
 </XPD:OBJ>
