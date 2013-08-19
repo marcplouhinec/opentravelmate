@@ -24,8 +24,6 @@ Tasks
 
 - Check if it is not better to put the functions Marker.onClick, onMouseEnter and onMouseLeave on the Map widget.
 
-- Use a SparseArray in the Android's NativeMap.
-
 - On the UML diagram, rename Map.onTileDisplayed to Map.onTilesDisplayed and change the signature (do the same for onTileReleased).
 
 - Implement TileOverlay.removeTileOverlay.

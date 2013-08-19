@@ -19,6 +19,7 @@ import org.opentravelmate.widget.HtmlLayoutParams;
 import android.annotation.SuppressLint;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.SparseArray;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
@@ -50,8 +51,8 @@ public class NativeMap {
 	private final HtmlLayout htmlLayout;
 	private final FragmentManager fragmentManager;
 	private final Map<String, GoogleMap> mapByPlaceHolderId = new ConcurrentHashMap<String, GoogleMap>();
-	private final Map<Integer, com.google.android.gms.maps.model.Marker> gmarkerById =
-			new HashMap<Integer, com.google.android.gms.maps.model.Marker>();
+	private final SparseArray<com.google.android.gms.maps.model.Marker> gmarkerById =
+			new SparseArray<com.google.android.gms.maps.model.Marker>();
 	private final Map<String, TileObserver> tileObserverByPlaceHolderId = new HashMap<String, TileObserver>();
 	
 	/**
