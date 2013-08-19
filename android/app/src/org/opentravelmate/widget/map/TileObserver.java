@@ -117,7 +117,6 @@ public class TileObserver {
 	private class CustomCameraChangeListener implements OnCameraChangeListener {
 		@Override
 		public void onCameraChange(CameraPosition cameraPosition) {
-			
 			// Check if the centered tile has changed
 			TileCoordinates centeredTileCoordinates = getCenteredTileCoordinates();
 			boolean hasChanged = 

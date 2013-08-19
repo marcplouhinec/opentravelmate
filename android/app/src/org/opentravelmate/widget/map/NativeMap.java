@@ -5,27 +5,28 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.opentravelmate.R;
 import org.opentravelmate.commons.ExceptionListener;
 import org.opentravelmate.commons.UIThreadExecutor;
 import org.opentravelmate.widget.HtmlLayout;
 import org.opentravelmate.widget.HtmlLayoutParams;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.support.v4.app.FragmentManager;
-import android.view.LayoutInflater;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
+import android.widget.RelativeLayout;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.TileOverlayOptions;
@@ -47,8 +48,8 @@ public class NativeMap {
 	
 	private final ExceptionListener exceptionListener;
 	private final HtmlLayout htmlLayout;
-	private final LayoutInflater layoutInflater;
 	private final FragmentManager fragmentManager;
+	private final Map<String, GoogleMap> mapByPlaceHolderId = new ConcurrentHashMap<String, GoogleMap>();
 	private final Map<Integer, com.google.android.gms.maps.model.Marker> gmarkerById =
 			new HashMap<Integer, com.google.android.gms.maps.model.Marker>();
 	private final Map<String, TileObserver> tileObserverByPlaceHolderId = new HashMap<String, TileObserver>();
@@ -59,7 +60,6 @@ public class NativeMap {
 	public NativeMap(ExceptionListener exceptionListener, HtmlLayout htmlLayout, FragmentManager fragmentManager) {
 		this.exceptionListener = exceptionListener;
 		this.htmlLayout = htmlLayout;
-		this.layoutInflater = (LayoutInflater) htmlLayout.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.fragmentManager = fragmentManager;
 	}
 
@@ -127,16 +127,26 @@ public class NativeMap {
 	 */
 	@SuppressLint("SetJavaScriptEnabled")
 	public void buildView(final HtmlLayoutParams layoutParams) {
-		View view = layoutInflater.inflate(R.layout.map_layout, htmlLayout, false);
-		view.setLayoutParams(layoutParams);
-		htmlLayout.addView(view);
-		
-		GoogleMap map = ((SupportMapFragment) fragmentManager.findFragmentById(R.id.map)).getMap();
 		CameraPosition cameraPosition = new CameraPosition.Builder()
 			.target(new com.google.android.gms.maps.model.LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE))
 			.zoom(DEFAULT_ZOOM)
 			.build();
-		map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+		GoogleMapOptions options = new GoogleMapOptions().camera(cameraPosition);
+		GoogleMapFragment mapFragment = GoogleMapFragment.newInstance(options);
+		mapFragment.setOnGoogleMapFragmentListener(new GoogleMapFragment.OnGoogleMapFragmentListener() {
+			@Override public void onMapReady(GoogleMap map) {
+				mapByPlaceHolderId.put(layoutParams.id, map);
+			}
+		});
+		
+		RelativeLayout mapLayout = new RelativeLayout(htmlLayout.getContext());
+		mapLayout.setLayoutParams(layoutParams);
+		htmlLayout.addView(mapLayout);
+		
+		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+		fragmentTransaction.add(mapLayout.getId(), mapFragment);
+		fragmentTransaction.addToBackStack(null);
+		fragmentTransaction.commit();
 	}
 	
 	/**
@@ -149,11 +159,12 @@ public class NativeMap {
 	 */
 	@JavascriptInterface
 	public void addTileOverlay(final String id, final String jsonTileOverlay) {
+		final GoogleMap map = getGoogleMapSync(id);
+		
 		UIThreadExecutor.execute(new Runnable() {
 			@Override public void run() {
 				try {
 					TileOverlay tileOverlay = TileOverlay.fromJsonTileOverlay(new JSONObject(jsonTileOverlay));
-					GoogleMap map = ((SupportMapFragment) fragmentManager.findFragmentById(R.id.map)).getMap();
 					
 					TileProvider tileProvider = new UrlPatternTileProvider(tileOverlay.tileUrlPattern);
 					map.addTileOverlay(new TileOverlayOptions()
@@ -176,11 +187,12 @@ public class NativeMap {
 	 */
 	@JavascriptInterface
 	public void panTo(final String id, final String jsonCenter) {
+		final GoogleMap map = getGoogleMapSync(id);
+		
 		UIThreadExecutor.execute(new Runnable() {
 			@Override public void run() {
 				try {
 					LatLng center = LatLng.fromJsonLatLng(new JSONObject(jsonCenter));
-					GoogleMap map = ((SupportMapFragment) fragmentManager.findFragmentById(R.id.map)).getMap();
 					CameraPosition cameraPosition = new CameraPosition.Builder()
 						.target(new com.google.android.gms.maps.model.LatLng(center.lat, center.lng))
 						.zoom(map.getCameraPosition().zoom)
@@ -203,12 +215,12 @@ public class NativeMap {
 	 */
 	@JavascriptInterface
 	public void addMarker(final String id, final String jsonMarker) {
+		final GoogleMap map = getGoogleMapSync(id);
+		
 		UIThreadExecutor.execute(new Runnable() {
 			@Override public void run() {
 				try {
 					Marker marker = Marker.fromJsonMarker(new JSONObject(jsonMarker));
-					GoogleMap map = ((SupportMapFragment) fragmentManager.findFragmentById(R.id.map)).getMap();
-					
 					MarkerOptions markerOptions = new MarkerOptions()
 						.position(new com.google.android.gms.maps.model.LatLng(marker.position.lat, marker.position.lng))
 						.title(marker.title); 
@@ -257,13 +269,14 @@ public class NativeMap {
 	 */
 	@JavascriptInterface
 	public void observeTiles(final String id) {
+		final GoogleMap map = getGoogleMapSync(id);
+		
 		UIThreadExecutor.execute(new Runnable() {
 			@Override public void run() {
 				TileObserver tileObserver = tileObserverByPlaceHolderId.get(id);
 				
 				if (tileObserver == null) {
-					GoogleMap map = ((SupportMapFragment) fragmentManager.findFragmentById(R.id.map)).getMap();
-					tileObserver = new TileObserver(map, fragmentManager.findFragmentById(R.id.map).getView());
+					tileObserver = new TileObserver(map, htmlLayout.findViewByPlaceHolderId(id));
 					tileObserverByPlaceHolderId.put(id, tileObserver);
 					
 					tileObserver.onTilesDisplayed(new TileObserver.TilesListener() {
@@ -313,19 +326,40 @@ public class NativeMap {
 	 */
 	@JavascriptInterface
 	public String getDisplayedTileCoordinates(final String id) {
-		TileObserver tileObserver = tileObserverByPlaceHolderId.get(id);
-		
-		if (tileObserver != null) {
-			List<TileCoordinates> displayedTileCoordinates = tileObserver.getDisplayedTileCoordinates();
-			try {
-				JSONArray jsonDisplayedTileCoordinates = TileCoordinates.toJson(displayedTileCoordinates);
-				return jsonDisplayedTileCoordinates.toString(2);
-			} catch (JSONException e) {
-				exceptionListener.onException(false, e);
-			}
+		try {
+			JSONArray jsonDisplayedTileCoordinates = UIThreadExecutor.executeSync(new Callable<JSONArray>() {
+				@Override public JSONArray call() throws Exception {
+					TileObserver tileObserver = tileObserverByPlaceHolderId.get(id);
+					if (tileObserver != null) {
+						List<TileCoordinates> displayedTileCoordinates = tileObserver.getDisplayedTileCoordinates();
+						return TileCoordinates.toJson(displayedTileCoordinates);
+					}
+					return new JSONArray();
+				}
+			}, 100);
+			return jsonDisplayedTileCoordinates.toString(2);
+		} catch (Exception e) {
+			exceptionListener.onException(false, e);
 		}
 		
 		return "[]";
+	}
+	
+	/**
+	 * Get the map. Wait if the map is not ready.
+	 * 
+	 * @param id
+	 *     Map place holder ID.
+	 * @return map
+	 */
+	private GoogleMap getGoogleMapSync(String id) {
+		long watchDog = 100;
+		GoogleMap googleMap = null;
+		while (googleMap == null && watchDog-- > 0) {
+			googleMap = mapByPlaceHolderId.get(id);
+			try { Thread.sleep(100); } catch (InterruptedException e) { }
+		}
+		return googleMap;
 	}
 	
 	/**

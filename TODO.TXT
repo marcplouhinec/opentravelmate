@@ -26,17 +26,9 @@ Tasks
 
 - Use a SparseArray in the Android's NativeMap.
 
-- On the UML diagram, rename Map.onTileDisplayed to Map.onTilesDisplayed and change the signature (do the same for onTileReleased). 
-
-- Implement Map.onTilesDisplayed and Map.onTilesReleased.
+- On the UML diagram, rename Map.onTileDisplayed to Map.onTilesDisplayed and change the signature (do the same for onTileReleased).
 
 - Implement TileOverlay.removeTileOverlay.
-
-- Change the implementation of NativeMap.getDisplayedTileCoordinates to make it runnable in the UI thread on Android.
-
-- In the Android NativeMap, the GoogleMap is found like this:
-  GoogleMap map = ((SupportMapFragment) fragmentManager.findFragmentById(R.id.map)).getMap();
-  It must be found with the place-holder ID.
 
 
 Develoment tasks

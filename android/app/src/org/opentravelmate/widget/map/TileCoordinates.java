@@ -23,6 +23,11 @@ public class TileCoordinates {
 		this.y = y;
 	}
 	
+	@Override
+	public String toString() {
+		return "TileCoordinates [zoom=" + zoom + ", x=" + x + ", y=" + y + "]";
+	}
+
 	/**
 	 * @return JSON-serialized TileCoordinates
 	 * @throws JSONException
