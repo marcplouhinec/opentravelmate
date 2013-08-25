@@ -172,16 +172,27 @@ define([
             var marker = JSON.parse(jsonMarker);
             var gmap = gmapByPlaceHolderId[id];
 
-            var gmarker = new google.maps.Marker({
+            // Prepare a new Google Maps Marker
+            var markerOptions = {
                 position: new google.maps.LatLng(marker.position.lat, marker.position.lng),
                 title: marker.title
-            });
-            if (marker.anchorPoint) {
-                gmarker.setOptions({
-                    anchorPoint: new google.maps.Point(marker.anchorPoint.x, marker.anchorPoint.y)
-                });
+            };
+
+            // Handle UrlMarkerIcon if necessary
+            if (marker.icon && marker.icon.url) {
+                var urlMarkerIcon = marker.icon;
+                markerOptions.icon = {
+                    url: urlMarkerIcon.url,
+                    scaledSize: new google.maps.Size(urlMarkerIcon.size.width, urlMarkerIcon.size.height),
+                    anchor: new google.maps.Point(urlMarkerIcon.anchor.x, urlMarkerIcon.anchor.y)
+                };
             }
 
+            // Handle SvgPathMarkerIcon if necessary
+            // TODO
+
+            // Create and register the Google Maps Marker
+            var gmarker = new google.maps.Marker(markerOptions);
             gmarkerById[marker.id] = gmarker;
             gmarker.setMap(gmap);
         },

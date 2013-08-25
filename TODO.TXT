@@ -24,6 +24,14 @@ Tasks
 
 - Implement TileOverlay.removeTileOverlay.
 
+- In the UML diagram, remove Marker.anchorPoint, add MarkerIcon.anchor and remove this field from UrlMarkerIcon & SvgPathMarkerIcon.
+
+- In the UML diagram, remove UrlMarkerIcon.origin and scaledSize.
+
+- In the UML diagram, rename Size to Dimension.
+
+- In the UML diagram, create MarkerIcon.size and remove this field from UrlMarkerIcon.
+
 
 Develoment tasks
 ----------------
