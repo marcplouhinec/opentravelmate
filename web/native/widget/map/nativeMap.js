@@ -175,7 +175,8 @@ define([
             // Prepare a new Google Maps Marker
             var markerOptions = {
                 position: new google.maps.LatLng(marker.position.lat, marker.position.lng),
-                title: marker.title
+                title: marker.title,
+                clickable: false
             };
 
             // Handle UrlMarkerIcon if necessary
