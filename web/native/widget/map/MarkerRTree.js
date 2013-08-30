@@ -72,8 +72,8 @@ define(['underscore', './projectionUtils'], function(_, projectionUtils) {
         // For each zoom level, group the marker per tile
         for (var zoom = MIN_ZOOM; zoom <= MAX_ZOOM; zoom += 1) {
             var markerPositionXY = {
-                x: projectionUtils.lngToTileX(2, marker.position.lng),
-                y: projectionUtils.latToTileY(2, marker.position.lat)
+                x: projectionUtils.lngToTileX(zoom, marker.position.lng),
+                y: projectionUtils.latToTileY(zoom, marker.position.lat)
             };
 
             var markerCornerPositions = [
@@ -81,31 +81,37 @@ define(['underscore', './projectionUtils'], function(_, projectionUtils) {
                     x: markerPositionXY.x - markerAnchor.x / 256,
                     y: markerPositionXY.y - markerAnchor.y / 256
                 }, {
-                    x: markerPositionXY.x - (markerAnchor.x + markerSize.width) / 256,
+                    x: markerPositionXY.x - markerAnchor.x / 256 + markerSize.width / 256,
                     y: markerPositionXY.y - markerAnchor.y / 256
                 }, {
-                    x: markerPositionXY.x - (markerAnchor.x + markerSize.width) / 256,
-                    y: markerPositionXY.y - (markerAnchor.y + markerSize.height) / 256
+                    x: markerPositionXY.x - markerAnchor.x / 256 + markerSize.width / 256,
+                    y: markerPositionXY.y - markerAnchor.y / 256 + markerSize.height / 256
                 }, {
                     x: markerPositionXY.x - markerAnchor.x / 256,
-                    y: markerPositionXY.y - (markerAnchor.y + markerSize.height) / 256
+                    y: markerPositionXY.y - markerAnchor.y / 256 + markerSize.height / 256
                 }
             ];
 
+            /** @type {Object.<String, Boolean>} */
+            var tileIdSet = {};
             for (var i = 0; i < 4; i += 1) {
-                var tileId = zoom + '_' + projectionUtils.tileYToLat(zoom, markerCornerPositions[i].y) + '_' + projectionUtils.tileXToLng(zoom, markerCornerPositions[i].x);
+                var tileId = [zoom, Math.floor(markerCornerPositions[i].x), Math.floor(markerCornerPositions[i].y) ].join('_');
+                tileIdSet[tileId] = true;
+            }
 
+            var markerWithCoord = {
+                marker: marker,
+                x: markerPositionXY.x,
+                y: markerPositionXY.y
+            };
+            for (var tileId in tileIdSet) {
                 // Add the marker to this._markersByTileId
                 var markerWithCoords = this._markersByTileId[tileId];
                 if (!markerWithCoords) {
                     markerWithCoords = [];
                     this._markersByTileId[tileId] = markerWithCoords;
                 }
-                markerWithCoords.push({
-                    marker: marker,
-                    x: markerCornerPositions[i].x,
-                    y: markerCornerPositions[i].y
-                });
+                markerWithCoords.push(markerWithCoord);
 
                 // Add the tile to this._tileIdsByMarkerId
                 var tileIds = this._tileIdsByMarkerId[String(marker.id)];
@@ -134,7 +140,7 @@ define(['underscore', './projectionUtils'], function(_, projectionUtils) {
         delete this._tileIdsByMarkerId[String(marker.id)];
 
         // Remove the marker from this._markersByTileId
-        for (var i = 0; i < tileIds.length; i += 1) {
+        for (var i = 0; i < 1; i += 1) {
             var tileId = tileIds[i];
             var markerWithCoords = this._markersByTileId[tileId];
 
@@ -163,11 +169,11 @@ define(['underscore', './projectionUtils'], function(_, projectionUtils) {
         }
 
         // Find the nearest marker
-        var nearestDistance2 = markerWithCoords[0].x * x + markerWithCoords[0].y * y;
+        var nearestDistance2 = Math.pow(markerWithCoords[0].x - x, 2) + Math.pow(markerWithCoords[0].y - y, 2);
         var nearestMarker = markerWithCoords[0].marker;
 
         for (var i = 1; i < markerWithCoords.length; i += 1) {
-            var distance2 = markerWithCoords[i].x * x + markerWithCoords[i].y * y;
+            var distance2 = Math.pow(markerWithCoords[i].x - x, 2) + Math.pow(markerWithCoords[i].y - y, 2);
             if (distance2 < nearestDistance2) {
                 nearestDistance2 = distance2;
                 nearestMarker = markerWithCoords[i].marker;
@@ -176,7 +182,7 @@ define(['underscore', './projectionUtils'], function(_, projectionUtils) {
 
         return {
             marker: nearestMarker,
-            distance: Math.sqrt(nearestDistance2)
+            distance: Math.sqrt(nearestDistance2) * 256
         };
     };
 

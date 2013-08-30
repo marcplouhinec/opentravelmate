@@ -5,8 +5,12 @@
  */
 
 define([
-    'jquery', 'native/widget/map/google', 'native/widget/map/TileObserver'
-], function($, google, TileObserver) {
+    'jquery',
+    'native/widget/map/google',
+    'native/widget/map/TileObserver',
+    'native/widget/map/MarkerRTree',
+    'native/widget/map/projectionUtils'
+], function($, google, TileObserver, MarkerRTree, projectionUtils) {
     'use strict';
     
     /**
@@ -32,6 +36,12 @@ define([
     var TILE_EVENT_MAPTYPE_INDEX = 42;
 
     /**
+     * @constant
+     * @type {number}
+     */
+    var MAX_MOUSE_MARKER_DISTANCE = 17;
+
+    /**
      * @type {Object.<String, google.maps.Map>}
      */
     var gmapByPlaceHolderId = {};
@@ -45,6 +55,21 @@ define([
      * @type {Object.<String, TileObserver>}
      */
     var tileObserverByPlaceHolderId = {};
+
+    /**
+     * @type {Object.<String, MarkerRTree>}
+     */
+    var markerRTreeByPlaceHolderId = {};
+
+    /**
+     * @type {Object.<String, Boolean>}
+     */
+    var markerObservingStateByPlaceHolderId = {};
+
+    /**
+     * @type {Object.<String, Object>}
+     */
+    var markerUnderMouseByPlaceHolderId = {};
 
 
     var nativeMap = {
@@ -75,6 +100,7 @@ define([
                 'mapTypeId': google.maps.MapTypeId.ROADMAP
             });
             gmapByPlaceHolderId[layoutParams.id] = gmap;
+            markerRTreeByPlaceHolderId[layoutParams.id] = new MarkerRTree();
         },
 
         /**
@@ -100,6 +126,8 @@ define([
          */
         'removeView': function(id) {
             $(id + '-canvas').remove();
+
+            delete markerRTreeByPlaceHolderId[id];
         },
 
         /**
@@ -140,6 +168,8 @@ define([
                     divTile.style.height = '256px';
                     divTile.style.backgroundImage = 'url(' + tileUrl + ')';
                     divTile.style.backgroundSize = '256px 256px';
+                    // divTile.style.border = 'solid red 1px';
+                    // divTile.appendChild(document.createTextNode('(' + zoom + ', ' + coord.x + ', ' + coord.y +')'));
                     return divTile;
                 }
             });
@@ -196,6 +226,8 @@ define([
             var gmarker = new google.maps.Marker(markerOptions);
             gmarkerById[marker.id] = gmarker;
             gmarker.setMap(gmap);
+
+            markerRTreeByPlaceHolderId[id].addMarker(marker);
         },
 
         /**
@@ -256,6 +288,109 @@ define([
         'getDisplayedTileCoordinates': function(id) {
             var tileObserver = tileObserverByPlaceHolderId[id];
             return JSON.stringify(tileObserver ? tileObserver.getDisplayedTileCoordinates() : null);
+        },
+
+        /**
+         * Start observing markers and forward the CLICK, MOUSE_ENTER and MOUSE_LEAVE events to the
+         * map defined by the given place-holder ID.
+         * Note: this function does nothing if the markers are already observed.
+         *
+         * @param {String} id
+         *     Map place holder ID.
+         */
+        'observeMarkers': function (id) {
+            var self = this;
+
+            if (!markerObservingStateByPlaceHolderId[id]) {
+                markerObservingStateByPlaceHolderId[id] = true;
+                var gmap = gmapByPlaceHolderId[id];
+
+                google.maps.event.addListener(gmap, 'click', function (event) {
+                    self._handleMouseClick(id, gmap, event);
+                });
+                google.maps.event.addListener(gmap, 'mousemove', function (event) {
+                    self._handleMouseMove(id, gmap, event);
+                });
+            }
+        },
+
+        /**
+         * Handle a mouse click event.
+         *
+         * @param {String} id
+         *     Map place holder ID.
+         * @param gmap
+         *     Google Map object.
+         * @param event
+         *     Google Maps event.
+         */
+        '_handleMouseClick': function(id, gmap, event) {
+            var zoom = gmap.getZoom();
+            var x = projectionUtils.lngToTileX(zoom, event.latLng.lng());
+            var y = projectionUtils.latToTileY(zoom, event.latLng.lat());
+            var markerWithDistance = markerRTreeByPlaceHolderId[id].getNearestMarkerWithDistance(zoom, x, y);
+
+            // Call the click listeners if the distance is low enough
+            if (markerWithDistance && markerWithDistance.distance <= MAX_MOUSE_MARKER_DISTANCE) {
+                require(['extensions/core/widget/Widget'], function (Widget) {
+                    var map = /** @type {Map} */ Widget.findById(id);
+                    map.fireMarkerEvent('CLICK', markerWithDistance.marker);
+                });
+            }
+        },
+
+        /**
+         * Handle a mouse move event.
+         *
+         * @param {String} id
+         *     Map place holder ID.
+         * @param gmap
+         *     Google Map object.
+         * @param event
+         *     Google Maps event.
+         */
+        '_handleMouseMove': function(id, gmap, event) {
+            var zoom = gmap.getZoom();
+            var x = projectionUtils.lngToTileX(zoom, event.latLng.lng());
+            var y = projectionUtils.latToTileY(zoom, event.latLng.lat());
+            var markerWithDistance = markerRTreeByPlaceHolderId[id].getNearestMarkerWithDistance(zoom, x, y);
+            var markerUnderMouse = markerUnderMouseByPlaceHolderId[id];
+
+            if (markerWithDistance && markerWithDistance.distance <= MAX_MOUSE_MARKER_DISTANCE) {
+                // Fire a MOUSE_LEAVE event if necessary
+                if (markerUnderMouse && markerUnderMouse.id !== markerWithDistance.marker.id) {
+                    require(['extensions/core/widget/Widget'], function (Widget) {
+                        var map = /** @type {Map} */ Widget.findById(id);
+                        map.fireMarkerEvent('MOUSE_LEAVE', markerUnderMouse);
+                    });
+                }
+
+                // Fire a MOUSE_ENTER event if necessary
+                if (!markerUnderMouse || markerUnderMouse.id !== markerWithDistance.marker.id) {
+                    markerUnderMouse = markerWithDistance.marker;
+                    markerUnderMouseByPlaceHolderId[id] = markerUnderMouse;
+                    require(['extensions/core/widget/Widget'], function (Widget) {
+                        var map = /** @type {Map} */ Widget.findById(id);
+                        map.fireMarkerEvent('MOUSE_ENTER', markerUnderMouse);
+                    });
+                }
+
+                // Set the mouse cursor to 'pointer'
+                gmap.setOptions({draggableCursor: 'pointer'});
+            } else {
+                // Send a MOUSE_LEAVE event if necessary
+                if (markerUnderMouse) {
+                    delete markerUnderMouseByPlaceHolderId[id];
+
+                    require(['extensions/core/widget/Widget'], function (Widget) {
+                        var map = /** @type {Map} */ Widget.findById(id);
+                        map.fireMarkerEvent('MOUSE_LEAVE', markerUnderMouse);
+                    });
+                }
+
+                // Set the mouse cursor to 'default'
+                gmap.setOptions({draggableCursor: null});
+            }
         }
     };
 
