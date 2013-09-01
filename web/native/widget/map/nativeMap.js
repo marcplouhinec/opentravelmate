@@ -7,10 +7,11 @@
 define([
     'jquery',
     'native/widget/map/google',
+    'native/widget/map/InfoBox',
     'native/widget/map/TileObserver',
     'native/widget/map/MarkerRTree',
     'native/widget/map/projectionUtils'
-], function($, google, TileObserver, MarkerRTree, projectionUtils) {
+], function($, google, InfoBox, TileObserver, MarkerRTree, projectionUtils) {
     'use strict';
     
     /**
@@ -70,6 +71,11 @@ define([
      * @type {Object.<String, Object>}
      */
     var markerUnderMouseByPlaceHolderId = {};
+
+    /**
+     * @type {Object.<String, google.maps.InfoWindow>}
+     */
+    var infoWindowByPlaceHolderId = {};
 
 
     var nativeMap = {
@@ -391,6 +397,52 @@ define([
                 // Set the mouse cursor to 'default'
                 gmap.setOptions({draggableCursor: null});
             }
+        },
+
+        /**
+         * Show the given text in an Info Window on top of the given marker.
+         *
+         * @param {String} id
+         *     Map place holder ID.
+         * @param {Number} markerId
+         *     ID of the marker where to set the Info Window anchor.
+         * @param content
+         *     Text displayed in the Info Window.
+         */
+        'showInfoWindow': function(id, markerId, content) {
+            var gmap = gmapByPlaceHolderId[id];
+            var gmarker = gmarkerById[markerId];
+
+            // Close the current displayed info window if any
+            var infoWindow = infoWindowByPlaceHolderId[id];
+            if (infoWindow) {
+                infoWindow.close();
+            }
+
+            // Create a new info window
+            var divElement = /** @type {HTMLDivElement} */document.createElement('div');
+            divElement.style.cursor = 'pointer';
+            divElement.style.backgroundColor = 'white';
+            divElement.style.borderRadius = '8px';
+            divElement.style.padding = '6px';
+            divElement.style.fontSize = '14px';
+            divElement.style.fontFamily = 'Roboto, sans-serif';
+            divElement.onclick = function () {
+                alert('hello');
+            };
+            divElement.textContent = content;
+            //infoWindow = new google.maps.InfoWindow({
+            //    content: divElement
+            //});
+            //infoWindow.open(gmap, gmarker);
+            //infoWindowByPlaceHolderId[id] = infoWindow;
+
+            var infoBox = new InfoBox({
+                content: divElement,
+                closeBoxURL: '',
+                pixelOffset: new google.maps.Size(-30, -50)
+            });
+            infoBox.open(gmap, gmarker);
         }
     };
 

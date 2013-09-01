@@ -32,6 +32,12 @@ Tasks
 
 - In the UML diagram, create MarkerIcon.size and remove this field from UrlMarkerIcon.
 
+- Add and implement Map.showInfoWindow(marker, text) and Map.onInfoWindowClicked(function(marker)).
+
+- Rename Map.onMarkerClick to Map.onMarkerClicked,
+         Map.onMarkerMouseEnter to Map.onMarkerMouseEntered and
+         Map.onMarkerMouseLeave to Map.onMarkerMouseLeaved.
+
 
 Develoment tasks
 ----------------
