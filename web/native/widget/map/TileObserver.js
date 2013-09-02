@@ -4,7 +4,7 @@
  * @author marc.plouhinec@gmail.com (Marc Plouhinec)
  */
 
-define(['jquery', 'underscore', './projectionUtils'], function($, _, projectionUtils) {
+define(['jquery', 'underscore', './../../../extensions/core/widget/map/projectionUtils'], function($, _, projectionUtils) {
     'use strict';
 
     /**

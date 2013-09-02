@@ -4,7 +4,7 @@
  * @author marc.plouhinec@gmail.com (Marc Plouhinec)
  */
 
-define(['underscore', './projectionUtils'], function(_, projectionUtils) {
+define(['underscore', './../../../extensions/core/widget/map/projectionUtils'], function(_, projectionUtils) {
     'use strict';
 
     /**
@@ -140,7 +140,7 @@ define(['underscore', './projectionUtils'], function(_, projectionUtils) {
         delete this._tileIdsByMarkerId[String(marker.id)];
 
         // Remove the marker from this._markersByTileId
-        for (var i = 0; i < 1; i += 1) {
+        for (var i = 0; i < tileIds.length; i += 1) {
             var tileId = tileIds[i];
             var markerWithCoords = this._markersByTileId[tileId];
 
