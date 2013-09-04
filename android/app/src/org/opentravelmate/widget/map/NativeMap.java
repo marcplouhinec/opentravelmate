@@ -17,6 +17,8 @@ import org.opentravelmate.widget.HtmlLayout;
 import org.opentravelmate.widget.HtmlLayoutParams;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.SparseArray;
@@ -24,10 +26,15 @@ import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMapOptions;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.TileOverlayOptions;
@@ -54,6 +61,9 @@ public class NativeMap {
 	private final SparseArray<com.google.android.gms.maps.model.Marker> gmarkerById =
 			new SparseArray<com.google.android.gms.maps.model.Marker>();
 	private final Map<String, TileObserver> tileObserverByPlaceHolderId = new HashMap<String, TileObserver>();
+	private final MarkerIconLoader markerIconLoader;
+	private final Map<com.google.android.gms.maps.model.Marker, Marker> markerByGmarker = new HashMap<com.google.android.gms.maps.model.Marker, Marker>();
+	private final Map<String, CustomInfoWindowAdapter> infoWindowAdapterByPlaceHolderId = new HashMap<String, CustomInfoWindowAdapter>();
 	
 	/**
 	 * Create a NativeMap object.
@@ -62,6 +72,7 @@ public class NativeMap {
 		this.exceptionListener = exceptionListener;
 		this.htmlLayout = htmlLayout;
 		this.fragmentManager = fragmentManager;
+		this.markerIconLoader = new MarkerIconLoader(exceptionListener);
 	}
 
 	/**
@@ -217,24 +228,60 @@ public class NativeMap {
 	@JavascriptInterface
 	public void addMarker(final String id, final String jsonMarker) {
 		final GoogleMap map = getGoogleMapSync(id);
-		
 		UIThreadExecutor.execute(new Runnable() {
 			@Override public void run() {
+				Marker marker;
 				try {
-					Marker marker = Marker.fromJsonMarker(new JSONObject(jsonMarker));
-					MarkerOptions markerOptions = new MarkerOptions()
-						.position(new com.google.android.gms.maps.model.LatLng(marker.position.lat, marker.position.lng))
-						.title(marker.title); 
-					if (marker.anchorPoint != null) {
-						markerOptions.anchor((float)marker.anchorPoint.x, (float)marker.anchorPoint.y);
-					}
-					
-					gmarkerById.put(marker.id, map.addMarker(markerOptions));
+					marker = Marker.fromJsonMarker(new JSONObject(jsonMarker));
 				} catch (JSONException e) {
 					exceptionListener.onException(false, e);
+					return;
+				}
+				
+				if (marker.icon == null) {
+					addMarker(map, marker, null);
+				} else {
+					// Find the Marker Icon scale ratio
+					View view = htmlLayout.findViewByPlaceHolderId(id);
+					HtmlLayoutParams layoutParams = (HtmlLayoutParams)view.getLayoutParams();
+					double scaleRatio = view.getWidth() / layoutParams.windowWidth;
+					
+					// Load the icon
+					final Marker fmarker = marker;
+					markerIconLoader.loadIcon(marker.icon, scaleRatio, new MarkerIconLoader.OnIconLoadListener() {
+						@Override public void onIconLoad(final Bitmap bitmap) {
+							UIThreadExecutor.execute(new Runnable() {
+								@Override public void run() {
+									addMarker(map, fmarker, bitmap);
+								}
+							});
+						}
+					});
 				}
 			}
 		});
+	}
+	
+	/**
+	 * Add the given marker with the given icon to the map.
+	 * 
+	 * @param map
+	 * @param marker
+	 * @param markerIcon
+	 */
+	private void addMarker(final GoogleMap map, final Marker marker, final Bitmap markerIcon) {
+		MarkerOptions markerOptions = new MarkerOptions()
+			.position(new com.google.android.gms.maps.model.LatLng(marker.position.lat, marker.position.lng))
+			.title(marker.title);
+		
+		if (markerIcon != null) {
+			markerOptions.icon(BitmapDescriptorFactory.fromBitmap(markerIcon));
+			markerOptions.anchor((float)(marker.icon.anchor.x / marker.icon.size.width), (float)(marker.icon.anchor.y / marker.icon.size.height));
+		}
+		
+		com.google.android.gms.maps.model.Marker gmarker = map.addMarker(markerOptions);
+		gmarkerById.put(marker.id, gmarker);
+		markerByGmarker.put(gmarker, marker);
 	}
 	
 	/**
@@ -344,6 +391,130 @@ public class NativeMap {
 		}
 		
 		return "[]";
+	}
+	
+	/**
+     * Start observing markers and forward the CLICK, MOUSE_ENTER and MOUSE_LEAVE events to the
+     * map defined by the given place-holder ID.
+     * Note: this function does nothing if the markers are already observed.
+     *
+     * @param id
+     *     Map place holder ID.
+     */
+	@JavascriptInterface
+	public void observeMarkers(final String id) {
+		final GoogleMap map = getGoogleMapSync(id);
+		
+		UIThreadExecutor.execute(new Runnable() {
+			@Override public void run() {
+				// Observe marker click
+				map.setOnMarkerClickListener(new CustomMarkerClickListener(id));
+				CustomInfoWindowAdapter infoWindowAdapter = new CustomInfoWindowAdapter();
+				infoWindowAdapterByPlaceHolderId.put(id, infoWindowAdapter);
+				map.setInfoWindowAdapter(infoWindowAdapter);
+				
+				// Observe InfoWindow click
+				map.setOnInfoWindowClickListener(new CustomInfoWindowClickListener(id));
+			}
+		});
+	}
+	
+	/**
+	 * Forward marker click event to the JS Map object.
+	 */
+	private class CustomMarkerClickListener implements OnMarkerClickListener {
+		
+		private final String placeHolderId;
+
+		public CustomMarkerClickListener(String placeHolderId) {
+			this.placeHolderId = placeHolderId;
+		}
+
+		@Override
+		public boolean onMarkerClick(com.google.android.gms.maps.model.Marker gmarker) {
+			WebView mainWebView = (WebView)htmlLayout.findViewByPlaceHolderId(HtmlLayout.MAIN_WEBVIEW_ID);
+			Marker marker = markerByGmarker.get(gmarker);
+			try {
+				mainWebView.loadUrl("javascript:(function(){" +
+						"    require(['extensions/core/widget/Widget'], function (Widget) {" +
+						"        var map = Widget.findById('" + placeHolderId + "');" +
+						"        map.fireMarkerEvent('CLICK', " + marker.toJson().toString(2) + ");" +
+						"    });" +
+						"})();");
+			} catch (JSONException e) {
+				exceptionListener.onException(false, e);
+			}
+			return true;
+		}
+	}
+	
+	/**
+	 * Forward InfoWindow click event to the JS Map object.
+	 */
+	private class CustomInfoWindowClickListener implements OnInfoWindowClickListener {
+		
+		private final String placeHolderId;
+
+		public CustomInfoWindowClickListener(String placeHolderId) {
+			this.placeHolderId = placeHolderId;
+		}
+		
+		@Override
+		public void onInfoWindowClick(com.google.android.gms.maps.model.Marker gmarker) {
+			WebView mainWebView = (WebView)htmlLayout.findViewByPlaceHolderId(HtmlLayout.MAIN_WEBVIEW_ID);
+			Marker marker = markerByGmarker.get(gmarker);
+			try {
+				mainWebView.loadUrl("javascript:(function(){" +
+						"    require(['extensions/core/widget/Widget'], function (Widget) {" +
+						"        var map = Widget.findById('" + placeHolderId + "');" +
+						"        map.fireInfoWindowClickEvent(" + marker.toJson().toString(2) + ");" +
+						"    });" +
+						"})();");
+			} catch (JSONException e) {
+				exceptionListener.onException(false, e);
+			}
+		}
+	}
+	
+	@JavascriptInterface
+	public void showInfoWindow(final String id, final String jsonMarker, final String content) {
+		UIThreadExecutor.execute(new Runnable() {
+			@Override public void run() {
+				Marker marker;
+				try {
+					marker = Marker.fromJsonMarker(new JSONObject(jsonMarker));
+				} catch (JSONException e) {
+					exceptionListener.onException(false, e);
+					return;
+				}
+				
+				infoWindowAdapterByPlaceHolderId.get(id).setContent(content);
+				gmarkerById.get(marker.id).showInfoWindow();
+			}
+		});
+	}
+	
+	private class CustomInfoWindowAdapter implements InfoWindowAdapter {
+		
+		private String content = "";
+		
+		@Override
+		public View getInfoContents(com.google.android.gms.maps.model.Marker gmarker) {
+			TextView textView = new TextView(htmlLayout.getContext());
+			textView.setText(content);
+			textView.setTextColor(0xFF000000);
+			textView.setTypeface(null, Typeface.BOLD);
+			return textView;
+		}
+
+		@Override
+		public View getInfoWindow(com.google.android.gms.maps.model.Marker gmarker) {
+			return null;
+		}
+
+		public void setContent(String content) {
+			this.content = content;
+		}
 	}
 	
 	/**

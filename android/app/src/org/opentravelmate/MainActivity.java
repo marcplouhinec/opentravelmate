@@ -83,7 +83,7 @@ public class MainActivity extends FragmentActivity {
 		{
 			put("url", "extensions/core/mainwebview/mainwebview.html");
 			put("entrypoint", "extensions/core/mainwebview/mainwebview");
-		}});
+		}}, 1, 1);
 		nativeWebView.buildView(layoutParams);
 	}
 	

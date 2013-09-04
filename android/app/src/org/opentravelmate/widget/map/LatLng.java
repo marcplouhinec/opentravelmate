@@ -32,6 +32,17 @@ public class LatLng {
 	}
 	
 	/**
+	 * @return JSON-serialized LatLng
+	 * @throws JSONException
+	 */
+	public JSONObject toJson() throws JSONException {
+		JSONObject jsonLatLng = new JSONObject();
+		jsonLatLng.put("lat", lat);
+		jsonLatLng.put("lng", lng);
+		return jsonLatLng;
+	}
+	
+	/**
 	 * Build a LatLng from a JSON-serialized representation.
 	 * 
 	 * @param jsonLatLng

@@ -52,10 +52,28 @@ public class HtmlLayoutParams extends ViewGroup.LayoutParams {
 	public final Map<String, String> additionalParameters;
 	
 	/**
+	 * HTML Window width in pixels (according to the default Webview scale ratio).
+	 */
+	public final int windowWidth;
+	
+	/**
+	 * HTML Window height in pixels (according to the default Webview scale ratio).
+	 */
+	public final int windowHeight;
+	
+	/**
 	 * Create a new LayoutParams object.
 	 */
 	public HtmlLayoutParams(
-			String id, double x, double y, double width, double height, boolean visible, Map<String, String> additionalParameters) {
+			String id,
+			double x,
+			double y,
+			double width,
+			double height,
+			boolean visible,
+			Map<String, String> additionalParameters,
+			int windowWidth,
+			int windowHeight) {
 		super(0, 0);
 		this.id = id;
 		this.x = x;
@@ -64,6 +82,8 @@ public class HtmlLayoutParams extends ViewGroup.LayoutParams {
 		this.height = height;
 		this.visible = visible;
 		this.additionalParameters = additionalParameters;
+		this.windowWidth = windowWidth;
+		this.windowHeight = windowHeight;
 	}
 	
 	/**
@@ -89,7 +109,7 @@ public class HtmlLayoutParams extends ViewGroup.LayoutParams {
 			String key = String.valueOf(keys.next());
 			additionalParameters.put(key, jsonAdditionalParameters.getString(key));
 		}
-		return new HtmlLayoutParams(id, x, y, width, height, visible, additionalParameters);
+		return new HtmlLayoutParams(id, x, y, width, height, visible, additionalParameters, windowWidth, windowHeight);
 	}
 
 	@Override

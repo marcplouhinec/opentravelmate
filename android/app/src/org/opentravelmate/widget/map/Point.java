@@ -32,6 +32,17 @@ public class Point {
 	}
 	
 	/**
+	 * @return JSON-serialized Point
+	 * @throws JSONException
+	 */
+	public JSONObject toJson() throws JSONException {
+		JSONObject jsonPoint = new JSONObject();
+		jsonPoint.put("x", x);
+		jsonPoint.put("y", y);
+		return jsonPoint;
+	}
+	
+	/**
 	 * Build a Point from a JSON-serialized representation.
 	 * 
 	 * @param jsonPoint

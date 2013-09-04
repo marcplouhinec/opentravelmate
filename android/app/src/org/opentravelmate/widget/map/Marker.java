@@ -26,15 +26,38 @@ public class Marker {
 	public final String title;
 	
 	/**
-	 * Relative position of the marker icon.
+	 * Marker icon.
 	 */
-	public final Point anchorPoint;
+	public final MarkerIcon icon;
 	
-	public Marker(int id, LatLng position, String title, Point anchorPoint) {
+	/**
+	 * Create a new Marker.
+	 * 
+	 * @param id
+	 * @param position
+	 * @param title
+	 * @param icon
+	 */
+	public Marker(int id, LatLng position, String title, MarkerIcon icon) {
 		this.id = id;
 		this.position = position;
 		this.title = title;
-		this.anchorPoint = anchorPoint;
+		this.icon = icon;
+	}
+	
+	/**
+	 * @return JSON-serialized Marker
+	 * @throws JSONException
+	 */
+	public JSONObject toJson() throws JSONException {
+		JSONObject jsonMarker = new JSONObject();
+		jsonMarker.put("id", id);
+		jsonMarker.put("position", position.toJson());
+		jsonMarker.put("title", title);
+		if (icon instanceof UrlMarkerIcon) {
+			jsonMarker.put("icon", ((UrlMarkerIcon)icon).toJson());
+		}
+		return jsonMarker;
 	}
 	
 	/**
@@ -45,11 +68,10 @@ public class Marker {
 	 * @throws JSONException
 	 */
 	public static Marker fromJsonMarker(JSONObject jsonMarker) throws JSONException {
-		JSONObject jsonAnchorPoint = jsonMarker.get("anchorPoint") == null ? jsonMarker.getJSONObject("anchorPoint") : null;
 		return new Marker(
 				jsonMarker.getInt("id"),
 				LatLng.fromJsonLatLng(jsonMarker.getJSONObject("position")),
 				jsonMarker.getString("title"),
-				jsonAnchorPoint == null ? null : Point.fromJsonPoint(jsonAnchorPoint));
+				jsonMarker.has("icon") ? UrlMarkerIcon.fromJsonUrlMarkerIcon(jsonMarker.getJSONObject("icon")) : null);
 	}
 }
