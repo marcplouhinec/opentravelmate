@@ -199,61 +199,69 @@ define([
         },
 
         /**
-         * Add a marker on the map.
+         * Add markers on the map.
          *
          * @param {String} id
          *     Map place holder ID.
-         * @param {String} jsonMarker
-         *     JSON serialized Marker.
+         * @param {String} jsonMarkers
+         *     JSON serialized array of markers.
          */
-        'addMarker': function(id, jsonMarker) {
-            var marker = JSON.parse(jsonMarker);
+        'addMarkers': function(id, jsonMarkers) {
+            var markers = /** @type {Array} */ JSON.parse(jsonMarkers);
             var gmap = gmapByPlaceHolderId[id];
 
-            // Prepare a new Google Maps Marker
-            var markerOptions = {
-                position: new google.maps.LatLng(marker.position.lat, marker.position.lng),
-                title: marker.title,
-                clickable: false
-            };
+            for (var i = 0; i < markers.length; i += 1) {
+                var marker = markers[i];
 
-            // Handle UrlMarkerIcon if necessary
-            if (marker.icon && marker.icon.url) {
-                var urlMarkerIcon = marker.icon;
-                markerOptions.icon = {
-                    url: urlMarkerIcon.url,
-                    scaledSize: new google.maps.Size(urlMarkerIcon.size.width, urlMarkerIcon.size.height),
-                    anchor: new google.maps.Point(urlMarkerIcon.anchor.x, urlMarkerIcon.anchor.y)
+                // Prepare a new Google Maps Marker
+                var markerOptions = {
+                    position: new google.maps.LatLng(marker.position.lat, marker.position.lng),
+                    title: marker.title,
+                    clickable: false
                 };
+
+                // Handle UrlMarkerIcon if necessary
+                if (marker.icon && marker.icon.url) {
+                    var urlMarkerIcon = marker.icon;
+                    markerOptions.icon = {
+                        url: urlMarkerIcon.url,
+                        scaledSize: new google.maps.Size(urlMarkerIcon.size.width, urlMarkerIcon.size.height),
+                        anchor: new google.maps.Point(urlMarkerIcon.anchor.x, urlMarkerIcon.anchor.y)
+                    };
+                }
+
+                // Handle SvgPathMarkerIcon if necessary
+                // TODO
+
+                // Create and register the Google Maps Marker
+                var gmarker = new google.maps.Marker(markerOptions);
+                gmarkerById[marker.id] = gmarker;
+                gmarker.setMap(gmap);
+
+                markerRTreeByPlaceHolderId[id].addMarker(marker);
             }
-
-            // Handle SvgPathMarkerIcon if necessary
-            // TODO
-
-            // Create and register the Google Maps Marker
-            var gmarker = new google.maps.Marker(markerOptions);
-            gmarkerById[marker.id] = gmarker;
-            gmarker.setMap(gmap);
-
-            markerRTreeByPlaceHolderId[id].addMarker(marker);
         },
 
         /**
-         * Remove a marker from the map.
+         * Remove markers from the map.
          *
          * @param {String} id
          *     Map place holder ID.
-         * @param {String} jsonMarker
-         *     JSON serialized Marker.
+         * @param {String} jsonMarkers
+         *     JSON serialized array of markers.
          */
-        'removeMarker': function(id, jsonMarker) {
-            var marker = JSON.parse(jsonMarker);
-            var gmarker = gmarkerById[marker.id];
-            delete gmarkerById[marker.id];
+        'removeMarkers': function(id, jsonMarkers) {
+            var markers = /** @type {Array} */ JSON.parse(jsonMarkers);
 
-            markerRTreeByPlaceHolderId[id].removeMarker(marker);
+            for (var i = 0; i < markers.length; i += 1) {
+                var marker = markers[i];
+                var gmarker = gmarkerById[marker.id];
+                delete gmarkerById[marker.id];
 
-            gmarker.setMap(null);
+                markerRTreeByPlaceHolderId[id].removeMarker(marker);
+
+                gmarker.setMap(null);
+            }
         },
 
         /**

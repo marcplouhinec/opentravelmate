@@ -24,8 +24,6 @@ Tasks
 
 - Implement TileOverlay.removeTileOverlay.
 
-- On the Android platform, make map.addMarker faster.
-
 
 Develoment tasks
 ----------------

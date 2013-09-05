@@ -1,5 +1,9 @@
 package org.opentravelmate.widget.map;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -73,5 +77,20 @@ public class Marker {
 				LatLng.fromJsonLatLng(jsonMarker.getJSONObject("position")),
 				jsonMarker.getString("title"),
 				jsonMarker.has("icon") ? UrlMarkerIcon.fromJsonUrlMarkerIcon(jsonMarker.getJSONObject("icon")) : null);
+	}
+	
+	/**
+	 * Build a Marker array from a JSON-serialized representation.
+	 * 
+	 * @param jsonMarkers
+	 * @return List of markers
+	 * @throws JSONException
+	 */
+	public static List<Marker> fromJsonMarkers(JSONArray jsonMarkers) throws JSONException {
+		List<Marker> markers = new ArrayList<Marker>(jsonMarkers.length());
+		for (int i = 0; i < jsonMarkers.length(); i++) {
+			markers.add(fromJsonMarker(jsonMarkers.getJSONObject(i)));
+		}
+		return markers;
 	}
 }

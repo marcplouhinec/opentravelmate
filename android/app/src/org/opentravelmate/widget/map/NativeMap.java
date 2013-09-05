@@ -218,45 +218,46 @@ public class NativeMap {
 	}
 	
 	/**
-	 * Add a marker on the map.
+	 * Add markers on the map.
 	 * 
 	 * @param id
 	 *     Map place holder ID.
-	 * @param jsonMarker
-     *     JSON serialized Marker.
+	 * @param jsonMarkers
+     *     JSON serialized array of markers.
 	 */
 	@JavascriptInterface
-	public void addMarker(final String id, final String jsonMarker) {
+	public void addMarkers(final String id, final String jsonMarkers) {
 		final GoogleMap map = getGoogleMapSync(id);
 		UIThreadExecutor.execute(new Runnable() {
 			@Override public void run() {
-				Marker marker;
+				List<Marker> markers;
 				try {
-					marker = Marker.fromJsonMarker(new JSONObject(jsonMarker));
+					markers = Marker.fromJsonMarkers(new JSONArray(jsonMarkers));
 				} catch (JSONException e) {
 					exceptionListener.onException(false, e);
 					return;
 				}
 				
-				if (marker.icon == null) {
-					addMarker(map, marker, null);
-				} else {
-					// Find the Marker Icon scale ratio
-					View view = htmlLayout.findViewByPlaceHolderId(id);
-					HtmlLayoutParams layoutParams = (HtmlLayoutParams)view.getLayoutParams();
-					double scaleRatio = view.getWidth() / layoutParams.windowWidth;
-					
-					// Load the icon
-					final Marker fmarker = marker;
-					markerIconLoader.loadIcon(marker.icon, scaleRatio, new MarkerIconLoader.OnIconLoadListener() {
-						@Override public void onIconLoad(final Bitmap bitmap) {
-							UIThreadExecutor.execute(new Runnable() {
-								@Override public void run() {
-									addMarker(map, fmarker, bitmap);
-								}
-							});
-						}
-					});
+				for (final Marker marker : markers) {
+					if (marker.icon == null) {
+						addMarker(map, marker, null);
+					} else {
+						// Find the Marker Icon scale ratio
+						View view = htmlLayout.findViewByPlaceHolderId(id);
+						HtmlLayoutParams layoutParams = (HtmlLayoutParams)view.getLayoutParams();
+						double scaleRatio = view.getWidth() / layoutParams.windowWidth;
+						
+						// Load the icon
+						markerIconLoader.loadIcon(marker.icon, scaleRatio, new MarkerIconLoader.OnIconLoadListener() {
+							@Override public void onIconLoad(final Bitmap bitmap) {
+								UIThreadExecutor.execute(new Runnable() {
+									@Override public void run() {
+										addMarker(map, marker, bitmap);
+									}
+								});
+							}
+						});
+					}
 				}
 			}
 		});
@@ -285,21 +286,23 @@ public class NativeMap {
 	}
 	
 	/**
-	 * Remove a marker from the map.
+	 * Remove markers from the map.
 	 * 
 	 * @param id
 	 *     Map place holder ID.
-	 * @param jsonMarker
-     *     JSON serialized Marker.
+	 * @param jsonMarkers
+     *     JSON serialized array of markers.
 	 */
 	@JavascriptInterface
-	public void removeMarker(final String id, final String jsonMarker) {
+	public void removeMarkers(final String id, final String jsonMarkers) {
 		UIThreadExecutor.execute(new Runnable() {
 			@Override public void run() {
 				try {
-					Marker marker = Marker.fromJsonMarker(new JSONObject(jsonMarker));
-					gmarkerById.get(marker.id).remove();
-					gmarkerById.remove(marker.id);
+					List<Marker> markers = Marker.fromJsonMarkers(new JSONArray(jsonMarkers));
+					for (Marker marker : markers) {
+						gmarkerById.get(marker.id).remove();
+						gmarkerById.remove(marker.id);
+					}
 				} catch (JSONException e) {
 					exceptionListener.onException(false, e);
 				}
