@@ -1351,24 +1351,23 @@
 </XPD:OBJ>
 </XPD:OBJ>
 <XPD:OBJ name="Operations[7]" type="UMLOperation" guid="HVmiftZ8jUmPhsbikie7oAAA">
-<XPD:ATTR name="Name" type="string">addMarker</XPD:ATTR>
+<XPD:ATTR name="Name" type="string">addMarkers</XPD:ATTR>
 <XPD:REF name="Owner">9ScC0Qkmrkm6KIZFnBm5yQAA</XPD:REF>
 <XPD:ATTR name="#Parameters" type="integer">1</XPD:ATTR>
-<XPD:OBJ name="Parameters[0]" type="UMLParameter" guid="XQCiHkgbd0ugLd10C81YOQAA">
-<XPD:ATTR name="Name" type="string">marker</XPD:ATTR>
-<XPD:ATTR name="TypeExpression" type="string">Marker</XPD:ATTR>
+<XPD:OBJ name="Parameters[0]" type="UMLParameter" guid="sM42sWZ0wEG7HAMqcmgN8wAA">
+<XPD:ATTR name="Name" type="string">markers</XPD:ATTR>
+<XPD:ATTR name="TypeExpression" type="string">List&lt;Marker&gt;</XPD:ATTR>
 <XPD:REF name="BehavioralFeature">HVmiftZ8jUmPhsbikie7oAAA</XPD:REF>
-<XPD:REF name="Type_">bj5JHNT1o0W/K9kTNUTFXAAA</XPD:REF>
 </XPD:OBJ>
 </XPD:OBJ>
 <XPD:OBJ name="Operations[8]" type="UMLOperation" guid="/rRuSTXsBUa3nGujmAdrvwAA">
-<XPD:ATTR name="Name" type="string">removeMarker</XPD:ATTR>
+<XPD:ATTR name="Name" type="string">removeMarkers</XPD:ATTR>
 <XPD:REF name="Owner">9ScC0Qkmrkm6KIZFnBm5yQAA</XPD:REF>
 <XPD:ATTR name="#Parameters" type="integer">1</XPD:ATTR>
-<XPD:OBJ name="Parameters[0]" type="UMLParameter" guid="2OqUA4Nkzky91PT4VlPO4QAA">
-<XPD:ATTR name="Name" type="string">marker</XPD:ATTR>
+<XPD:OBJ name="Parameters[0]" type="UMLParameter" guid="/cwrxNW3kkKyxJEB2vIeHQAA">
+<XPD:ATTR name="Name" type="string">markers</XPD:ATTR>
+<XPD:ATTR name="TypeExpression" type="string">List&lt;Marker&gt;</XPD:ATTR>
 <XPD:REF name="BehavioralFeature">/rRuSTXsBUa3nGujmAdrvwAA</XPD:REF>
-<XPD:REF name="Type_">bj5JHNT1o0W/K9kTNUTFXAAA</XPD:REF>
 </XPD:OBJ>
 </XPD:OBJ>
 <XPD:OBJ name="Operations[9]" type="UMLOperation" guid="GxJAHOfsS0q7oAHwxW1c+QAA">
@@ -1626,8 +1625,8 @@
 <XPD:REF name="Views[2]">V/MHEMcsTEagT7QTCOn15gAA</XPD:REF>
 <XPD:REF name="Views[3]">B9/dEkHoqUC4XAlBZdy28wAA</XPD:REF>
 <XPD:ATTR name="#TypedParameters" type="integer">3</XPD:ATTR>
-<XPD:REF name="TypedParameters[0]">XQCiHkgbd0ugLd10C81YOQAA</XPD:REF>
-<XPD:REF name="TypedParameters[1]">2OqUA4Nkzky91PT4VlPO4QAA</XPD:REF>
+<XPD:REF name="TypedParameters[0]" pathname="marker">XQCiHkgbd0ugLd10C81YOQAA</XPD:REF>
+<XPD:REF name="TypedParameters[1]" pathname="marker">2OqUA4Nkzky91PT4VlPO4QAA</XPD:REF>
 <XPD:REF name="TypedParameters[2]">4RYLlMLdk0G4p3cxCLfJ8gAA</XPD:REF>
 <XPD:ATTR name="#Associations" type="integer">3</XPD:ATTR>
 <XPD:REF name="Associations[0]">nhy2UONKwECTBrAkUkcUWAAA</XPD:REF>

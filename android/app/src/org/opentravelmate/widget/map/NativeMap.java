@@ -492,7 +492,8 @@ public class NativeMap {
 				}
 				
 				infoWindowAdapterByPlaceHolderId.get(id).setContent(content);
-				gmarkerById.get(marker.id).showInfoWindow();
+				com.google.android.gms.maps.model.Marker gmarker = gmarkerById.get(marker.id);
+				gmarker.showInfoWindow();
 			}
 		});
 	}

@@ -24,6 +24,10 @@ Tasks
 
 - Implement TileOverlay.removeTileOverlay.
 
+- In Map.showInfoWindow, add the anchor point.
+
+- On the Android version, move the map (if needed) when an InfoWindow is opened close to the screen border.
+
 
 Develoment tasks
 ----------------
