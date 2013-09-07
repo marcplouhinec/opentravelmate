@@ -21,6 +21,7 @@ Tasks
 - On Android, typing text in an Auto-complete input make the auto-complete dialog to "blink". It is because
   AutoCompleteTextInput._setDialogLayoutParams() is called each time a key is typed.
   --> Call this method ONLY if the layout change.
+  --> Even if this function is called several times, improve the webview.layout() function to avoid flickering.
 
 - Implement TileOverlay.removeTileOverlay.
 
