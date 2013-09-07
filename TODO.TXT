@@ -24,9 +24,11 @@ Tasks
 
 - Implement TileOverlay.removeTileOverlay.
 
-- In Map.showInfoWindow, add the anchor point.
+- In Map.showInfoWindow, add the anchor point. By default the info window must start from the marker's top corner.
 
 - On the Android version, move the map (if needed) when an InfoWindow is opened close to the screen border.
+
+- On the web version, A MOUSE_UP event should not un-highlight the info window if the mouse is still on top of it.
 
 
 Develoment tasks

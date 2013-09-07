@@ -4,7 +4,10 @@
  * @author marc.plouhinec@gmail.com (Marc Plouhinec)
  */
 
-define(['underscore', './../../../extensions/core/widget/map/projectionUtils'], function(_, projectionUtils) {
+define([
+    'underscore', './../../../extensions/core/widget/map/projectionUtils',
+    './../../../extensions/core/utils/geometryUtils'
+], function(_, projectionUtils, geometryUtils) {
     'use strict';
 
     /**
@@ -46,7 +49,7 @@ define(['underscore', './../../../extensions/core/widget/map/projectionUtils'], 
         /**
          * Contains all the markers grouped by tiles.
          *
-         * @type {Object.<Number, Array<{marker: Object, x: Number, y: Number}>>}
+         * @type {Object.<Number, Array<{marker: Object, x: Number, y: Number, corners: {nw: {x: Number, y: Number}, se: {x: Number, y: Number}}}>>}
          * @private
          */
         this._markersByTileId = {};
@@ -102,7 +105,11 @@ define(['underscore', './../../../extensions/core/widget/map/projectionUtils'], 
             var markerWithCoord = {
                 marker: marker,
                 x: markerPositionXY.x,
-                y: markerPositionXY.y
+                y: markerPositionXY.y,
+                corners: {
+                    nw: markerCornerPositions[0],
+                    se: markerCornerPositions[2]
+                }
             };
             for (var tileId in tileIdSet) {
                 // Add the marker to this._markersByTileId
@@ -168,21 +175,32 @@ define(['underscore', './../../../extensions/core/widget/map/projectionUtils'], 
             return null;
         }
 
-        // Find the nearest marker
+        // Find the nearest marker by its position
         var nearestDistance2 = Math.pow(markerWithCoords[0].x - x, 2) + Math.pow(markerWithCoords[0].y - y, 2);
-        var nearestMarker = markerWithCoords[0].marker;
+        var markerWithCoord = markerWithCoords[0];
 
         for (var i = 1; i < markerWithCoords.length; i += 1) {
             var distance2 = Math.pow(markerWithCoords[i].x - x, 2) + Math.pow(markerWithCoords[i].y - y, 2);
             if (distance2 < nearestDistance2) {
                 nearestDistance2 = distance2;
-                nearestMarker = markerWithCoords[i].marker;
+                markerWithCoord = markerWithCoords[i];
             }
         }
 
+        // Compute the distance between the given point and the marker border
+        var distance = geometryUtils.getDistanceBetweenPointAndRectangle({
+            x: x,
+            y: y
+        }, {
+            xMin: markerWithCoord.corners.nw.x,
+            yMin: markerWithCoord.corners.nw.y,
+            xMax: markerWithCoord.corners.se.x,
+            yMax: markerWithCoord.corners.se.y
+        });
+
         return {
-            marker: nearestMarker,
-            distance: Math.sqrt(nearestDistance2) * 256
+            marker: markerWithCoord.marker,
+            distance: distance * 256
         };
     };
 
