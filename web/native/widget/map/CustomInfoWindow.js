@@ -4,7 +4,12 @@
  * @author marc.plouhinec@gmail.com (Marc Plouhinec)
  */
 
-define(['./InfoBox', '../../../extensions/core/utils/stringUtils', './google'], function(InfoBox, stringUtils, google) {
+define([
+    'jquery',
+    './InfoBox',
+    '../../../extensions/core/utils/stringUtils',
+    './google'
+], function($, InfoBox, stringUtils, google) {
     'use strict';
 
     /**
@@ -99,22 +104,24 @@ define(['./InfoBox', '../../../extensions/core/utils/stringUtils', './google'], 
         divTriangleElement.style.marginLeft = (infoBoxWidth / 2 - 7) + 'px';
         divWrapperElement.appendChild(divTriangleElement);
 
-        divWrapperElement.onmouseover = function() {
+        var isMouseIn = false;
+        $(divWrapperElement).mouseenter(function() {
+            isMouseIn = true;
             divElement.style.backgroundColor = '#0099cc';
             divTriangleElement.style.borderTop = '14px solid #0099cc';
-        };
-        divWrapperElement.onmousedown = function() {
+        }).mouseleave(function() {
+            isMouseIn = false;
+            divElement.style.backgroundColor = 'white';
+            divTriangleElement.style.borderTop = '14px solid white';
+        }).mousedown(function() {
             divElement.style.backgroundColor = '#0099cc';
             divTriangleElement.style.borderTop = '14px solid #0099cc';
-        };
-        divWrapperElement.onmouseout = function() {
-            divElement.style.backgroundColor = 'white';
-            divTriangleElement.style.borderTop = '14px solid white';
-        };
-        divWrapperElement.onmouseup = function() {
-            divElement.style.backgroundColor = 'white';
-            divTriangleElement.style.borderTop = '14px solid white';
-        };
+        }).mouseup(function() {
+            if (!isMouseIn) {
+                divElement.style.backgroundColor = 'white';
+                divTriangleElement.style.borderTop = '14px solid white';
+            }
+        });
 
         // Create the info box
         this._infoBox = new InfoBox({
