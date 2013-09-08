@@ -76,7 +76,8 @@ public class Marker {
 				jsonMarker.getInt("id"),
 				LatLng.fromJsonLatLng(jsonMarker.getJSONObject("position")),
 				jsonMarker.getString("title"),
-				jsonMarker.has("icon") ? UrlMarkerIcon.fromJsonUrlMarkerIcon(jsonMarker.getJSONObject("icon")) : null);
+				jsonMarker.has("icon") && !jsonMarker.isNull("icon") ?
+						UrlMarkerIcon.fromJsonUrlMarkerIcon(jsonMarker.getJSONObject("icon")) : null);
 	}
 	
 	/**

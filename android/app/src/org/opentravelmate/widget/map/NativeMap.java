@@ -11,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.opentravelmate.R;
 import org.opentravelmate.commons.ExceptionListener;
 import org.opentravelmate.commons.UIThreadExecutor;
 import org.opentravelmate.widget.HtmlLayout;
@@ -62,8 +63,12 @@ public class NativeMap {
 			new SparseArray<com.google.android.gms.maps.model.Marker>();
 	private final Map<String, TileObserver> tileObserverByPlaceHolderId = new HashMap<String, TileObserver>();
 	private final MarkerIconLoader markerIconLoader;
-	private final Map<com.google.android.gms.maps.model.Marker, Marker> markerByGmarker = new HashMap<com.google.android.gms.maps.model.Marker, Marker>();
-	private final Map<String, CustomInfoWindowAdapter> infoWindowAdapterByPlaceHolderId = new HashMap<String, CustomInfoWindowAdapter>();
+	private final Map<com.google.android.gms.maps.model.Marker, Marker> markerByGmarker =
+			new HashMap<com.google.android.gms.maps.model.Marker, Marker>();
+	private final Map<String, CustomInfoWindowAdapter> infoWindowAdapterByPlaceHolderId =
+			new HashMap<String, CustomInfoWindowAdapter>();
+	private final Map<String, com.google.android.gms.maps.model.Marker> infoWindowMarkerByPlaceHolderId =
+			new HashMap<String, com.google.android.gms.maps.model.Marker>();
 	
 	/**
 	 * Create a NativeMap object.
@@ -479,13 +484,33 @@ public class NativeMap {
 		}
 	}
 	
+	/**
+     * Show the given text in an Info Window on top of the given marker.
+     *
+     * @param {String} id
+     *     Map place holder ID.
+     * @param {String} jsonMarker
+     *     JSON-serialized marker where to set the Info Window anchor.
+     * @param content
+     *     Text displayed in the Info Window.
+     * @param {String} jsonAnchor
+     *     JSON-serialized position of the the InfoWindow-base compared to the marker position.
+     *     Examples:
+     *       - (0,0) is the marker position.
+     *       - (0,1) is on the under of the marker position.
+     *       - (-1,0) is on the left of the marker position.
+     */
 	@JavascriptInterface
-	public void showInfoWindow(final String id, final String jsonMarker, final String content) {
+	public void showInfoWindow(final String id, final String jsonMarker, final String content, final String jsonAnchor) {
+		final GoogleMap map = getGoogleMapSync(id);
+		
 		UIThreadExecutor.execute(new Runnable() {
 			@Override public void run() {
 				Marker marker;
+				Point anchor;
 				try {
 					marker = Marker.fromJsonMarker(new JSONObject(jsonMarker));
+					anchor = "null".equals(jsonAnchor) ? null : Point.fromJsonPoint(new JSONObject(jsonAnchor));
 				} catch (JSONException e) {
 					exceptionListener.onException(false, e);
 					return;
@@ -493,7 +518,31 @@ public class NativeMap {
 				
 				infoWindowAdapterByPlaceHolderId.get(id).setContent(content);
 				com.google.android.gms.maps.model.Marker gmarker = gmarkerById.get(marker.id);
-				gmarker.showInfoWindow();
+				
+				// Since the InfowWindow object cannot be customized with an achor, it is handled manually with an
+				// invisible marker.
+				if (anchor == null || marker.icon == null) {
+					gmarker.showInfoWindow();
+				} else {
+					// Remove the existing info window marker if any
+					com.google.android.gms.maps.model.Marker existingInfoWindowMarker = infoWindowMarkerByPlaceHolderId.get(id);
+					if (existingInfoWindowMarker != null) {
+						existingInfoWindowMarker.remove();
+						markerByGmarker.remove(existingInfoWindowMarker);
+					}
+					
+					// Create a new info window marker and display it
+					MarkerOptions infoWindowMarkerOptions = new MarkerOptions()
+						.position(new com.google.android.gms.maps.model.LatLng(marker.position.lat, marker.position.lng))
+						.title(marker.title)
+						.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_transparent_marker))
+						.anchor((float)(anchor.x / marker.icon.size.width), (float)(anchor.y / marker.icon.size.height));
+					
+					com.google.android.gms.maps.model.Marker infoWindowMarker = map.addMarker(infoWindowMarkerOptions);
+					infoWindowMarker.showInfoWindow();
+					infoWindowMarkerByPlaceHolderId.put(id, infoWindowMarker);
+					markerByGmarker.put(infoWindowMarker, marker);
+				}
 			}
 		});
 	}
