@@ -45,6 +45,24 @@ define([
     var MAX_MOUSE_MARKER_DISTANCE = 17;
 
     /**
+     * @constant
+     * @type {{width: number, height: number}}
+     */
+    var DEFAULT_MARKER_SIZE = {
+        width: 22,
+        height: 40
+    };
+
+    /**
+     * @constant
+     * @type {{x: number, y: number}}
+     */
+    var DEFAULT_MARKER_ANCHOR = {
+        x: 11,
+        y: 40
+    };
+
+    /**
      * @type {Object.<String, google.maps.Map>}
      */
     var gmapByPlaceHolderId = {};
@@ -108,7 +126,7 @@ define([
                 'mapTypeId': google.maps.MapTypeId.ROADMAP
             });
             gmapByPlaceHolderId[layoutParams.id] = gmap;
-            markerRTreeByPlaceHolderId[layoutParams.id] = new MarkerRTree();
+            markerRTreeByPlaceHolderId[layoutParams.id] = new MarkerRTree(DEFAULT_MARKER_SIZE, DEFAULT_MARKER_ANCHOR);
         },
 
         /**
@@ -426,9 +444,16 @@ define([
          *     JSON-serialized marker where to set the Info Window anchor.
          * @param content
          *     Text displayed in the Info Window.
+         * @param {String} jsonAnchor
+         *     JSON-serialized position of the the InfoWindow-base compared to the marker position.
+         *     Examples:
+         *       - (0,0) is the marker position.
+         *       - (0,1) is on the under of the marker position.
+         *       - (-1,0) is on the left of the marker position.
          */
-        'showInfoWindow': function(id, jsonMarker, content) {
+        'showInfoWindow': function(id, jsonMarker, content, jsonAnchor) {
             var marker = JSON.parse(jsonMarker);
+            var anchor = /** @type {{x: Number, y: Number}|null} */ JSON.parse(jsonAnchor);
             var gmap = gmapByPlaceHolderId[id];
             var gmarker = gmarkerById[marker.id];
 
@@ -438,8 +463,18 @@ define([
                 infoWindow.close();
             }
 
+            // Compute the default anchor
+            if (!anchor) {
+                var markerSize = marker.icon ? marker.icon.size : DEFAULT_MARKER_SIZE;
+                var markerAnchor = marker.icon ? marker.icon.anchor : DEFAULT_MARKER_ANCHOR;
+                anchor = {
+                    x: markerSize.width / 2 - markerAnchor.x,
+                    y: -markerAnchor.y
+                };
+            }
+
             // Create a new info window
-            var infoWindow = new CustomInfoWindow(content);
+            var infoWindow = new CustomInfoWindow(content, anchor);
             infoWindow.open(gmap, gmarker);
             infoWindow.onClick(function() {
                 require(['extensions/core/widget/Widget'], function (Widget) {

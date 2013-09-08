@@ -12,24 +12,6 @@ define([
 
     /**
      * @const
-     * @type {{width: number, height: number}}
-     */
-    var DEFAULT_MARKER_SIZE = {
-        width: 22,
-        height: 40
-    };
-
-    /**
-     * @const
-     * @type {{x: number, y: number}}
-     */
-    var DEFAULT_MARKER_ANCHOR = {
-        x: 11,
-        y: 40
-    };
-
-    /**
-     * @const
      * @type {number}
      */
     var MIN_ZOOM = 2;
@@ -43,9 +25,13 @@ define([
     /**
      * Create a new MarkerRTree.
      *
+     * @param {{width: Number, height: Number}} defaultMarkerSize
+     *     Default icon size when a marker has no custom icon.
+     * @param {{x: Number, y: Number}} defaultMarkerAnchor
+     *     Default icon anchor when a marker has no custom icon.
      * @constructor
      */
-    function MarkerRTree() {
+    function MarkerRTree(defaultMarkerSize, defaultMarkerAnchor) {
         /**
          * Contains all the markers grouped by tiles.
          *
@@ -61,6 +47,18 @@ define([
          * @private
          */
         this._tileIdsByMarkerId = {};
+
+        /**
+         * @type {{width: Number, height: Number}}
+         * @private
+         */
+        this._defaultMarkerSize = defaultMarkerSize;
+
+        /**
+         * @type {{x: Number, y: Number}}
+         * @private
+         */
+        this._defaultMarkerAnchor = defaultMarkerAnchor;
     };
 
     /**
@@ -69,8 +67,8 @@ define([
      * @param marker
      */
     MarkerRTree.prototype.addMarker = function(marker) {
-        var markerSize = marker.icon ? marker.icon.size : DEFAULT_MARKER_SIZE;
-        var markerAnchor = marker.icon ? marker.icon.anchor : DEFAULT_MARKER_ANCHOR;
+        var markerSize = marker.icon ? marker.icon.size : this._defaultMarkerSize;
+        var markerAnchor = marker.icon ? marker.icon.anchor : this._defaultMarkerAnchor;
 
         // For each zoom level, group the marker per tile
         for (var zoom = MIN_ZOOM; zoom <= MAX_ZOOM; zoom += 1) {

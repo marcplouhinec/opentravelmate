@@ -35,9 +35,16 @@ define(['./InfoBox', '../../../extensions/core/utils/stringUtils', './google'], 
      * Create a new CustomInfoWindow.
      *
      * @param {string} content
+     *     InfoWindow text content.
+     * @param {{x: Number, y: Number}} anchor
+     *     Position of the the InfoWindow-base compared to the marker position.
+     *     Examples:
+     *       - (0,0) is the marker position.
+     *       - (0,1) is on the under of the marker position.
+     *       - (-1,0) is on the left of the marker position.
      * @constructor
      */
-    function CustomInfoWindow(content) {
+    function CustomInfoWindow(content, anchor) {
         var self = this;
 
         /**
@@ -113,7 +120,7 @@ define(['./InfoBox', '../../../extensions/core/utils/stringUtils', './google'], 
         this._infoBox = new InfoBox({
             content: divWrapperElement,
             closeBoxURL: '',
-            pixelOffset: new google.maps.Size(-infoBoxWidth / 2, -46),
+            pixelOffset: new google.maps.Size(-infoBoxWidth / 2 + anchor.x, -46 + anchor.y),
             maxWidth: 0
         });
     }
