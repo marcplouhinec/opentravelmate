@@ -19,16 +19,21 @@ import org.opentravelmate.widget.HtmlLayoutParams;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.DisplayMetrics;
 import android.util.SparseArray;
+import android.util.TypedValue;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
@@ -54,6 +59,7 @@ public class NativeMap {
 	private static final float DEFAULT_ZOOM = 13;
 	private static final double DEFAULT_LATITUDE = 49.6;
 	private static final double DEFAULT_LONGITUDE = 6.135;
+	private static final int INFO_WINDOW_MARGIN_DIP = 10;
 	
 	private final ExceptionListener exceptionListener;
 	private final HtmlLayout htmlLayout;
@@ -69,6 +75,7 @@ public class NativeMap {
 			new HashMap<String, CustomInfoWindowAdapter>();
 	private final Map<String, com.google.android.gms.maps.model.Marker> infoWindowMarkerByPlaceHolderId =
 			new HashMap<String, com.google.android.gms.maps.model.Marker>();
+	private final int infoWindowMargin;
 	
 	/**
 	 * Create a NativeMap object.
@@ -78,6 +85,9 @@ public class NativeMap {
 		this.htmlLayout = htmlLayout;
 		this.fragmentManager = fragmentManager;
 		this.markerIconLoader = new MarkerIconLoader(exceptionListener);
+		
+		DisplayMetrics metrics = htmlLayout.getContext().getResources().getDisplayMetrics();
+		infoWindowMargin = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, INFO_WINDOW_MARGIN_DIP, metrics));
 	}
 
 	/**
@@ -518,7 +528,8 @@ public class NativeMap {
 					return;
 				}
 				
-				infoWindowAdapterByPlaceHolderId.get(id).setContent(content);
+				CustomInfoWindowAdapter infoWindowAdapter = infoWindowAdapterByPlaceHolderId.get(id);
+				infoWindowAdapter.setContent(content);
 				com.google.android.gms.maps.model.Marker gmarker = gmarkerById.get(marker.id);
 				
 				// Since the InfowWindow object cannot be customized with an achor, it is handled manually with an
@@ -545,17 +556,62 @@ public class NativeMap {
 					infoWindowMarkerByPlaceHolderId.put(id, infoWindowMarker);
 					markerByGmarker.put(infoWindowMarker, marker);
 				}
+				
+				// Move the camera in order to be able to see the InfoWindow completely
+				Rect bounds = infoWindowAdapter.getInfoWindowBounds();
+				bounds.right += infoWindowMargin;
+				bounds.bottom += infoWindowMargin;
+				View mapView = htmlLayout.findViewByPlaceHolderId(id);
+				CameraPosition cameraPosition = map.getCameraPosition();
+				com.google.android.gms.maps.model.LatLng mapCenter = cameraPosition.target;
+				Point mapCenterTileXY = new Point(
+						ProjectionUtils.lngToTileX(cameraPosition.zoom, mapCenter.longitude),
+						ProjectionUtils.latToTileY(cameraPosition.zoom, mapCenter.latitude));
+				Point markerPositionTileXY = new Point(
+						ProjectionUtils.lngToTileX(cameraPosition.zoom, marker.position.lng),
+						ProjectionUtils.latToTileY(cameraPosition.zoom, marker.position.lat));
+				int markerPositionX = (int)Math.round((markerPositionTileXY.x - mapCenterTileXY.x) * 512 + mapView.getWidth() / 2);
+				int markerPositionY = (int)Math.round((markerPositionTileXY.y - mapCenterTileXY.y) * 512 + mapView.getHeight() / 2);
+				int infoWindowNorthWestX = markerPositionX - bounds.width() / 2;
+				int infoWindowNorthWestY = markerPositionY - bounds.height();
+				int infoWindowSouthEastX = markerPositionX + bounds.width() / 2;
+				int infoWindowSouthEastY = markerPositionY + bounds.height();
+				int scrollX = 0;
+				int scrollY = 0;
+				if (infoWindowNorthWestX < 0) {
+					scrollX = infoWindowNorthWestX;
+				}
+				if (infoWindowNorthWestY < 0) {
+					scrollY = infoWindowNorthWestY;
+				}
+				if (infoWindowSouthEastX > mapView.getWidth()) {
+					scrollX = infoWindowSouthEastX - mapView.getWidth();
+				}
+				if (infoWindowSouthEastY > mapView.getHeight()) {
+					scrollY = infoWindowSouthEastY - mapView.getHeight();
+				}
+				CameraUpdate cameraUpdate = CameraUpdateFactory.scrollBy(scrollX, scrollY);
+				map.animateCamera(cameraUpdate, 500, null);
 			}
 		});
 	}
 	
 	private class CustomInfoWindowAdapter implements InfoWindowAdapter {
 		
+		private static final int PADDING_RIGHT = 21;
+		private static final int PADDING_LEFT = 21;
+		private static final int PADDING_TOP = 16;
+		private static final int PADDING_BOTTOM = 58;
+		
 		private String content = "";
+		private final TextView textView;
+		
+		public CustomInfoWindowAdapter() {
+			textView = new TextView(htmlLayout.getContext());
+		}
 		
 		@Override
 		public View getInfoContents(com.google.android.gms.maps.model.Marker gmarker) {
-			TextView textView = new TextView(htmlLayout.getContext());
 			textView.setText(content);
 			textView.setTextColor(0xFF000000);
 			textView.setTypeface(null, Typeface.BOLD);
@@ -569,6 +625,15 @@ public class NativeMap {
 
 		public void setContent(String content) {
 			this.content = content;
+		}
+		
+		public Rect getInfoWindowBounds() {
+			Rect bounds = new Rect();
+			Paint textPaint = textView.getPaint();
+			textPaint.getTextBounds(content, 0, content.length(), bounds);
+			bounds.right += PADDING_LEFT + PADDING_RIGHT;
+			bounds.bottom += PADDING_TOP + PADDING_BOTTOM;
+			return bounds;
 		}
 	}
 	
