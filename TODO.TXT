@@ -25,8 +25,6 @@ Tasks
 
 - Implement TileOverlay.removeTileOverlay.
 
-- On the Android version, a zoom should not remove all the waypoint marker definitely.
-
 - On the Android version, move the map (if needed) when an InfoWindow is opened close to the screen border.
 
 - On the web version, A MOUSE_UP event should not un-highlight the info window if the mouse is still on top of it.

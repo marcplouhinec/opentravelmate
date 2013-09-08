@@ -89,17 +89,17 @@ public class TileObserver {
 	private Map<String, TileCoordinates> getDisplayedTileCoordinateById() {
 		CameraPosition cameraPosition = this.googleMap.getCameraPosition();
 		float zoom = cameraPosition.zoom;
-		int zoomAsInt = (int)Math.floor(zoom);
+		int zoomAsInt = (int)Math.round(zoom);
 		Point xyCenter = new Point(
-				ProjectionUtils.lngToTileX(zoom, cameraPosition.target.longitude),
-				ProjectionUtils.latToTileY(zoom, cameraPosition.target.latitude));
+				ProjectionUtils.lngToTileX(zoomAsInt, cameraPosition.target.longitude),
+				ProjectionUtils.latToTileY(zoomAsInt, cameraPosition.target.latitude));
 		int mapCanvasWidth = this.mapView.getWidth();
 		int mapCanvasHeight = this.mapView.getHeight();
 		
 		Point xyNorthEast = new Point(xyCenter.x - (mapCanvasWidth / 2) / 256, xyCenter.y - (mapCanvasHeight / 2) / 256);
 		Point xySouthWest = new Point(xyCenter.x + (mapCanvasWidth / 2) / 256, xyCenter.y + (mapCanvasHeight / 2) / 256);
-		TileCoordinates tileNorthEast = new TileCoordinates(zoomAsInt, (int)Math.floor(xyNorthEast.x), (int)Math.floor(xyNorthEast.y));
-		TileCoordinates tileSouthWest = new TileCoordinates(zoomAsInt, (int)Math.floor(xySouthWest.x), (int)Math.floor(xySouthWest.y));
+		TileCoordinates tileNorthEast = new TileCoordinates(zoomAsInt, (int)Math.round(xyNorthEast.x), (int)Math.round(xyNorthEast.y));
+		TileCoordinates tileSouthWest = new TileCoordinates(zoomAsInt, (int)Math.round(xySouthWest.x), (int)Math.round(xySouthWest.y));
 		
 		// Take all the tiles from the north-east to the south-east and include the adjacents ones outside of the view-port.
 		Map<String, TileCoordinates> displayedTileCoordinateById = new HashMap<String, TileCoordinates>();

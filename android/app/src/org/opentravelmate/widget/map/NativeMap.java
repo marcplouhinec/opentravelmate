@@ -305,8 +305,10 @@ public class NativeMap {
 				try {
 					List<Marker> markers = Marker.fromJsonMarkers(new JSONArray(jsonMarkers));
 					for (Marker marker : markers) {
-						gmarkerById.get(marker.id).remove();
-						gmarkerById.remove(marker.id);
+						if (gmarkerById.get(marker.id) != null) {
+							gmarkerById.get(marker.id).remove();
+							gmarkerById.remove(marker.id);
+						}
 					}
 				} catch (JSONException e) {
 					exceptionListener.onException(false, e);
