@@ -25,6 +25,8 @@ Tasks
 
 - Implement TileOverlay.removeTileOverlay.
 
+- Add webview.additionalParameters that contains the placeholder "data-otm-*" attributes.
+
 
 Develoment tasks
 ----------------

@@ -1075,7 +1075,7 @@
 <XPD:ATTR name="Left" type="integer">28</XPD:ATTR>
 <XPD:ATTR name="Top" type="integer">412</XPD:ATTR>
 <XPD:ATTR name="Width" type="integer">284</XPD:ATTR>
-<XPD:ATTR name="Height" type="integer">108</XPD:ATTR>
+<XPD:ATTR name="Height" type="integer">121</XPD:ATTR>
 <XPD:REF name="Model">FMbPaFUu0EezPEMRt/W0BgAA</XPD:REF>
 <XPD:OBJ name="NameCompartment" type="UMLNameCompartmentView" guid="al6AIQXNSUur46I890asCwAA">
 <XPD:OBJ name="NameLabel" type="LabelView" guid="TYeAxXL+B0GXb9aWvIWKAgAA">
@@ -1624,10 +1624,8 @@
 <XPD:REF name="Views[1]">g9Hhc2D7ik6KbjB2YMmK6wAA</XPD:REF>
 <XPD:REF name="Views[2]">V/MHEMcsTEagT7QTCOn15gAA</XPD:REF>
 <XPD:REF name="Views[3]">B9/dEkHoqUC4XAlBZdy28wAA</XPD:REF>
-<XPD:ATTR name="#TypedParameters" type="integer">3</XPD:ATTR>
-<XPD:REF name="TypedParameters[0]" pathname="marker">XQCiHkgbd0ugLd10C81YOQAA</XPD:REF>
-<XPD:REF name="TypedParameters[1]" pathname="marker">2OqUA4Nkzky91PT4VlPO4QAA</XPD:REF>
-<XPD:REF name="TypedParameters[2]">4RYLlMLdk0G4p3cxCLfJ8gAA</XPD:REF>
+<XPD:ATTR name="#TypedParameters" type="integer">1</XPD:ATTR>
+<XPD:REF name="TypedParameters[0]">4RYLlMLdk0G4p3cxCLfJ8gAA</XPD:REF>
 <XPD:ATTR name="#Associations" type="integer">3</XPD:ATTR>
 <XPD:REF name="Associations[0]">nhy2UONKwECTBrAkUkcUWAAA</XPD:REF>
 <XPD:REF name="Associations[1]">R29KpH2e+0aV20tbRy2qWAAA</XPD:REF>
@@ -2005,8 +2003,9 @@
 <XPD:ATTR name="#Operations" type="integer">4</XPD:ATTR>
 <XPD:OBJ name="Operations[0]" type="UMLOperation" guid="gRR1zO46SEeBQmBwlyuFQgAA">
 <XPD:ATTR name="Name" type="string">onCreate</XPD:ATTR>
+<XPD:ATTR name="OwnerScope" type="UMLScopeKind">skClassifier</XPD:ATTR>
 <XPD:REF name="Owner">940HnCsaL0qFXIQRPCHnrgAA</XPD:REF>
-<XPD:ATTR name="#Parameters" type="integer">2</XPD:ATTR>
+<XPD:ATTR name="#Parameters" type="integer">3</XPD:ATTR>
 <XPD:OBJ name="Parameters[0]" type="UMLParameter" guid="yyCSzeveTkeriZaIgokpsAAA">
 <XPD:ATTR name="Name" type="string">id</XPD:ATTR>
 <XPD:ATTR name="TypeExpression" type="string">String</XPD:ATTR>
@@ -2017,11 +2016,17 @@
 <XPD:ATTR name="TypeExpression" type="string">Function</XPD:ATTR>
 <XPD:REF name="BehavioralFeature">gRR1zO46SEeBQmBwlyuFQgAA</XPD:REF>
 </XPD:OBJ>
+<XPD:OBJ name="Parameters[2]" type="UMLParameter" guid="41Utq45Mt0O/1Wp3vrPDhgAA">
+<XPD:ATTR name="Name" type="string">listenOnce</XPD:ATTR>
+<XPD:ATTR name="TypeExpression" type="string">Boolean</XPD:ATTR>
+<XPD:REF name="BehavioralFeature">gRR1zO46SEeBQmBwlyuFQgAA</XPD:REF>
+</XPD:OBJ>
 </XPD:OBJ>
 <XPD:OBJ name="Operations[1]" type="UMLOperation" guid="CvsOD6PUz0uLWtU5IBAUygAA">
 <XPD:ATTR name="Name" type="string">onDestroy</XPD:ATTR>
+<XPD:ATTR name="OwnerScope" type="UMLScopeKind">skClassifier</XPD:ATTR>
 <XPD:REF name="Owner">940HnCsaL0qFXIQRPCHnrgAA</XPD:REF>
-<XPD:ATTR name="#Parameters" type="integer">2</XPD:ATTR>
+<XPD:ATTR name="#Parameters" type="integer">3</XPD:ATTR>
 <XPD:OBJ name="Parameters[0]" type="UMLParameter" guid="ag5lQUdaw0uF/rkFul17GAAA">
 <XPD:ATTR name="Name" type="string">id</XPD:ATTR>
 <XPD:ATTR name="TypeExpression" type="string">String</XPD:ATTR>
@@ -2030,6 +2035,11 @@
 <XPD:OBJ name="Parameters[1]" type="UMLParameter" guid="cUTyOiu2FUKKWcj9LlxbhQAA">
 <XPD:ATTR name="Name" type="string">listener</XPD:ATTR>
 <XPD:ATTR name="TypeExpression" type="string">Function</XPD:ATTR>
+<XPD:REF name="BehavioralFeature">CvsOD6PUz0uLWtU5IBAUygAA</XPD:REF>
+</XPD:OBJ>
+<XPD:OBJ name="Parameters[2]" type="UMLParameter" guid="V1DCyrmU50m7E/MMR1TidwAA">
+<XPD:ATTR name="Name" type="string">listenOnce</XPD:ATTR>
+<XPD:ATTR name="TypeExpression" type="string">Boolean</XPD:ATTR>
 <XPD:REF name="BehavioralFeature">CvsOD6PUz0uLWtU5IBAUygAA</XPD:REF>
 </XPD:OBJ>
 </XPD:OBJ>
@@ -2128,7 +2138,7 @@
 <XPD:REF name="BehavioralFeature">kCDHid2jV0W6FhnMMxp2EgAA</XPD:REF>
 </XPD:OBJ>
 </XPD:OBJ>
-<XPD:ATTR name="#Attributes" type="integer">2</XPD:ATTR>
+<XPD:ATTR name="#Attributes" type="integer">3</XPD:ATTR>
 <XPD:OBJ name="Attributes[0]" type="UMLAttribute" guid="XKGslhTHX0yfPtJjp+WHFgAA">
 <XPD:ATTR name="Name" type="string">id</XPD:ATTR>
 <XPD:REF name="Owner">FMbPaFUu0EezPEMRt/W0BgAA</XPD:REF>
@@ -2136,6 +2146,11 @@
 <XPD:OBJ name="Attributes[1]" type="UMLAttribute" guid="0QlqtO4XoUSKROeoNHRj+QAA">
 <XPD:ATTR name="Name" type="string">baseUrl</XPD:ATTR>
 <XPD:ATTR name="TypeExpression" type="string">String</XPD:ATTR>
+<XPD:REF name="Owner">FMbPaFUu0EezPEMRt/W0BgAA</XPD:REF>
+</XPD:OBJ>
+<XPD:OBJ name="Attributes[2]" type="UMLAttribute" guid="90QIl4OjTUeDnyW6iLBjaQAA">
+<XPD:ATTR name="Name" type="string">additionalParameters</XPD:ATTR>
+<XPD:ATTR name="TypeExpression" type="string">Map&lt;String, String&gt;</XPD:ATTR>
 <XPD:REF name="Owner">FMbPaFUu0EezPEMRt/W0BgAA</XPD:REF>
 </XPD:OBJ>
 </XPD:OBJ>

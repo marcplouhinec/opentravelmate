@@ -36,6 +36,7 @@ define(function() {
 				iframe.contentWindow.org_opentravelmate_widget_webview_webviewUrl = layoutParams.additionalParameters['url'];
 				iframe.contentWindow.org_opentravelmate_widget_webview_webviewEntrypoint = layoutParams.additionalParameters['entrypoint'];
 				iframe.contentWindow.org_opentravelmate_widget_webview_webviewBaseUrl = baseUrl;
+                iframe.contentWindow.org_opentravelmate_widget_webview_additionalParameters = layoutParams.additionalParameters;
 				var script = /** @type {HTMLScriptElement} */ iframe.contentDocument.createElement('script');
 				script.src = baseUrl + 'extensions/core/lib/require.min.js';
 				script.setAttribute('data-main', baseUrl + 'extensions/core/widget/webview/startupScript');
