@@ -119,4 +119,19 @@ public class HtmlLayoutParams extends ViewGroup.LayoutParams {
 				+ visible + ", additionalParameters=" + additionalParameters
 				+ "]";
 	}
+	
+	/**
+	 * @return JSON-serialized additionalParameters
+	 */
+	public JSONObject getAdditionalParametersAsJson() {
+		JSONObject jsonObject = new JSONObject();
+		try {
+			for (Map.Entry<String, String> entry : additionalParameters.entrySet()) {
+				jsonObject.put(entry.getKey(), entry.getValue());
+			}
+			return jsonObject;
+		} catch (JSONException e) {
+			return jsonObject;
+		}
+	}
 }
