@@ -27,6 +27,22 @@ Tasks
 
 - Add webview.additionalParameters that contains the placeholder "data-otm-*" attributes.
 
+- Implements GooglePlaceProvider by using something like:
+require(['async!http://maps.googleapis.com/maps/api/js?libraries=places&sensor=true!callback'], function () {
+    var google = window.google;
+
+    var defaultBounds = new google.maps.LatLngBounds(
+        new google.maps.LatLng(49.5, 6.12),
+        new google.maps.LatLng(49.7, 6.14));
+
+    var service = new google.maps.places.AutocompleteService();
+    service.getQueryPredictions({input: 'palais gr', bounds: defaultBounds}, function (predictions, status) {
+        console.log(predictions);
+        console.log(status);
+    });
+});
+See https://developers.google.com/maps/documentation/javascript/places?hl=fr#places_autocomplete
+
 
 Develoment tasks
 ----------------
