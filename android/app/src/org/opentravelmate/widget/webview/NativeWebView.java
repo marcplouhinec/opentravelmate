@@ -120,7 +120,7 @@ public class NativeWebView {
 						"    require(['extensions/core/widget/Widget'], function (Widget) {" +
 						"        var subWebView = Widget.findById('" + webViewPlaceHolderId + "');" +
 						"        if (!subWebView) { return; };" +
-						"        var payload = JSON.parse('" + jsonPayload.replace("\"", "\\\"") + "');" +
+						"        var payload = JSON.parse('" + escapeQuotes(jsonPayload) + "');" +
 						"        subWebView.fireEventFromInternal('" + eventName + "', payload);" +
 						"    });" +
 						"})();");
@@ -142,7 +142,7 @@ public class NativeWebView {
 				WebView webView = (WebView)htmlLayout.findViewByPlaceHolderId(webViewPlaceHolderId);
 				webView.loadUrl("javascript:(function(){" +
 						"    require(['extensions/core/widget/webview/webview'], function (webview) {" +
-						"        var payload = JSON.parse('" + jsonPayload.replace("\"", "\\\"") + "');" +
+						"        var payload = JSON.parse('" + escapeQuotes(jsonPayload) + "');" +
 						"        webview.fireEventFromExternal('" + eventName + "', payload);" +
 						"    });" +
 						"})();");
@@ -218,6 +218,18 @@ public class NativeWebView {
 				"  script.setAttribute('data-main', '" + this.baseUrl + "extensions/core/widget/webview/startupScript');" +
 				"  document.body.appendChild(script);" +
 				"})();");
+	}
+	
+	/**
+	 * Escape the quote and double-quote characters.
+	 * 
+	 * @param jsonObject
+	 * @return same JSON-encoded object with escaped quotes
+	 */
+	private String escapeQuotes(String jsonObject) {
+		String escapedJson = jsonObject.replace("\"", "\\\"");
+		escapedJson = escapedJson.replace("'", "\\'");
+		return escapedJson;
 	}
 
 }
