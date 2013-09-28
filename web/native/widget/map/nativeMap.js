@@ -217,6 +217,26 @@ define([
         },
 
         /**
+         * Get the map bounds (South-West and North-East points).
+         *
+         * @param {String} id
+         *     Map place holder ID.
+         * @return {String} jsonBounds
+         *     JSON serialized {sw: LatLng, ne: LatLng}.
+         */
+        'getBounds': function(id) {
+            var gmap = gmapByPlaceHolderId[id];
+            var gBounds = gmap.getBounds();
+            return JSON.stringify({sw: {
+                lat: gBounds.getSouthWest().lat(),
+                lng: gBounds.getSouthWest().lng()
+            }, ne: {
+                lat: gBounds.getNorthEast().lat(),
+                lng: gBounds.getNorthEast().lng()
+            }});
+        },
+
+        /**
          * Add markers on the map.
          *
          * @param {String} id

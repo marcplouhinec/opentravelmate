@@ -233,6 +233,47 @@ public class NativeMap {
 	}
 	
 	/**
+	 * Get the map bounds (South-West and North-East points).
+     *
+     * @param id
+     *     Map place holder ID.
+     * @return jsonBounds
+     *     JSON serialized {sw: LatLng, ne: LatLng}.
+	 */
+	@JavascriptInterface
+	public String getBounds(final String id) {
+		final GoogleMap map = getGoogleMapSync(id);
+		
+		try {
+			JSONObject jsonBounds = UIThreadExecutor.executeSync(new Callable<JSONObject>() {
+				@Override public JSONObject call() throws Exception {
+					CameraPosition cameraPosition = map.getCameraPosition();
+					float zoom = cameraPosition.zoom;
+					
+					// TODO
+					
+					JSONObject jsonBounds = new JSONObject();
+					JSONObject jsonSW = new JSONObject();
+					jsonSW.put("lat", 0);
+					jsonSW.put("lng", 0);
+					jsonBounds.put("sw", jsonSW);
+					JSONObject jsonNE = new JSONObject();
+					jsonNE.put("lat", 0);
+					jsonNE.put("lng", 0);
+					jsonBounds.put("ne", jsonNE);
+				
+					return jsonBounds;
+				}
+			}, 100);
+			return jsonBounds.toString(2);
+		} catch (Exception e) {
+			exceptionListener.onException(false, e);
+		}
+		
+		return "{}";
+	}
+	
+	/**
 	 * Add markers on the map.
 	 * 
 	 * @param id
