@@ -384,6 +384,19 @@ public class NativeMap {
 	}
 	
 	/**
+     * Add a button on the map top-right corner.
+     *
+     * @param {String} id
+     *     Map place holder ID.
+     * @param {String} jsonMapButton
+     *     JSON serialized MapButton.
+     */
+	@JavascriptInterface
+	public void addMapButton(final String id, final String jsonMapButton) {
+		// TODO
+	}
+	
+	/**
 	 * Start observing tiles and forward the TILES_DISPLAYED and TILES_RELEASED events to the
      * map defined by the given place-holder ID.
      * Note: this function does nothing if the tiles are already observed.
@@ -650,6 +663,19 @@ public class NativeMap {
 				map.animateCamera(cameraUpdate, 500, null);
 			}
 		});
+	}
+	
+	/**
+     * Set the map type.
+     *
+     * @param {String} id
+     *     Map place holder ID.
+     * @param {String} mapType
+     *     'ROADMAP' or 'SATELLITE'.
+     */
+	@JavascriptInterface
+	public void setMapType(final String id, final String mapType) {
+		// TODO
 	}
 	
 	private class CustomInfoWindowAdapter implements InfoWindowAdapter {

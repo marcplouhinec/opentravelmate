@@ -12,8 +12,9 @@ define([
     'native/widget/map/TileObserver',
     'native/widget/map/MarkerRTree',
     'extensions/core/widget/map/projectionUtils',
-    'native/widget/map/CustomInfoWindow'
-], function($, stringUtils, google, InfoBox, TileObserver, MarkerRTree, projectionUtils, CustomInfoWindow) {
+    'native/widget/map/CustomInfoWindow',
+    'native/widget/map/MapButtonController'
+], function($, stringUtils, google, InfoBox, TileObserver, MarkerRTree, projectionUtils, CustomInfoWindow, MapButtonController) {
     'use strict';
     
     /**
@@ -97,6 +98,11 @@ define([
      */
     var infoWindowByPlaceHolderId = {};
 
+    /**
+     * @type {Object.<String, MapButtonController>}
+     */
+    var mapButtonControllerByPlaceHolderId = {};
+
 
     var nativeMap = {
         /**
@@ -123,10 +129,18 @@ define([
             var gmap = new google.maps.Map(mapCanvas, {
                 'zoom': DEFAULT_ZOOM,
                 'center': new google.maps.LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE),
-                'mapTypeId': google.maps.MapTypeId.ROADMAP
+                'mapTypeId': google.maps.MapTypeId.ROADMAP,
+                'mapTypeControl': false
             });
             gmapByPlaceHolderId[layoutParams.id] = gmap;
             markerRTreeByPlaceHolderId[layoutParams.id] = new MarkerRTree(DEFAULT_MARKER_SIZE, DEFAULT_MARKER_ANCHOR);
+            mapButtonControllerByPlaceHolderId[layoutParams.id] = new MapButtonController(layoutParams.id, baseUrl);
+            mapButtonControllerByPlaceHolderId[layoutParams.id].onButtonClick(function(mapButton) {
+                require(['extensions/core/widget/Widget'], function (Widget) {
+                    var map = /** @type {Map} */ Widget.findById(layoutParams.id);
+                    map.fireMapButtonClickEvent(mapButton.id);
+                });
+            });
         },
 
         /**
@@ -300,6 +314,18 @@ define([
 
                 gmarker.setMap(null);
             }
+        },
+
+        /**
+         * Add a button on the map top-right corner.
+         *
+         * @param {String} id
+         *     Map place holder ID.
+         * @param {String} jsonMapButton
+         *     JSON serialized MapButton.
+         */
+        'addMapButton': function(id, jsonMapButton) {
+            mapButtonControllerByPlaceHolderId[id].addButton(JSON.parse(jsonMapButton));
         },
 
         /**
@@ -503,6 +529,21 @@ define([
                 });
             });
             infoWindowByPlaceHolderId[id] = infoWindow;
+        },
+
+        /**
+         * Set the map type.
+         *
+         * @param {String} id
+         *     Map place holder ID.
+         * @param {String} mapType
+         *     'ROADMAP' or 'SATELLITE'.
+         */
+        'setMapType': function(id, mapType) {
+            var gmap = gmapByPlaceHolderId[id];
+            gmap.setOptions({
+                mapTypeId: mapType === 'ROADMAP' ? google.maps.MapTypeId.ROADMAP : google.maps.MapTypeId.SATELLITE
+            });
         }
     };
 

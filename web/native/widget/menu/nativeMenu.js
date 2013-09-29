@@ -146,8 +146,7 @@ define(['jquery', 'extensions/core/utils/FunctionDam'], function($, FunctionDam)
                 event.preventDefault();
 
                 require(['extensions/core/widget/Widget'], function (Widget) {
-                    /** @type {Menu} */
-                    var menu = Widget.findById(menuPlaceHolderId);
+                    var menu = /** @type {Menu} */ Widget.findById(menuPlaceHolderId);
                     menu.fireClickEvent(item.id);
                 });
             });
