@@ -249,17 +249,32 @@ public class NativeMap {
 				@Override public JSONObject call() throws Exception {
 					CameraPosition cameraPosition = map.getCameraPosition();
 					float zoom = cameraPosition.zoom;
+					Point xyCenter = new Point(
+							ProjectionUtils.lngToTileX(zoom, cameraPosition.target.longitude),
+							ProjectionUtils.latToTileY(zoom, cameraPosition.target.latitude));
 					
-					// TODO
+					View mapView = htmlLayout.findViewByPlaceHolderId(id);
+					int mapCanvasWidth = mapView.getWidth();
+					int mapCanvasHeight = mapView.getHeight();
+					
+					Point xyNorthEast = new Point(xyCenter.x + (mapCanvasWidth / 2) / 256, xyCenter.y - (mapCanvasHeight / 2) / 256);
+					Point xySouthWest = new Point(xyCenter.x - (mapCanvasWidth / 2) / 256, xyCenter.y + (mapCanvasHeight / 2) / 256);
+					
+					LatLng northEast = new LatLng(
+							ProjectionUtils.tileYToLat(zoom, xyNorthEast.y),
+							ProjectionUtils.tileXToLng(zoom, xyNorthEast.x));
+					LatLng southWest = new LatLng(
+							ProjectionUtils.tileYToLat(zoom, xySouthWest.y),
+							ProjectionUtils.tileXToLng(zoom, xySouthWest.x));
 					
 					JSONObject jsonBounds = new JSONObject();
 					JSONObject jsonSW = new JSONObject();
-					jsonSW.put("lat", 0);
-					jsonSW.put("lng", 0);
+					jsonSW.put("lat", southWest.lat);
+					jsonSW.put("lng", southWest.lng);
 					jsonBounds.put("sw", jsonSW);
 					JSONObject jsonNE = new JSONObject();
-					jsonNE.put("lat", 0);
-					jsonNE.put("lng", 0);
+					jsonNE.put("lat", northEast.lat);
+					jsonNE.put("lng", northEast.lng);
 					jsonBounds.put("ne", jsonNE);
 				
 					return jsonBounds;

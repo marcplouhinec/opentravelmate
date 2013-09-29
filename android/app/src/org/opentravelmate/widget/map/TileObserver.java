@@ -96,10 +96,10 @@ public class TileObserver {
 		int mapCanvasWidth = this.mapView.getWidth();
 		int mapCanvasHeight = this.mapView.getHeight();
 		
-		Point xyNorthEast = new Point(xyCenter.x - (mapCanvasWidth / 2) / 256, xyCenter.y - (mapCanvasHeight / 2) / 256);
-		Point xySouthWest = new Point(xyCenter.x + (mapCanvasWidth / 2) / 256, xyCenter.y + (mapCanvasHeight / 2) / 256);
-		TileCoordinates tileNorthEast = new TileCoordinates(zoomAsInt, (int)Math.round(xyNorthEast.x), (int)Math.round(xyNorthEast.y));
-		TileCoordinates tileSouthWest = new TileCoordinates(zoomAsInt, (int)Math.round(xySouthWest.x), (int)Math.round(xySouthWest.y));
+		Point xyNorthWest = new Point(xyCenter.x - (mapCanvasWidth / 2) / 256, xyCenter.y - (mapCanvasHeight / 2) / 256);
+		Point xySouthEast = new Point(xyCenter.x + (mapCanvasWidth / 2) / 256, xyCenter.y + (mapCanvasHeight / 2) / 256);
+		TileCoordinates tileNorthEast = new TileCoordinates(zoomAsInt, (int)Math.round(xyNorthWest.x), (int)Math.round(xyNorthWest.y));
+		TileCoordinates tileSouthWest = new TileCoordinates(zoomAsInt, (int)Math.round(xySouthEast.x), (int)Math.round(xySouthEast.y));
 		
 		// Take all the tiles from the north-east to the south-east and include the adjacents ones outside of the view-port.
 		Map<String, TileCoordinates> displayedTileCoordinateById = new HashMap<String, TileCoordinates>();
