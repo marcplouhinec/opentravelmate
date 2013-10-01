@@ -88,6 +88,13 @@ define([
          */
         this._mapButtonElements = [];
 
+
+        /**
+         * @type {Array.<HTMLImageElement>}
+         * @private
+         */
+        this._mapButtonImgElements = [];
+
         /**
          * @type {String}
          * @private
@@ -154,6 +161,7 @@ define([
         mapButtonElement.title = mapButton.tooltip;
 
         var mapButtonImg = /** @type {HTMLImageElement} */ document.createElement('img');
+        this._mapButtonImgElements.push(mapButtonImg);
         mapButtonImg.src = this._baseUrl + '/' + mapButton.iconUrl;
         mapButtonImg.alt = mapButton.tooltip;
         mapButtonElement.appendChild(mapButtonImg);
@@ -174,7 +182,27 @@ define([
         });
 
         document.body.appendChild(mapButtonElement);
-    }
+    };
+
+    /**
+     * Update the given button on the map.
+     *
+     * @param {MapButton} mapButton
+     */
+    MapButtonController.prototype.updateButton = function(mapButton) {
+        // Update the map button in the inner collection
+        for (var index = 0 ; index < this._mapButtons.length; index += 1) {
+            if (this._mapButtons[index].id === mapButton.id) {
+                this._mapButtons[index] = mapButton;
+                var mapButtonElement = this._mapButtonElements[index];
+                mapButtonElement.title = mapButton.tooltip;
+                var mapButtonImg = this._mapButtonImgElements[index];
+                mapButtonImg.src = this._baseUrl + '/' + mapButton.iconUrl;
+                mapButtonImg.alt = mapButton.tooltip;
+                break;
+            }
+        }
+    };
 
     /**
      * Register a listener for a button click event.
