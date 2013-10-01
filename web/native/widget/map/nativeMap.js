@@ -134,7 +134,7 @@ define([
             });
             gmapByPlaceHolderId[layoutParams.id] = gmap;
             markerRTreeByPlaceHolderId[layoutParams.id] = new MarkerRTree(DEFAULT_MARKER_SIZE, DEFAULT_MARKER_ANCHOR);
-            mapButtonControllerByPlaceHolderId[layoutParams.id] = new MapButtonController(layoutParams.id, baseUrl);
+            mapButtonControllerByPlaceHolderId[layoutParams.id] = new MapButtonController(gmap, layoutParams.id, baseUrl);
             mapButtonControllerByPlaceHolderId[layoutParams.id].onButtonClick(function(mapButton) {
                 require(['extensions/core/widget/Widget'], function (Widget) {
                     var map = /** @type {Map} */ Widget.findById(layoutParams.id);
