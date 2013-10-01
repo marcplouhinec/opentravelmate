@@ -29,15 +29,12 @@ Tasks
 
 - In the UML diagram add Widget.findByIdAsync
 
-- Implements Map.addMapButton
-  --> Android: nothing is implemented yet
-  --> Web: handle the resize event, make the map button more light when the map is in satellite mode.
+- Implement Map.addMapButton in the Android platform
 
-- Implement and document in the UML diagram: Map.setMapType
+- Implement Map.updateMapButton in the Android platform
 
-- Create a function Map.updateMapButton
+- Implement Map.setMapType in the Android platform
 
-- Change the map button image in satelliteButtonHandler when the map is in satellite mode and call Map.updateMapButton.
 
 
 Develoment tasks
