@@ -74,7 +74,7 @@ public class MainActivity extends FragmentActivity {
 		HtmlLayout htmlLayout = new HtmlLayout(this);
 		this.setContentView(htmlLayout);
 		NativeMenu nativeMenu = new NativeMenu(exceptionListener, htmlLayout, baseUrl);
-		NativeMap nativeMap = new NativeMap(exceptionListener, htmlLayout, this.getSupportFragmentManager());
+		NativeMap nativeMap = new NativeMap(exceptionListener, htmlLayout, this.getSupportFragmentManager(), baseUrl);
 		NativeWebView nativeWebView = new NativeWebView(exceptionListener, htmlLayout, baseUrl, nativeMenu, nativeMap);
 		
 		// Initialize the root web view

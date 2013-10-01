@@ -61,6 +61,7 @@ public class NativeMap {
 	private static final double DEFAULT_LONGITUDE = 6.135;
 	private static final int INFO_WINDOW_MARGIN_DIP = 10;
 	
+	private final String baseUrl;
 	private final ExceptionListener exceptionListener;
 	private final HtmlLayout htmlLayout;
 	private final FragmentManager fragmentManager;
@@ -76,14 +77,16 @@ public class NativeMap {
 	private final Map<String, com.google.android.gms.maps.model.Marker> infoWindowMarkerByPlaceHolderId =
 			new HashMap<String, com.google.android.gms.maps.model.Marker>();
 	private final int infoWindowMargin;
+	private final Map<String, MapButtonController> mapButtonControllerByPlaceHolderId = new HashMap<String, MapButtonController>();
 	
 	/**
 	 * Create a NativeMap object.
 	 */
-	public NativeMap(ExceptionListener exceptionListener, HtmlLayout htmlLayout, FragmentManager fragmentManager) {
+	public NativeMap(ExceptionListener exceptionListener, HtmlLayout htmlLayout, FragmentManager fragmentManager, String baseUrl) {
 		this.exceptionListener = exceptionListener;
 		this.htmlLayout = htmlLayout;
 		this.fragmentManager = fragmentManager;
+		this.baseUrl = baseUrl;
 		this.markerIconLoader = new MarkerIconLoader(exceptionListener);
 		
 		DisplayMetrics metrics = htmlLayout.getContext().getResources().getDisplayMetrics();
@@ -159,16 +162,18 @@ public class NativeMap {
 			.zoom(DEFAULT_ZOOM)
 			.build();
 		GoogleMapOptions options = new GoogleMapOptions().camera(cameraPosition);
+		
+		final RelativeLayout mapLayout = new RelativeLayout(htmlLayout.getContext());
+		mapLayout.setLayoutParams(layoutParams);
+		htmlLayout.addView(mapLayout);
+
 		GoogleMapFragment mapFragment = GoogleMapFragment.newInstance(options);
 		mapFragment.setOnGoogleMapFragmentListener(new GoogleMapFragment.OnGoogleMapFragmentListener() {
 			@Override public void onMapReady(GoogleMap map) {
 				mapByPlaceHolderId.put(layoutParams.id, map);
+				mapButtonControllerByPlaceHolderId.put(layoutParams.id, new MapButtonController(map, mapLayout, baseUrl));
 			}
 		});
-		
-		RelativeLayout mapLayout = new RelativeLayout(htmlLayout.getContext());
-		mapLayout.setLayoutParams(layoutParams);
-		htmlLayout.addView(mapLayout);
 		
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 		fragmentTransaction.add(mapLayout.getId(), mapFragment);
@@ -393,7 +398,16 @@ public class NativeMap {
      */
 	@JavascriptInterface
 	public void addMapButton(final String id, final String jsonMapButton) {
-		// TODO
+		UIThreadExecutor.execute(new Runnable() {
+			@Override public void run() {
+				try {
+					MapButton mapButton = MapButton.fromJsonMapButton(new JSONObject(jsonMapButton));
+					mapButtonControllerByPlaceHolderId.get(id).addButton(mapButton);
+				} catch (JSONException e) {
+					exceptionListener.onException(false, e);
+				}
+			}
+		});
 	}
 	
 	/**
