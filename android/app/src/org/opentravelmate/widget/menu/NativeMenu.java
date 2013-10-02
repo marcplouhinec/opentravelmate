@@ -1,19 +1,15 @@
 package org.opentravelmate.widget.menu;
 
-import java.io.IOException;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opentravelmate.R;
-import org.opentravelmate.commons.BgThreadExecutor;
 import org.opentravelmate.commons.ExceptionListener;
-import org.opentravelmate.commons.IOUtils;
+import org.opentravelmate.commons.ImageLoader;
 import org.opentravelmate.commons.UIThreadExecutor;
 import org.opentravelmate.widget.HtmlLayout;
 import org.opentravelmate.widget.HtmlLayoutParams;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.JavascriptInterface;
@@ -117,7 +113,7 @@ public class NativeMenu {
 		// Set the logo
 		ImageView imageViewMenuLogo = (ImageView)view.findViewById(R.id.imageViewMenuLogo);
 		imageViewMenuLogo.setImageBitmap(null);
-		loadImageForImageView(imageViewMenuLogo, this.baseUrl + "extensions/core/widget/menu/image/ic_logo.png");
+		ImageLoader.loadImageForImageView(imageViewMenuLogo, this.baseUrl + "extensions/core/widget/menu/image/ic_logo.png", exceptionListener);
 		
 		// Add the 'more' button
 		this.addMenuItem(layoutParams.id, new MenuItem(-1, "More", "More", this.baseUrl + "extensions/core/widget/menu/image/ic_btn_more.png"));
@@ -162,7 +158,7 @@ public class NativeMenu {
 		}});
 		menuItemButton.setContentDescription(menuItem.title);
 		menuItemButton.setImageBitmap(null);
-		loadImageForImageView(menuItemButton, menuItem.iconUrl);
+		ImageLoader.loadImageForImageView(menuItemButton, menuItem.iconUrl, exceptionListener);
 		
 		// Handle the click event
 		menuItemButton.setOnClickListener(new View.OnClickListener() {
@@ -175,29 +171,6 @@ public class NativeMenu {
 						"        menu.fireClickEvent(" + menuItem.id + ");" +
 						"    });" +
 						"})();");
-			}
-		});
-	}
-	
-	/**
-	 * Load the menu item image in background.
-	 * 
-	 * @param imageView
-	 * @param iconUrl
-	 */
-	private void loadImageForImageView(final ImageView imageView, final String iconUrl) {
-		BgThreadExecutor.execute(new Runnable() {
-			@Override public void run() {
-				try {
-					final Bitmap bitmap = IOUtils.toBitmap(iconUrl);
-					UIThreadExecutor.execute(new Runnable() {
-						@Override public void run() {
-							imageView.setImageBitmap(bitmap);
-						}
-					});
-				} catch (IOException e) {
-					exceptionListener.onException(false, e);
-				}
 			}
 		});
 	}

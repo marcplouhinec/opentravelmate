@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.opentravelmate.R;
 import org.opentravelmate.commons.ExceptionListener;
+import org.opentravelmate.commons.OnReadyExecutor;
 import org.opentravelmate.commons.UIThreadExecutor;
 import org.opentravelmate.widget.HtmlLayout;
 import org.opentravelmate.widget.HtmlLayoutParams;
@@ -77,6 +78,7 @@ public class NativeMap {
 	private final Map<String, com.google.android.gms.maps.model.Marker> infoWindowMarkerByPlaceHolderId =
 			new HashMap<String, com.google.android.gms.maps.model.Marker>();
 	private final int infoWindowMargin;
+	private final Map<String, OnReadyExecutor> onReadyExecutorByPlaceHolderId = new HashMap<String, OnReadyExecutor>();
 	private final Map<String, MapButtonController> mapButtonControllerByPlaceHolderId = new HashMap<String, MapButtonController>();
 	
 	/**
@@ -168,10 +170,27 @@ public class NativeMap {
 		htmlLayout.addView(mapLayout);
 
 		GoogleMapFragment mapFragment = GoogleMapFragment.newInstance(options);
+		onReadyExecutorByPlaceHolderId.put(layoutParams.id, new OnReadyExecutor());
 		mapFragment.setOnGoogleMapFragmentListener(new GoogleMapFragment.OnGoogleMapFragmentListener() {
 			@Override public void onMapReady(GoogleMap map) {
 				mapByPlaceHolderId.put(layoutParams.id, map);
-				mapButtonControllerByPlaceHolderId.put(layoutParams.id, new MapButtonController(map, mapLayout, baseUrl));
+				MapButtonController mapButtonController = new MapButtonController(htmlLayout, layoutParams, baseUrl, exceptionListener);
+				mapButtonControllerByPlaceHolderId.put(layoutParams.id, mapButtonController);
+				onReadyExecutorByPlaceHolderId.get(layoutParams.id).setReady(true);
+				
+				// When the user click on a map button, forward the click event
+				mapButtonController.onButtonClick(new MapButtonController.ClickListener() {
+					@Override public void onClick(MapButton mapButton) {
+						WebView mainWebView = (WebView)htmlLayout.findViewByPlaceHolderId(HtmlLayout.MAIN_WEBVIEW_ID);
+						mainWebView.loadUrl("javascript:(function(){" +
+								"    require(['extensions/core/widget/Widget'], function (Widget) {" +
+								"        var map = Widget.findById('" + layoutParams.id + "');" +
+								"        map.fireMapButtonClickEvent(" + mapButton.id + ");" +
+								"    });" +
+								"})();");
+					}
+				});
+				
 			}
 		});
 		
@@ -400,6 +419,13 @@ public class NativeMap {
 	public void addMapButton(final String id, final String jsonMapButton) {
 		UIThreadExecutor.execute(new Runnable() {
 			@Override public void run() {
+				// Postpone the function execution if the map is not yet ready
+				OnReadyExecutor onReadyExecutor = onReadyExecutorByPlaceHolderId.get(id);
+				if (!onReadyExecutor.isReady()) {
+					onReadyExecutor.execute(this);
+					return;
+				}
+				
 				try {
 					MapButton mapButton = MapButton.fromJsonMapButton(new JSONObject(jsonMapButton));
 					mapButtonControllerByPlaceHolderId.get(id).addButton(mapButton);
@@ -420,7 +446,23 @@ public class NativeMap {
      */
 	@JavascriptInterface
 	public void updateMapButton(final String id, final String jsonMapButton) {
-		// TODO
+		UIThreadExecutor.execute(new Runnable() {
+			@Override public void run() {
+				// Postpone the function execution if the map is not yet ready
+				OnReadyExecutor onReadyExecutor = onReadyExecutorByPlaceHolderId.get(id);
+				if (!onReadyExecutor.isReady()) {
+					onReadyExecutor.execute(this);
+					return;
+				}
+				
+				try {
+					MapButton mapButton = MapButton.fromJsonMapButton(new JSONObject(jsonMapButton));
+					mapButtonControllerByPlaceHolderId.get(id).updateButton(mapButton);
+				} catch (JSONException e) {
+					exceptionListener.onException(false, e);
+				}
+			}
+		});
 	}
 	
 	/**
@@ -702,7 +744,14 @@ public class NativeMap {
      */
 	@JavascriptInterface
 	public void setMapType(final String id, final String mapType) {
-		// TODO
+		final GoogleMap map = getGoogleMapSync(id);
+		
+		UIThreadExecutor.execute(new Runnable() {
+			@Override public void run() {
+				map.setMapType("SATELLITE".equals(mapType) ? GoogleMap.MAP_TYPE_SATELLITE : GoogleMap.MAP_TYPE_NORMAL);
+				mapButtonControllerByPlaceHolderId.get(id).setMapType(mapType);
+			}
+		});
 	}
 	
 	private class CustomInfoWindowAdapter implements InfoWindowAdapter {
