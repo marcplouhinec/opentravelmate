@@ -11,6 +11,7 @@ import org.opentravelmate.commons.ExceptionListener;
 import org.opentravelmate.commons.I18nException;
 import org.opentravelmate.commons.UIThreadExecutor;
 import org.opentravelmate.geolocation.NativeGeolocation;
+import org.opentravelmate.geolocation.UserLocationProvider;
 import org.opentravelmate.httpserver.ExtensionRequestHandler;
 import org.opentravelmate.httpserver.HttpServer;
 import org.opentravelmate.httpserver.NativeRequestHandler;
@@ -22,7 +23,9 @@ import org.opentravelmate.widget.webview.NativeWebView;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -45,6 +48,8 @@ public class MainActivity extends FragmentActivity {
 		
 		UIThreadExecutor.init();
 		I18nException.setContext(this);
+		LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+		UserLocationProvider.getInstance().init(locationManager);
 		
 		// Hide the action bar
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
