@@ -27,8 +27,6 @@ Tasks
 
 - On the web version, the InfoWindow is not removed when the marker is removed.
 
-- In the UML diagram add Widget.findByIdAsync
-
 
 Develoment tasks
 ----------------
