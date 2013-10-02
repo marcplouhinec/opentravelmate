@@ -10,6 +10,7 @@ import org.opentravelmate.R;
 import org.opentravelmate.commons.ExceptionListener;
 import org.opentravelmate.commons.I18nException;
 import org.opentravelmate.commons.UIThreadExecutor;
+import org.opentravelmate.geolocation.NativeGeolocation;
 import org.opentravelmate.httpserver.ExtensionRequestHandler;
 import org.opentravelmate.httpserver.HttpServer;
 import org.opentravelmate.httpserver.NativeRequestHandler;
@@ -57,6 +58,7 @@ public class MainActivity extends FragmentActivity {
 		nativeRequestHandler.registerInjectedJavaObject(NativeWebView.SCRIPT_URL, NativeWebView.GLOBAL_OBJECT_NAME);
 		nativeRequestHandler.registerInjectedJavaObject(NativeMenu.SCRIPT_URL, NativeMenu.GLOBAL_OBJECT_NAME);
 		nativeRequestHandler.registerInjectedJavaObject(NativeMap.SCRIPT_URL, NativeMap.GLOBAL_OBJECT_NAME);
+		nativeRequestHandler.registerInjectedJavaObject(NativeGeolocation.SCRIPT_URL, NativeGeolocation.GLOBAL_OBJECT_NAME);
 		requestHandlerByPattern.put("/native/*", nativeRequestHandler);
 		ExtensionRequestHandler extensionRequestHandler = new ExtensionRequestHandler(getAssets());
 		requestHandlerByPattern.put("/extensions/*", extensionRequestHandler);
@@ -75,7 +77,8 @@ public class MainActivity extends FragmentActivity {
 		this.setContentView(htmlLayout);
 		NativeMenu nativeMenu = new NativeMenu(exceptionListener, htmlLayout, baseUrl);
 		NativeMap nativeMap = new NativeMap(exceptionListener, htmlLayout, this.getSupportFragmentManager(), baseUrl);
-		NativeWebView nativeWebView = new NativeWebView(exceptionListener, htmlLayout, baseUrl, nativeMenu, nativeMap);
+		NativeGeolocation nativeGeolocation = new NativeGeolocation(exceptionListener, htmlLayout);
+		NativeWebView nativeWebView = new NativeWebView(exceptionListener, htmlLayout, baseUrl, nativeMenu, nativeMap, nativeGeolocation);
 		
 		// Initialize the root web view
 		HtmlLayoutParams layoutParams = new HtmlLayoutParams(HtmlLayout.MAIN_WEBVIEW_ID, 0, 0, 1, 1, true, new HashMap<String, String>(){

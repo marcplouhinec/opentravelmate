@@ -6,6 +6,7 @@ import org.opentravelmate.R;
 import org.opentravelmate.commons.ExceptionListener;
 import org.opentravelmate.commons.I18nException;
 import org.opentravelmate.commons.UIThreadExecutor;
+import org.opentravelmate.geolocation.NativeGeolocation;
 import org.opentravelmate.widget.HtmlLayout;
 import org.opentravelmate.widget.HtmlLayoutParams;
 import org.opentravelmate.widget.map.NativeMap;
@@ -33,17 +34,24 @@ public class NativeWebView {
 	private final String baseUrl;
 	private final NativeMenu nativeMenu;
 	private final NativeMap nativeMap;
+	private final NativeGeolocation nativeGeolocation;
 	
 	/**
 	 * Create a NativeWebView object.
 	 */
 	public NativeWebView(
-			ExceptionListener exceptionListener, HtmlLayout htmlLayout, String baseUrl, NativeMenu nativeMenu, NativeMap nativeMap) {
+			ExceptionListener exceptionListener,
+			HtmlLayout htmlLayout,
+			String baseUrl,
+			NativeMenu nativeMenu,
+			NativeMap nativeMap,
+			NativeGeolocation nativeGeolocation) {
 		this.exceptionListener = exceptionListener;
 		this.htmlLayout = htmlLayout;
 		this.baseUrl = baseUrl;
 		this.nativeMenu = nativeMenu;
 		this.nativeMap = nativeMap;
+		this.nativeGeolocation = nativeGeolocation;
 	}
 	
 	/**
@@ -190,6 +198,7 @@ public class NativeWebView {
 		webView.addJavascriptInterface(this, NativeWebView.GLOBAL_OBJECT_NAME);
 		webView.addJavascriptInterface(this.nativeMenu, NativeMenu.GLOBAL_OBJECT_NAME);
 		webView.addJavascriptInterface(this.nativeMap, NativeMap.GLOBAL_OBJECT_NAME);
+		webView.addJavascriptInterface(this.nativeGeolocation, NativeGeolocation.GLOBAL_OBJECT_NAME);
 		
 		// Set the URL
 		webView.loadUrl(this.baseUrl + layoutParams.additionalParameters.get("url"));

@@ -27,6 +27,10 @@ Tasks
 
 - On the web version, the InfoWindow is not removed when the marker is removed.
 
+- In currentPositionButtonHandler, show an error when the geolocation.getCurrentPosition return an error.
+
+- Implement NativeGeolocation.getCurrentPosition in the Android platform.
+
 
 Develoment tasks
 ----------------
