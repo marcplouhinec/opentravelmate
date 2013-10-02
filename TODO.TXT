@@ -29,13 +29,6 @@ Tasks
 
 - In the UML diagram add Widget.findByIdAsync
 
-- Implement Map.addMapButton in the Android platform
-
-- Implement Map.updateMapButton in the Android platform
-
-- Implement Map.setMapType in the Android platform
-
-
 
 Develoment tasks
 ----------------
@@ -47,7 +40,7 @@ Develoment tasks
 4.  [X] Display found places on the map
 5.  [X] Display the Luxembourg bus lines on the map
 6.  [X] Handle bus stop or found place selection on the map
-7.  [ ] Create the "show/hide satellite" map button
+7.  [X] Create the "show/hide satellite" map button
 8.  [ ] Create the "show current location" map button
 9.  [ ] Correctly handle the main menu (show the items until there is no place left and put other items in the "more" panel)
 10. [ ] On big screens, show the menu item title
