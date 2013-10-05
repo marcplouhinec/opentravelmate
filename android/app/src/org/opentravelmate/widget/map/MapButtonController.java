@@ -30,7 +30,7 @@ public class MapButtonController {
 	private final static double MAP_BUTTON_TOTAL_HEIGHT = MAP_BUTTON_MARGIN_TOP + MAP_BUTTON_HEIGHT;
 	
 	private final HtmlLayout htmlLayout;
-	private final HtmlLayoutParams mapLayoutParams;
+	private HtmlLayoutParams mapLayoutParams;
 	private final String baseUrl;
 	private final ExceptionListener exceptionListener;
 	private final LayoutInflater layoutInflater;
@@ -61,17 +61,7 @@ public class MapButtonController {
 		ImageButton button = (ImageButton)layoutInflater.inflate(R.layout.map_button_layout, htmlLayout, false);
 		imageButtons.add(button);
 		button.setBackgroundResource(R.drawable.mapbutton_selector);
-		double x = mapLayoutParams.x + mapLayoutParams.width - (MAP_BUTTON_MARGIN_RIGHT + MAP_BUTTON_WIDTH) / mapLayoutParams.windowWidth;
-		double y = mapLayoutParams.y + (MAP_BUTTON_TOTAL_HEIGHT * nbPrecedingButtons + MAP_BUTTON_MARGIN_TOP) / mapLayoutParams.windowHeight;
-		double width = MAP_BUTTON_WIDTH / mapLayoutParams.windowWidth;
-		double height = MAP_BUTTON_HEIGHT / mapLayoutParams.windowHeight;
-		HtmlLayoutParams layoutParams = new HtmlLayoutParams(
-				"button-" + mapButton.id,
-				x, y, width, height, true,
-				Collections.<String, String>emptyMap(),
-				mapLayoutParams.windowWidth,
-				mapLayoutParams.windowHeight);
-		button.setLayoutParams(layoutParams);
+		button.setLayoutParams(getButtonLayoutParams(mapButton, button, nbPrecedingButtons));
 		htmlLayout.addView(button);
 		
 		ImageLoader.loadImageForImageView(button, baseUrl + mapButton.iconUrl, exceptionListener);
@@ -124,6 +114,46 @@ public class MapButtonController {
 		}
 	}
 	
+	/**
+	 * Function called when the screen is resized or the orientation is changed.
+	 */
+	public void onWindowResize(HtmlLayoutParams mapLayoutParams) {
+		this.mapLayoutParams = mapLayoutParams;
+		
+		for (int i = 0; i < imageButtons.size(); i++) {
+			ImageButton button = imageButtons.get(i);
+			MapButton mapButton = mapButtons.get(i);
+			
+			button.setLayoutParams(getButtonLayoutParams(mapButton, button, i));
+		}
+	}
+	
+	/**
+	 * Compute the Map Button widget LayoutParams.
+	 * 
+	 * @param mapButton
+	 * @param button
+	 * @param nbPrecedingButtons
+	 * @return LayoutParams
+	 */
+	private HtmlLayoutParams getButtonLayoutParams(MapButton mapButton, ImageButton button, int nbPrecedingButtons) {
+		double x = mapLayoutParams.x + mapLayoutParams.width - (MAP_BUTTON_MARGIN_RIGHT + MAP_BUTTON_WIDTH) / mapLayoutParams.windowWidth;
+		double y = mapLayoutParams.y + (MAP_BUTTON_TOTAL_HEIGHT * nbPrecedingButtons + MAP_BUTTON_MARGIN_TOP) / mapLayoutParams.windowHeight;
+		double width = MAP_BUTTON_WIDTH / mapLayoutParams.windowWidth;
+		double height = MAP_BUTTON_HEIGHT / mapLayoutParams.windowHeight;
+		
+		HtmlLayoutParams layoutParams = new HtmlLayoutParams(
+				"button-" + mapButton.id,
+				x, y, width, height, true,
+				Collections.<String, String>emptyMap(),
+				mapLayoutParams.windowWidth,
+				mapLayoutParams.windowHeight);
+		return layoutParams;
+	}
+	
+	/**
+	 * Listen for the map button click events.
+	 */
 	public interface ClickListener {
 		void onClick(MapButton mapButton);
 	}

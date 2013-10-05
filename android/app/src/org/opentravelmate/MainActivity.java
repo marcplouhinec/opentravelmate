@@ -6,7 +6,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.http.protocol.HttpRequestHandler;
-import org.opentravelmate.R;
 import org.opentravelmate.commons.ExceptionListener;
 import org.opentravelmate.commons.I18nException;
 import org.opentravelmate.commons.UIThreadExecutor;
@@ -40,6 +39,7 @@ public class MainActivity extends FragmentActivity {
 	
 	private static final String LOG_TAG = MainActivity.class.getSimpleName();
 	private HttpServer httpServer;
+	private NativeMap nativeMap = null;
 
 	@SuppressLint("NewApi")
 	@Override
@@ -81,7 +81,7 @@ public class MainActivity extends FragmentActivity {
 		HtmlLayout htmlLayout = new HtmlLayout(this);
 		this.setContentView(htmlLayout);
 		NativeMenu nativeMenu = new NativeMenu(exceptionListener, htmlLayout, baseUrl);
-		NativeMap nativeMap = new NativeMap(exceptionListener, htmlLayout, this.getSupportFragmentManager(), baseUrl);
+		nativeMap = new NativeMap(exceptionListener, htmlLayout, this.getSupportFragmentManager(), baseUrl);
 		NativeGeolocation nativeGeolocation = new NativeGeolocation(exceptionListener, htmlLayout);
 		NativeWebView nativeWebView = new NativeWebView(exceptionListener, htmlLayout, baseUrl, nativeMenu, nativeMap, nativeGeolocation);
 		

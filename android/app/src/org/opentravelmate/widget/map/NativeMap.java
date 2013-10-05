@@ -127,6 +127,10 @@ public class NativeMap {
 					View view = htmlLayout.findViewByPlaceHolderId(layoutParams.id);
 					if (view != null) {
 						view.setLayoutParams(layoutParams);
+						
+						// Change the map buttons position
+						MapButtonController mapButtonController = mapButtonControllerByPlaceHolderId.get(layoutParams.id);
+						mapButtonController.onWindowResize(layoutParams);
 					}
 				} catch (JSONException e) {
 					exceptionListener.onException(false, e);
@@ -179,9 +183,9 @@ public class NativeMap {
 				onReadyExecutorByPlaceHolderId.get(layoutParams.id).setReady(true);
 				
 				// When the user click on a map button, forward the click event
+				final WebView mainWebView = (WebView)htmlLayout.findViewByPlaceHolderId(HtmlLayout.MAIN_WEBVIEW_ID);
 				mapButtonController.onButtonClick(new MapButtonController.ClickListener() {
 					@Override public void onClick(MapButton mapButton) {
-						WebView mainWebView = (WebView)htmlLayout.findViewByPlaceHolderId(HtmlLayout.MAIN_WEBVIEW_ID);
 						mainWebView.loadUrl("javascript:(function(){" +
 								"    require(['extensions/core/widget/Widget'], function (Widget) {" +
 								"        var map = Widget.findById('" + layoutParams.id + "');" +
@@ -190,7 +194,6 @@ public class NativeMap {
 								"})();");
 					}
 				});
-				
 			}
 		});
 		
