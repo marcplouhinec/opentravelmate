@@ -31,6 +31,10 @@ Tasks
 
 - Complete the NativeGeolocation.getCurrentPosition implementation in the Android platform (handle jsonOptions and heading).
 
+- In the "place-information" extension, create a "placeSelectionMenu.onPlaceSelected(listener: function(place: Place))" function where other extensions can register their listeners.
+
+- In the "place-commons" extension, create a directory of place providers, in order to let other extensions to get more information about places.
+
 
 Develoment tasks
 ----------------
