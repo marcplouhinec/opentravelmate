@@ -9,8 +9,8 @@ import org.apache.http.protocol.HttpRequestHandler;
 import org.opentravelmate.commons.ExceptionListener;
 import org.opentravelmate.commons.I18nException;
 import org.opentravelmate.commons.UIThreadExecutor;
+import org.opentravelmate.geolocation.Geolocation;
 import org.opentravelmate.geolocation.NativeGeolocation;
-import org.opentravelmate.geolocation.UserLocationProvider;
 import org.opentravelmate.httpserver.ExtensionRequestHandler;
 import org.opentravelmate.httpserver.HttpServer;
 import org.opentravelmate.httpserver.NativeRequestHandler;
@@ -48,8 +48,6 @@ public class MainActivity extends FragmentActivity {
 		
 		UIThreadExecutor.init();
 		I18nException.setContext(this);
-		LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-		UserLocationProvider.getInstance().init(locationManager);
 		
 		// Hide the action bar
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -82,7 +80,8 @@ public class MainActivity extends FragmentActivity {
 		this.setContentView(htmlLayout);
 		NativeMenu nativeMenu = new NativeMenu(exceptionListener, htmlLayout, baseUrl);
 		nativeMap = new NativeMap(exceptionListener, htmlLayout, this.getSupportFragmentManager(), baseUrl);
-		NativeGeolocation nativeGeolocation = new NativeGeolocation(exceptionListener, htmlLayout);
+		Geolocation geolocation = new Geolocation((LocationManager) this.getSystemService(Context.LOCATION_SERVICE));
+		NativeGeolocation nativeGeolocation = new NativeGeolocation(exceptionListener, htmlLayout, geolocation);
 		NativeWebView nativeWebView = new NativeWebView(exceptionListener, htmlLayout, baseUrl, nativeMenu, nativeMap, nativeGeolocation);
 		
 		// Initialize the root web view

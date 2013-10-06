@@ -1,12 +1,11 @@
 package org.opentravelmate.geolocation;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.opentravelmate.commons.ExceptionListener;
 import org.opentravelmate.commons.UIThreadExecutor;
-import org.opentravelmate.geolocation.UserLocationProvider.Strategy;
 import org.opentravelmate.widget.HtmlLayout;
 
-import android.location.Location;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
@@ -22,13 +21,15 @@ public class NativeGeolocation {
 	
 	private final ExceptionListener exceptionListener;
 	private final HtmlLayout htmlLayout;
+	private final Geolocation geolocation;
 
 	/**
 	 * Create a NativeGeolocation.
 	 */
-	public NativeGeolocation(ExceptionListener exceptionListener, HtmlLayout htmlLayout) {
+	public NativeGeolocation(ExceptionListener exceptionListener, HtmlLayout htmlLayout, Geolocation geolocation) {
 		this.exceptionListener = exceptionListener;
 		this.htmlLayout = htmlLayout;
+		this.geolocation = geolocation;
 	}
 
 	/**
@@ -43,8 +44,12 @@ public class NativeGeolocation {
 	public void getCurrentPosition(final String callbacksId, final String jsonOptions) {
 		UIThreadExecutor.execute(new Runnable() {
 			@Override public void run() {
-				// TODO take care of jsonOptions
-				getCurrentLocation(callbacksId);
+				try {
+					PositionOptions positionOptions = PositionOptions.fromJson(new JSONObject(jsonOptions));
+					getCurrentLocation(callbacksId, positionOptions);
+				} catch (JSONException e) {
+					exceptionListener.onException(false, e);
+				}
 			}
 		});
 	}
@@ -55,31 +60,33 @@ public class NativeGeolocation {
 	 * 
 	 * @param callbacksId
 	 */
-	private void getCurrentLocation(final String callbacksId) {
-		UserLocationProvider.getInstance().addListener(Strategy.CURRENT_POSITION, new UserLocationProvider.Listener() {
-			@Override public void onLocationprovided(Location location) {
-				// Check if the user location is good enough
-				if (UserLocationProvider.ACCEPTABLE_ACCURACY >= location.getAccuracy()) {
-					Position position = new Position(new Coordinates(
-							location.getLatitude(),
-							location.getLongitude(),
-							location.getAltitude(),
-							location.getAccuracy(),
-							location.getAccuracy(),
-							0,
-							location.getSpeed()), location.getTime());
+	private void getCurrentLocation(final String callbacksId, PositionOptions positionOptions) {
+		geolocation.getCurrentPosition(new PositionCallback() {
+			@Override public void on(Position position) {
+				try {
 					WebView mainWebView = (WebView)htmlLayout.findViewByPlaceHolderId(HtmlLayout.MAIN_WEBVIEW_ID);
-					try {
-						mainWebView.loadUrl("javascript:(function(){" +
-								"    require(['extensions/core/geolocation/geolocation'], function (geolocation) {" +
-								"        geolocation.fireCurrentPositionEvent(\"" + callbacksId + "\", " + position.toJson().toString(2) + ", null);" +
-								"    });" +
-								"})();");
-					} catch (JSONException e) {
-						exceptionListener.onException(false, e);
-					}
+					mainWebView.loadUrl("javascript:(function(){" +
+							"    require(['extensions/core/geolocation/geolocation'], function (geolocation) {" +
+							"        geolocation.fireCurrentPositionEvent(\"" + callbacksId + "\", " + position.toJson().toString(2) + ", null);" +
+							"    });" +
+							"})();");
+				} catch (JSONException e) {
+					exceptionListener.onException(false, e);
 				}
 			}
-		});
+		}, new PositionErrorCallback() {
+			@Override public void on(PositionError positionError) {
+				try {
+					WebView mainWebView = (WebView)htmlLayout.findViewByPlaceHolderId(HtmlLayout.MAIN_WEBVIEW_ID);
+					mainWebView.loadUrl("javascript:(function(){" +
+							"    require(['extensions/core/geolocation/geolocation'], function (geolocation) {" +
+							"        geolocation.fireCurrentPositionEvent(\"" + callbacksId + "\", null, " + positionError.toJson().toString(2) + ");" +
+							"    });" +
+							"})();");
+				} catch (JSONException e) {
+					exceptionListener.onException(false, e);
+				}
+			}
+		}, positionOptions);
 	}
 }
