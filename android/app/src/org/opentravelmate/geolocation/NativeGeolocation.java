@@ -89,4 +89,28 @@ public class NativeGeolocation {
 			}
 		}, positionOptions);
 	}
+	
+	/**
+	 * Watch the device location.
+	 * 
+	 * @param callbacksId
+     *     ID of geolocation success and error callbacks.
+	 * @param jsonOptions
+	 *     JSON-serialized PositionOptions.
+	 */
+	@JavascriptInterface
+	public void watchPosition(final String callbacksId, final String jsonOptions) {
+		// TODO
+	}
+	
+	/**
+     * Stop watching the device position.
+     *
+     * @param {String} callbacksId
+     *     ID of geolocation success and error callbacks.
+     */
+	@JavascriptInterface
+	public void clearWatch(final String callbacksId) {
+		// TODO
+	}
 }
