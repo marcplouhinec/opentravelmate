@@ -27,9 +27,10 @@ Tasks
 
 - On the web version, the InfoWindow is not removed when the marker is removed.
 
-- In currentPositionButtonHandler, show an error when the geolocation.getCurrentPosition return an error.
-
-- Complete the NativeGeolocation.getCurrentPosition implementation in the Android platform (handle jsonOptions and heading).
+- In currentPositionButtonHandler, watch the user position:
+  - Show the first low-accuracy location
+  - Show a better location when we get one
+  - Stop watching after 20sec
 
 - In the "place-information" extension, create a "placeSelectionMenu.onPlaceSelected(listener: function(place: Place))" function where other extensions can register their listeners.
 
