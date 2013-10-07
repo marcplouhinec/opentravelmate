@@ -1,5 +1,8 @@
 package org.opentravelmate.geolocation;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opentravelmate.commons.ExceptionListener;
@@ -22,6 +25,7 @@ public class NativeGeolocation {
 	private final ExceptionListener exceptionListener;
 	private final HtmlLayout htmlLayout;
 	private final Geolocation geolocation;
+	private final Map<String, Long> watchIdByCallbacksId = new HashMap<String, Long>();
 
 	/**
 	 * Create a NativeGeolocation.
@@ -59,6 +63,7 @@ public class NativeGeolocation {
 	 * Note: this function must be called in the UI thread.
 	 * 
 	 * @param callbacksId
+	 * @param positionOptions
 	 */
 	private void getCurrentLocation(final String callbacksId, PositionOptions positionOptions) {
 		geolocation.getCurrentPosition(new PositionCallback() {
@@ -100,7 +105,55 @@ public class NativeGeolocation {
 	 */
 	@JavascriptInterface
 	public void watchPosition(final String callbacksId, final String jsonOptions) {
-		// TODO
+		UIThreadExecutor.execute(new Runnable() {
+			@Override public void run() {
+				try {
+					PositionOptions positionOptions = PositionOptions.fromJson(new JSONObject(jsonOptions));
+					watchPosition(callbacksId, positionOptions);
+				} catch (JSONException e) {
+					exceptionListener.onException(false, e);
+				}
+			}
+		});
+	}
+	
+	/**
+	 * Get the current device location.
+	 * Note: this function must be called in the UI thread.
+	 * 
+	 * @param callbacksId
+	 * @param positionOptions
+	 */
+	private void watchPosition(final String callbacksId, final PositionOptions positionOptions) {
+		Long watchId = geolocation.watchPosition(new PositionCallback() {
+			@Override public void on(Position position) {
+				try {
+					WebView mainWebView = (WebView)htmlLayout.findViewByPlaceHolderId(HtmlLayout.MAIN_WEBVIEW_ID);
+					mainWebView.loadUrl("javascript:(function(){" +
+							"    require(['extensions/core/geolocation/geolocation'], function (geolocation) {" +
+							"        geolocation.fireWatchPositionEvent(\"" + callbacksId + "\", " + position.toJson().toString(2) + ", null);" +
+							"    });" +
+							"})();");
+				} catch (JSONException e) {
+					exceptionListener.onException(false, e);
+				}
+			}
+		}, new PositionErrorCallback() {
+			@Override public void on(PositionError positionError) {
+				try {
+					WebView mainWebView = (WebView)htmlLayout.findViewByPlaceHolderId(HtmlLayout.MAIN_WEBVIEW_ID);
+					mainWebView.loadUrl("javascript:(function(){" +
+							"    require(['extensions/core/geolocation/geolocation'], function (geolocation) {" +
+							"        geolocation.fireWatchPositionEvent(\"" + callbacksId + "\", null, " + positionError.toJson().toString(2) + ");" +
+							"    });" +
+							"})();");
+				} catch (JSONException e) {
+					exceptionListener.onException(false, e);
+				}
+			}
+		}, positionOptions);
+		
+		watchIdByCallbacksId.put(callbacksId, watchId);
 	}
 	
 	/**
@@ -111,6 +164,9 @@ public class NativeGeolocation {
      */
 	@JavascriptInterface
 	public void clearWatch(final String callbacksId) {
-		// TODO
+		Long watchId = watchIdByCallbacksId.get(callbacksId);
+		if (watchId != null) {
+			geolocation.clearWatch(watchId);
+		}
 	}
 }

@@ -1,6 +1,8 @@
 package org.opentravelmate.geolocation;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import android.location.Location;
 import android.location.LocationListener;
@@ -19,7 +21,10 @@ public class Geolocation {
 	private static final int UPDATE_MIN_TIME = 5000; //Milliseconds
 	private static final int UPDATE_MIN_DISTANCE = 10; //Meters
 	private static final String TIMEOUT_MESSAGE = "Unable to provide a position on time.";
+	public static final int DEFAULT_MAX_LOCATION_AGE = 1000 * 60 * 2; //Milliseconds
 	private final LocationManager locationManager;
+	private final Map<Long, WatchPositionLocationListener> locationListenerByWatchId = new HashMap<Long, WatchPositionLocationListener>();
+	private long nextWatchId = 42;
 	
 	/**
 	 * Create a new Geolocation service.
@@ -40,16 +45,8 @@ public class Geolocation {
 	public void getCurrentPosition(PositionCallback successCallback, PositionErrorCallback errorCallback, PositionOptions options) {
 		
 		// First check if the last known location is acceptable
-		if (options.maximumAge > 0) {
-			Location lastKnownNetLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-			Location lastKnownGpsLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-			
-			Location locationToCheck = 
-					isBetterLocation(lastKnownNetLocation, lastKnownGpsLocation, options.maximumAge) ? lastKnownNetLocation : lastKnownGpsLocation;
-			if (isAcceptableLocation(locationToCheck, options)) {
-				successCallback.on(locationToPosition(locationToCheck));
-				return;
-			}
+		if (sendLastKnownLocation(successCallback, options) != null) {
+			return;
 		}
 		
 		// Query the location manager
@@ -65,23 +62,101 @@ public class Geolocation {
 		
 		// Check timeout
 		if (options.timeout > 0) {
-			handler.postDelayed(new TimeOutChecker(currentPositionQuery, listener), options.timeout);
+			handler.postDelayed(new CurrentPositionTimeOutChecker(currentPositionQuery, listener), options.timeout);
+		}
+	}
+	
+	/**
+	 * Watch the device location.
+	 * 
+	 * @param successCallback
+	 * @param errorCallback
+	 * @param options
+	 * @return watchId
+	 */
+	public Long watchPosition(PositionCallback successCallback, PositionErrorCallback errorCallback, PositionOptions options) {
+		// Send the last known location
+		Location lastKnownLocation = sendLastKnownLocation(successCallback, options);
+		
+		// Query the location manager
+		Handler handler = new Handler(); // Handler used to avoid race conditions
+		WatchPositionQuery watchPositionQuery = new WatchPositionQuery(successCallback, errorCallback, options);
+		WatchPositionTimeOutChecker timeOutChecker = new WatchPositionTimeOutChecker(errorCallback);
+		WatchPositionLocationListener listener = new WatchPositionLocationListener(watchPositionQuery, handler, lastKnownLocation, timeOutChecker);
+
+		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, UPDATE_MIN_TIME, UPDATE_MIN_DISTANCE, listener);
+		if (options.enableHighAccuracy) {
+			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, UPDATE_MIN_TIME, UPDATE_MIN_DISTANCE, listener);
+		}
+		
+		// Check timeout
+		if (options.timeout > 0) {
+			handler.postDelayed(timeOutChecker, options.timeout);
+		}
+		
+		// Store the locationListener with a newly generated watch id
+		Long watchId = nextWatchId++;
+		locationListenerByWatchId.put(watchId, listener);
+		return watchId;
+	}
+	
+	/**
+	 * Stop watching the device position.
+	 * 
+	 * @param watchId
+	 */
+	public void clearWatch(Long watchId) {
+		WatchPositionLocationListener locationListener = locationListenerByWatchId.get(watchId);
+		if (locationListener != null) {
+			locationManager.removeUpdates(locationListener);
+		}
+	}
+	
+	/**
+	 * Send the last known location if acceptable.
+	 * 
+	 * @param successCallback
+	 * @param options
+	 * @return sent location or null if no acceptable location is available.
+	 */
+	private Location sendLastKnownLocation(PositionCallback successCallback, PositionOptions options) {
+		if (options.maximumAge > 0) {
+			Location lastKnownNetLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+			Location lastKnownGpsLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			
+			Location locationToCheck = 
+					isBetterLocation(lastKnownNetLocation, lastKnownGpsLocation, options.maximumAge) ? lastKnownNetLocation : lastKnownGpsLocation;
+			if (isAcceptableLocation(locationToCheck, options)) {
+				successCallback.on(locationToPosition(locationToCheck));
+				return locationToCheck;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Contains the parameters that are passed to {@link Geolocation#watchPosition}.
+	 */
+	private static class WatchPositionQuery {
+		final PositionCallback successCallback;
+		final PositionErrorCallback errorCallback;
+		final PositionOptions options;
+		
+		private WatchPositionQuery(PositionCallback successCallback, PositionErrorCallback errorCallback, PositionOptions options) {
+			this.successCallback = successCallback;
+			this.errorCallback = errorCallback;
+			this.options = options;
 		}
 	}
 
 	/**
 	 * Contains the parameters that are passed to {@link Geolocation#getCurrentPosition}.
 	 */
-	private static class CurrentPositionQuery {
-		private final PositionCallback successCallback;
-		private final PositionErrorCallback errorCallback;
-		private final PositionOptions options;
+	private static class CurrentPositionQuery extends WatchPositionQuery {
 		private volatile boolean processed = false;
 		
 		private CurrentPositionQuery(PositionCallback successCallback, PositionErrorCallback errorCallback, PositionOptions options) {
-			this.successCallback = successCallback;
-			this.errorCallback = errorCallback;
-			this.options = options;
+			super(successCallback, errorCallback, options);
 		}
 	}
 	
@@ -114,14 +189,57 @@ public class Geolocation {
 	}
 	
 	/**
+	 * Listener called when a location is available for {@link Geolocation#watchPosition}.
+	 */
+	private class WatchPositionLocationListener implements LocationListener {
+		private final WatchPositionQuery watchPositionQuery;
+		private final Handler handler;
+		private final WatchPositionTimeOutChecker timeOutChecker;
+		private volatile Location currentBestLocation;
+		
+		private WatchPositionLocationListener(
+				WatchPositionQuery watchPositionQuery,
+				Handler handler,
+				Location currentBestLocation,
+				WatchPositionTimeOutChecker timeOutChecker) {
+			this.watchPositionQuery = watchPositionQuery;
+			this.handler = handler;
+			this.currentBestLocation = currentBestLocation;
+			this.timeOutChecker = timeOutChecker;
+		}
+		
+		@Override public void onLocationChanged(final Location location) {
+			handler.post(new Runnable() {
+				@Override public void run() {
+					PositionOptions options = watchPositionQuery.options;
+					if (isAcceptableLocation(location, options) &&
+						isBetterLocation(location, currentBestLocation, options.maximumAge > 0 ? options.maximumAge : DEFAULT_MAX_LOCATION_AGE)) {
+						currentBestLocation = location;
+						watchPositionQuery.successCallback.on(locationToPosition(location));
+					}
+					
+					// Check timeout
+					if (options.timeout > 0) {
+						handler.removeCallbacks(timeOutChecker);
+						handler.postDelayed(timeOutChecker, options.timeout);
+					}
+				}
+			});
+		}
+		@Override public void onProviderDisabled(String provider) {}
+		@Override public void onProviderEnabled(String provider) {}
+		@Override public void onStatusChanged(String provider, int status, Bundle extras) {}
+	}
+	
+	/**
 	 * Check {@link Geolocation#getCurrentPosition} timeout.
 	 */
-	private class TimeOutChecker implements Runnable {
+	private class CurrentPositionTimeOutChecker implements Runnable {
 		
 		private final CurrentPositionQuery currentPositionQuery;
 		private final CurrentPositionLocationListener locationListener;
 
-		private TimeOutChecker(
+		private CurrentPositionTimeOutChecker(
 				CurrentPositionQuery currentPositionQuery,
 				CurrentPositionLocationListener locationListener) {
 			this.currentPositionQuery = currentPositionQuery;
@@ -133,6 +251,22 @@ public class Geolocation {
 				currentPositionQuery.errorCallback.on(new PositionError(PositionError.TIMEOUT, TIMEOUT_MESSAGE));
 				locationManager.removeUpdates(locationListener);
 			}
+		}
+	}
+	
+	/**
+	 * Check {@link Geolocation#watchPosition} timeout.
+	 */
+	private class WatchPositionTimeOutChecker implements Runnable {
+		
+		private final PositionErrorCallback errorCallback;
+
+		private WatchPositionTimeOutChecker(PositionErrorCallback errorCallback) {
+			this.errorCallback = errorCallback;
+		}
+
+		@Override public void run() {
+			errorCallback.on(new PositionError(PositionError.TIMEOUT, TIMEOUT_MESSAGE));
 		}
 	}
 	
