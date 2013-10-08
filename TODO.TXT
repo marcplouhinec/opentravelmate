@@ -27,10 +27,7 @@ Tasks
 
 - On the web version, the InfoWindow is not removed when the marker is removed.
 
-- In currentPositionButtonHandler, watch the user position:
-  - Show the first low-accuracy location
-  - Show a better location when we get one
-  - Stop watching after 20sec
+- In currentPositionButtonHandler, show an error message when the geolocation API return an error.
 
 - In the "place-information" extension, create a "placeSelectionMenu.onPlaceSelected(listener: function(place: Place))" function where other extensions can register their listeners.
 
@@ -48,9 +45,8 @@ Develoment tasks
 5.  [X] Display the Luxembourg bus lines on the map
 6.  [X] Handle bus stop or found place selection on the map
 7.  [X] Create the "show/hide satellite" map button
-8.  [ ] Create the "show current location" map button
+8.  [X] Create the "show current location" map button
 9.  [ ] Correctly handle the main menu (show the items until there is no place left and put other items in the "more" panel)
-10. [ ] On big screens, show the menu item title
-11. [ ] Create the generic "menu panel" and add an arrow under the selected menu item. The place finder must be refactored to use this panel.
+10. [ ] Allow users to find itineraries
+11. [ ] Allow users to see timetables
 
-Next tasks: itinerary panel, find itinerary menu item, place details, ...
