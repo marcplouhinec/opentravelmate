@@ -516,10 +516,7 @@ define([
             var gmarker = gmarkerById[marker.id];
 
             // Close the current displayed info window if any
-            var infoWindow = infoWindowByPlaceHolderId[id];
-            if (infoWindow) {
-                infoWindow.close();
-            }
+            this.closeInfoWindow(id);
 
             // Compute the default anchor
             if (!anchor) {
@@ -541,6 +538,20 @@ define([
                 });
             });
             infoWindowByPlaceHolderId[id] = infoWindow;
+        },
+
+        /**
+         * Close the Info Window if any.
+         *
+         * @param {String} id
+         *     Map place holder ID.
+         */
+        'closeInfoWindow': function(id) {
+            var infoWindow = infoWindowByPlaceHolderId[id];
+            if (infoWindow) {
+                infoWindow.close();
+                delete infoWindowByPlaceHolderId[id];
+            }
         },
 
         /**

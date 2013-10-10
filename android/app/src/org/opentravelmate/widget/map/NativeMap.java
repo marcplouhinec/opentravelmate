@@ -738,6 +738,25 @@ public class NativeMap {
 	}
 	
 	/**
+     * Close the Info Window if any.
+     *
+     * @param {String} id
+     *     Map place holder ID.
+     */
+	@JavascriptInterface
+	public void closeInfoWindow(final String id) {
+		UIThreadExecutor.execute(new Runnable() {
+			@Override public void run() {
+				com.google.android.gms.maps.model.Marker existingInfoWindowMarker = infoWindowMarkerByPlaceHolderId.get(id);
+				if (existingInfoWindowMarker != null) {
+					existingInfoWindowMarker.remove();
+					markerByGmarker.remove(existingInfoWindowMarker);
+				}
+			}
+		});
+	}
+	
+	/**
      * Set the map type.
      *
      * @param {String} id

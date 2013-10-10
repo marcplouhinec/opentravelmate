@@ -29,8 +29,6 @@ Tasks
 
 - In currentPositionButtonHandler, show an error message when the geolocation API return an error.
 
-- Implement the Map.closeInfoWindow() function.
-
 
 Develoment tasks
 ----------------
