@@ -29,6 +29,8 @@ Tasks
 
 - In currentPositionButtonHandler, show an error message when the geolocation API return an error.
 
+- Implement the Map.closeInfoWindow() function.
+
 
 Develoment tasks
 ----------------
@@ -42,7 +44,7 @@ Develoment tasks
 6.  [X] Handle bus stop or found place selection on the map
 7.  [X] Create the "show/hide satellite" map button
 8.  [X] Create the "show current location" map button
-9.  [ ] Correctly handle the main menu (show the items until there is no place left and put other items in the "more" panel)
-10. [ ] Allow users to find itineraries
-11. [ ] Allow users to see timetables
+9.  [ ] Allow users to find itineraries
+10. [ ] Allow users to see timetables
+11. [ ] Correctly handle the main menu (show the items until there is no place left and put other items in the "more" panel)
 
