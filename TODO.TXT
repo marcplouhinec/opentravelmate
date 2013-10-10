@@ -29,6 +29,8 @@ Tasks
 
 - In currentPositionButtonHandler, show an error message when the geolocation API return an error.
 
+- Show details about the device position when the user selects the marker and click on "more information".
+
 
 Develoment tasks
 ----------------
