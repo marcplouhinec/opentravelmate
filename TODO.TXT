@@ -45,4 +45,5 @@ Develoment tasks
 9.  [ ] Allow users to find itineraries
 10. [ ] Allow users to see timetables
 11. [ ] Correctly handle the main menu (show the items until there is no place left and put other items in the "more" panel)
+12. [ ] Create a notification system (show loading, errors, ...etc)
 
