@@ -29,6 +29,8 @@ Tasks
 
 - In currentPositionButtonHandler, show an error message when the geolocation API return an error.
 
+- Add time and price in the itinerary objects.
+
 
 Develoment tasks
 ----------------
