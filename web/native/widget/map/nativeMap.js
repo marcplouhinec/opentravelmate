@@ -567,6 +567,45 @@ define([
             gmap.setOptions({
                 mapTypeId: mapType === 'ROADMAP' ? google.maps.MapTypeId.ROADMAP : google.maps.MapTypeId.SATELLITE
             });
+        },
+
+        /**
+         * Add the given polyline on the map.
+         *
+         * @param {String} id
+         *     Map place holder ID.
+         * @param {String} jsonPolyline
+         *     Polyline to add.
+         */
+        'addPolyline': function(id, jsonPolyline) {
+            var gmap = gmapByPlaceHolderId[id];
+            var polyline = JSON.parse(jsonPolyline);
+
+            // Convert the path
+            var gpath = [];
+            for (var i = 0; i < polyline.path.length; i++) {
+                var latLng = polyline.path[i];
+                gpath.push(new google.maps.LatLng(latLng.lat, latLng.lng));
+            }
+
+            // Convert the opacity
+            var opacity = polyline.color & 0xFF000000;
+            var strokeOpacity = opacity / 0xFF;
+
+            // Convert the color
+            var colorR = (polyline.color & 0x00FF0000) / 0xFFFF;
+            var colorG = (polyline.color & 0x0000FF00) / 0xFF;
+            var colorB = (polyline.color & 0x000000FF);
+            var strokeOpacity = 'rgb(' + colorR + ', ' + colorG + ', ' + colorB + ')';
+
+            // Create and show the poly line
+            var gpolyline = new google.maps.Polyline({
+                path: gpath,
+                strokeColor: strokeOpacity,
+                strokeOpacity: strokeOpacity,
+                strokeWeight: polyline.width
+            });
+            gpolyline.setMap(gmap);
         }
     };
 

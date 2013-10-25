@@ -640,13 +640,13 @@ public class NativeMap {
 	/**
      * Show the given text in an Info Window on top of the given marker.
      *
-     * @param {String} id
+     * @param id
      *     Map place holder ID.
-     * @param {String} jsonMarker
+     * @param jsonMarker
      *     JSON-serialized marker where to set the Info Window anchor.
      * @param content
      *     Text displayed in the Info Window.
-     * @param {String} jsonAnchor
+     * @param jsonAnchor
      *     JSON-serialized position of the the InfoWindow-base compared to the marker position.
      *     Examples:
      *       - (0,0) is the marker position.
@@ -740,7 +740,7 @@ public class NativeMap {
 	/**
      * Close the Info Window if any.
      *
-     * @param {String} id
+     * @param id
      *     Map place holder ID.
      */
 	@JavascriptInterface
@@ -759,9 +759,9 @@ public class NativeMap {
 	/**
      * Set the map type.
      *
-     * @param {String} id
+     * @param id
      *     Map place holder ID.
-     * @param {String} mapType
+     * @param mapType
      *     'ROADMAP' or 'SATELLITE'.
      */
 	@JavascriptInterface
@@ -774,6 +774,19 @@ public class NativeMap {
 				mapButtonControllerByPlaceHolderId.get(id).setMapType(mapType);
 			}
 		});
+	}
+	
+	/**
+     * Add the given polyline on the map.
+     *
+     * @param id
+     *     Map place holder ID.
+     * @param jsonPolyline
+     *     Polyline to add.
+     */
+	@JavascriptInterface
+	public void addPolyline(final String id, final String jsonPolyline) {
+		// TODO
 	}
 	
 	private class CustomInfoWindowAdapter implements InfoWindowAdapter {
