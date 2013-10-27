@@ -361,8 +361,8 @@ public class NativeMap {
 								});
 							}
 						});
-					} else if (marker.icon instanceof SvgPathMarkerIcon) {
-						SvgPathMarkerIcon icon = (SvgPathMarkerIcon)marker.icon;
+					} else if (marker.icon instanceof VectorMarkerIcon) {
+						VectorMarkerIcon icon = (VectorMarkerIcon)marker.icon;
 						SVG svgIcon;
 						try {
 							svgIcon = SVG.getFromString(icon.toSvg());

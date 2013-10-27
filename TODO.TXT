@@ -33,7 +33,7 @@ Tasks
 
 - Create the function Map.updateMarkers.
 
-- Rename SvgPathMarkerIcon to VectorMarkerIcon and rename strokeWeight to strokeWidth.
+- On the UML diagram, rename SvgPathMarkerIcon to VectorMarkerIcon and rename strokeWeight to strokeWidth.
 
 
 Develoment tasks

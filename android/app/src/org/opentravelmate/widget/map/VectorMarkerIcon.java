@@ -8,7 +8,7 @@ import org.json.JSONObject;
  *
  * @author marc.plouhinec@gmail.com (Marc Plouhinec)
  */
-public class SvgPathMarkerIcon extends MarkerIcon {
+public class VectorMarkerIcon extends MarkerIcon {
 
 	/**
 	 * Shape fill color.
@@ -50,10 +50,10 @@ public class SvgPathMarkerIcon extends MarkerIcon {
 	/**
 	 * Shape stroke width.
 	 */
-	public final double strokeWeight;
+	public final double strokeWidth;
 
 	/**
-	 * Create a new SvgPathMarkerIcon.
+	 * Create a new VectorMarkerIcon.
 	 * 
 	 * @param anchor
 	 * @param size
@@ -64,11 +64,11 @@ public class SvgPathMarkerIcon extends MarkerIcon {
 	 * @param scale
 	 * @param strokeColor
 	 * @param strokeOpacity
-	 * @param strokeWeight
+	 * @param strokeWidth
 	 */
-	public SvgPathMarkerIcon(Point anchor, Dimension size, String fillColor,
+	public VectorMarkerIcon(Point anchor, Dimension size, String fillColor,
 			double fillOpacity, String path, double rotation, double scale,
-			String strokeColor, double strokeOpacity, double strokeWeight) {
+			String strokeColor, double strokeOpacity, double strokeWidth) {
 		super(anchor, size);
 		this.fillColor = fillColor;
 		this.fillOpacity = fillOpacity;
@@ -77,26 +77,26 @@ public class SvgPathMarkerIcon extends MarkerIcon {
 		this.scale = scale;
 		this.strokeColor = strokeColor;
 		this.strokeOpacity = strokeOpacity;
-		this.strokeWeight = strokeWeight;
+		this.strokeWidth = strokeWidth;
 	}
 	
 	/**
-	 * @return JSON-serialized SvgPathMarkerIcon
+	 * @return JSON-serialized VectorMarkerIcon
 	 * @throws JSONException
 	 */
 	public JSONObject toJson() throws JSONException {
-		JSONObject jsonSvgPathMarkerIcon = new JSONObject();
-		jsonSvgPathMarkerIcon.put("anchor", anchor.toJson());
-		jsonSvgPathMarkerIcon.put("size", size.toJson());
-		jsonSvgPathMarkerIcon.put("fillColor", fillColor);
-		jsonSvgPathMarkerIcon.put("fillOpacity", fillOpacity);
-		jsonSvgPathMarkerIcon.put("path", path);
-		jsonSvgPathMarkerIcon.put("rotation", rotation);
-		jsonSvgPathMarkerIcon.put("scale", scale);
-		jsonSvgPathMarkerIcon.put("strokeColor", strokeColor);
-		jsonSvgPathMarkerIcon.put("strokeOpacity", strokeOpacity);
-		jsonSvgPathMarkerIcon.put("strokeWeight", strokeWeight);
-		return jsonSvgPathMarkerIcon;
+		JSONObject jsonVectorMarkerIcon = new JSONObject();
+		jsonVectorMarkerIcon.put("anchor", anchor.toJson());
+		jsonVectorMarkerIcon.put("size", size.toJson());
+		jsonVectorMarkerIcon.put("fillColor", fillColor);
+		jsonVectorMarkerIcon.put("fillOpacity", fillOpacity);
+		jsonVectorMarkerIcon.put("path", path);
+		jsonVectorMarkerIcon.put("rotation", rotation);
+		jsonVectorMarkerIcon.put("scale", scale);
+		jsonVectorMarkerIcon.put("strokeColor", strokeColor);
+		jsonVectorMarkerIcon.put("strokeOpacity", strokeOpacity);
+		jsonVectorMarkerIcon.put("strokeWidth", strokeWidth);
+		return jsonVectorMarkerIcon;
 	}
 	
 	public String toSvg() {
@@ -117,7 +117,7 @@ public class SvgPathMarkerIcon extends MarkerIcon {
 		renderedIcon.append("        fill-opacity=\"").append(fillOpacity).append("\"\n");
 		renderedIcon.append("        stroke=\"").append(strokeColor).append("\"\n");
 		renderedIcon.append("        stroke-opacity=\"").append(strokeOpacity).append("\"\n");
-		renderedIcon.append("        stroke-width=\"").append(strokeWeight).append("\"\n");
+		renderedIcon.append("        stroke-width=\"").append(strokeWidth).append("\"\n");
 		renderedIcon.append("        transform=\"").append(transformations).append("\"\n");
 		renderedIcon.append("  />\n");
 		renderedIcon.append("</svg>");
@@ -127,21 +127,21 @@ public class SvgPathMarkerIcon extends MarkerIcon {
 	/**
 	 * Build a Point from a JSON-serialized representation.
 	 * 
-	 * @param jsonSvgPathMarkerIcon
-	 * @return SvgPathMarkerIcon
+	 * @param jsonVectorMarkerIcon
+	 * @return VectorMarkerIcon
 	 * @throws JSONException
 	 */
-	public static SvgPathMarkerIcon fromJsonSvgPathMarkerIcon(JSONObject jsonSvgPathMarkerIcon) throws JSONException {
-		return new SvgPathMarkerIcon(
-				Point.fromJsonPoint(jsonSvgPathMarkerIcon.getJSONObject("anchor")),
-				Dimension.fromJsonDimension(jsonSvgPathMarkerIcon.getJSONObject("size")),
-				jsonSvgPathMarkerIcon.getString("fillColor"),
-				jsonSvgPathMarkerIcon.getDouble("fillOpacity"),
-				jsonSvgPathMarkerIcon.getString("path"),
-				jsonSvgPathMarkerIcon.getDouble("rotation"),
-				jsonSvgPathMarkerIcon.getDouble("scale"),
-				jsonSvgPathMarkerIcon.getString("strokeColor"),
-				jsonSvgPathMarkerIcon.getDouble("strokeOpacity"),
-				jsonSvgPathMarkerIcon.getDouble("strokeWeight"));
+	public static VectorMarkerIcon fromJsonVectorMarkerIcon(JSONObject jsonVectorMarkerIcon) throws JSONException {
+		return new VectorMarkerIcon(
+				Point.fromJsonPoint(jsonVectorMarkerIcon.getJSONObject("anchor")),
+				Dimension.fromJsonDimension(jsonVectorMarkerIcon.getJSONObject("size")),
+				jsonVectorMarkerIcon.getString("fillColor"),
+				jsonVectorMarkerIcon.getDouble("fillOpacity"),
+				jsonVectorMarkerIcon.getString("path"),
+				jsonVectorMarkerIcon.getDouble("rotation"),
+				jsonVectorMarkerIcon.getDouble("scale"),
+				jsonVectorMarkerIcon.getString("strokeColor"),
+				jsonVectorMarkerIcon.getDouble("strokeOpacity"),
+				jsonVectorMarkerIcon.getDouble("strokeWidth"));
 	}
 }

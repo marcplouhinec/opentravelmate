@@ -60,8 +60,8 @@ public class Marker {
 		jsonMarker.put("title", title);
 		if (icon instanceof UrlMarkerIcon) {
 			jsonMarker.put("icon", ((UrlMarkerIcon)icon).toJson());
-		} else if (icon instanceof SvgPathMarkerIcon) {
-			jsonMarker.put("icon", ((SvgPathMarkerIcon)icon).toJson());
+		} else if (icon instanceof VectorMarkerIcon) {
+			jsonMarker.put("icon", ((VectorMarkerIcon)icon).toJson());
 		}
 		return jsonMarker;
 	}
@@ -81,7 +81,7 @@ public class Marker {
 			if (jsonMarkerIcon.has("url")) {
 				markerIcon = UrlMarkerIcon.fromJsonUrlMarkerIcon(jsonMarkerIcon);
 			} else if (jsonMarkerIcon.has("path")) {
-				markerIcon = SvgPathMarkerIcon.fromJsonSvgPathMarkerIcon(jsonMarkerIcon);
+				markerIcon = VectorMarkerIcon.fromJsonVectorMarkerIcon(jsonMarkerIcon);
 			}
 		}
 		

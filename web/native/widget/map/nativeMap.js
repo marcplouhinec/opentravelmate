@@ -290,7 +290,7 @@ define([
                             anchor: new google.maps.Point(urlMarkerIcon.anchor.x, urlMarkerIcon.anchor.y)
                         };
                     } else if (marker.icon.path) {
-                        // SvgPathMarkerIcon
+                        // VectorMarkerIcon
                         markerOptions.icon = {
                             fillColor: marker.icon.fillColor,
                             fillOpacity: marker.icon.fillOpacity,
@@ -299,7 +299,7 @@ define([
                             scale: marker.icon.scale,
                             strokeColor: marker.icon.strokeColor,
                             strokeOpacity: marker.icon.strokeOpacity,
-                            strokeWeight: marker.icon.strokeWeight,
+                            strokeWeight: marker.icon.strokeWidth,
                             anchor: new google.maps.Point(marker.icon.anchor.x, marker.icon.anchor.y)
                         };
                     }
