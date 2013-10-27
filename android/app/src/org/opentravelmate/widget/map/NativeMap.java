@@ -20,6 +20,7 @@ import org.opentravelmate.widget.HtmlLayoutParams;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -34,6 +35,8 @@ import android.webkit.WebView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.caverock.androidsvg.SVG;
+import com.caverock.androidsvg.SVGParseException;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -71,7 +74,7 @@ public class NativeMap {
 	private final SparseArray<com.google.android.gms.maps.model.Marker> gmarkerById =
 			new SparseArray<com.google.android.gms.maps.model.Marker>();
 	private final Map<String, TileObserver> tileObserverByPlaceHolderId = new HashMap<String, TileObserver>();
-	private final MarkerIconLoader markerIconLoader;
+	private final UrlMarkerIconLoader markerIconLoader;
 	private final Map<com.google.android.gms.maps.model.Marker, Marker> markerByGmarker =
 			new HashMap<com.google.android.gms.maps.model.Marker, Marker>();
 	private final Map<String, CustomInfoWindowAdapter> infoWindowAdapterByPlaceHolderId =
@@ -92,7 +95,7 @@ public class NativeMap {
 		this.htmlLayout = htmlLayout;
 		this.fragmentManager = fragmentManager;
 		this.baseUrl = baseUrl;
-		this.markerIconLoader = new MarkerIconLoader(exceptionListener);
+		this.markerIconLoader = new UrlMarkerIconLoader(exceptionListener);
 		
 		DisplayMetrics metrics = htmlLayout.getContext().getResources().getDisplayMetrics();
 		infoWindowMargin = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, INFO_WINDOW_MARGIN_DIP, metrics));
@@ -342,14 +345,14 @@ public class NativeMap {
 				for (final Marker marker : markers) {
 					if (marker.icon == null) {
 						addMarker(map, marker, null);
-					} else {
+					} else if (marker.icon instanceof UrlMarkerIcon) {
 						// Find the Marker Icon scale ratio
 						View view = htmlLayout.findViewByPlaceHolderId(id);
 						HtmlLayoutParams layoutParams = (HtmlLayoutParams)view.getLayoutParams();
 						double scaleRatio = view.getWidth() / layoutParams.windowWidth;
 						
 						// Load the icon
-						markerIconLoader.loadIcon(marker.icon, scaleRatio, new MarkerIconLoader.OnIconLoadListener() {
+						markerIconLoader.loadIcon(marker.icon, scaleRatio, new UrlMarkerIconLoader.OnIconLoadListener() {
 							@Override public void onIconLoad(final Bitmap bitmap) {
 								UIThreadExecutor.execute(new Runnable() {
 									@Override public void run() {
@@ -358,6 +361,19 @@ public class NativeMap {
 								});
 							}
 						});
+					} else if (marker.icon instanceof SvgPathMarkerIcon) {
+						SvgPathMarkerIcon icon = (SvgPathMarkerIcon)marker.icon;
+						SVG svgIcon;
+						try {
+							svgIcon = SVG.getFromString(icon.toSvg());
+						} catch (SVGParseException e) {
+							exceptionListener.onException(false, e);
+							return;
+						}
+						Bitmap iconBitmap = Bitmap.createBitmap(icon.size.width, icon.size.height, Bitmap.Config.ARGB_8888);
+						Canvas canvas = new Canvas(iconBitmap);
+						svgIcon.renderToCanvas(canvas);
+						addMarker(map, marker, iconBitmap);
 					}
 				}
 			}

@@ -42,8 +42,8 @@ public class UrlMarkerIcon extends MarkerIcon {
 	/**
 	 * Build a Point from a JSON-serialized representation.
 	 * 
-	 * @param jsonPoint
-	 * @return Point
+	 * @param jsonUrlMarkerIcon
+	 * @return UrlMarkerIcon
 	 * @throws JSONException
 	 */
 	public static UrlMarkerIcon fromJsonUrlMarkerIcon(JSONObject jsonUrlMarkerIcon) throws JSONException {

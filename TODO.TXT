@@ -31,11 +31,9 @@ Tasks
 
 - Add time and price in the itinerary objects.
 
-- Create the functions Map.addPolyline and Map.removePolyline.
-
 - Create the function Map.updateMarkers.
 
-- Implement SvgPathMarkerIcon.
+- Rename SvgPathMarkerIcon to VectorMarkerIcon and rename strokeWeight to strokeWidth.
 
 
 Develoment tasks

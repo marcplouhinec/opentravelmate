@@ -279,18 +279,31 @@ define([
                     clickable: false
                 };
 
-                // Handle UrlMarkerIcon if necessary
-                if (marker.icon && marker.icon.url) {
-                    var urlMarkerIcon = marker.icon;
-                    markerOptions.icon = {
-                        url: urlMarkerIcon.url,
-                        scaledSize: new google.maps.Size(urlMarkerIcon.size.width, urlMarkerIcon.size.height),
-                        anchor: new google.maps.Point(urlMarkerIcon.anchor.x, urlMarkerIcon.anchor.y)
-                    };
+                // Handle the marker icon if applicable
+                if (marker.icon) {
+                    if (marker.icon.url) {
+                        // UrlMarkerIcon
+                        var urlMarkerIcon = marker.icon;
+                        markerOptions.icon = {
+                            url: urlMarkerIcon.url,
+                            scaledSize: new google.maps.Size(urlMarkerIcon.size.width, urlMarkerIcon.size.height),
+                            anchor: new google.maps.Point(urlMarkerIcon.anchor.x, urlMarkerIcon.anchor.y)
+                        };
+                    } else if (marker.icon.path) {
+                        // SvgPathMarkerIcon
+                        markerOptions.icon = {
+                            fillColor: marker.icon.fillColor,
+                            fillOpacity: marker.icon.fillOpacity,
+                            path: marker.icon.path,
+                            rotation: marker.icon.rotation,
+                            scale: marker.icon.scale,
+                            strokeColor: marker.icon.strokeColor,
+                            strokeOpacity: marker.icon.strokeOpacity,
+                            strokeWeight: marker.icon.strokeWeight,
+                            anchor: new google.maps.Point(marker.icon.anchor.x, marker.icon.anchor.y)
+                        };
+                    }
                 }
-
-                // Handle SvgPathMarkerIcon if necessary
-                // TODO
 
                 // Create and register the Google Maps Marker
                 var gmarker = new google.maps.Marker(markerOptions);

@@ -60,6 +60,8 @@ public class Marker {
 		jsonMarker.put("title", title);
 		if (icon instanceof UrlMarkerIcon) {
 			jsonMarker.put("icon", ((UrlMarkerIcon)icon).toJson());
+		} else if (icon instanceof SvgPathMarkerIcon) {
+			jsonMarker.put("icon", ((SvgPathMarkerIcon)icon).toJson());
 		}
 		return jsonMarker;
 	}
@@ -72,12 +74,23 @@ public class Marker {
 	 * @throws JSONException
 	 */
 	public static Marker fromJsonMarker(JSONObject jsonMarker) throws JSONException {
+		// Parse the icon
+		MarkerIcon markerIcon = null;
+		if (jsonMarker.has("icon") && !jsonMarker.isNull("icon")) {
+			JSONObject jsonMarkerIcon = jsonMarker.getJSONObject("icon");
+			if (jsonMarkerIcon.has("url")) {
+				markerIcon = UrlMarkerIcon.fromJsonUrlMarkerIcon(jsonMarkerIcon);
+			} else if (jsonMarkerIcon.has("path")) {
+				markerIcon = SvgPathMarkerIcon.fromJsonSvgPathMarkerIcon(jsonMarkerIcon);
+			}
+		}
+		
+		// Parse the rest of the marker
 		return new Marker(
 				jsonMarker.getInt("id"),
 				LatLng.fromJsonLatLng(jsonMarker.getJSONObject("position")),
 				jsonMarker.getString("title"),
-				jsonMarker.has("icon") && !jsonMarker.isNull("icon") ?
-						UrlMarkerIcon.fromJsonUrlMarkerIcon(jsonMarker.getJSONObject("icon")) : null);
+				markerIcon);
 	}
 	
 	/**

@@ -88,3 +88,4 @@ Credits
      * [JQuery](http://jquery.com/)
      * [JQuery Fast Button Plugin](https://github.com/alexblack/google-fastbutton)
      * [Underscore.js](http://underscorejs.org/)
+     * [AndroidSVG](https://code.google.com/p/androidsvg/)

@@ -21,14 +21,14 @@ import android.graphics.Rect;
  * 
  * @author marc.plouhinec@gmail.com (Marc Plouhinec)
  */
-public class MarkerIconLoader {
+public class UrlMarkerIconLoader {
 	
 	private static int MAX_ICONCACHE_SIZE = 10;
 	
 	private final ExceptionListener exceptionListener;
 	private final Map<String, Bitmap> iconCache = new LinkedHashMap<String, Bitmap>();
 	
-	public MarkerIconLoader(ExceptionListener exceptionListener) {
+	public UrlMarkerIconLoader(ExceptionListener exceptionListener) {
 		this.exceptionListener = exceptionListener;
 	}
 
