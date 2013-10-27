@@ -1,5 +1,9 @@
 package org.opentravelmate.widget.map;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -53,4 +57,20 @@ public class LatLng {
 		return new LatLng(jsonLatLng.getDouble("lat"), jsonLatLng.getDouble("lng"));
 	}
 
+	/**
+	 * Build a list of LatLng from a JSON-serialized representation.
+	 * 
+	 * @param jsonLatLngArray
+	 * @return List of LatLng
+	 * @throws JSONException
+	 */
+	public static List<LatLng> fromJsonLatLngArray(JSONArray jsonLatLngArray) throws JSONException {
+		List<LatLng> latLngList = new ArrayList<LatLng>(jsonLatLngArray.length());
+		
+		for (int i = 0; i < jsonLatLngArray.length(); i++) {
+			latLngList.add(fromJsonLatLng(jsonLatLngArray.getJSONObject(i)));
+		}
+		
+		return latLngList;
+	}
 }

@@ -44,6 +44,7 @@ import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.maps.model.TileProvider;
 import com.google.android.gms.maps.model.UrlTileProvider;
@@ -80,6 +81,8 @@ public class NativeMap {
 	private final int infoWindowMargin;
 	private final Map<String, OnReadyExecutor> onReadyExecutorByPlaceHolderId = new HashMap<String, OnReadyExecutor>();
 	private final Map<String, MapButtonController> mapButtonControllerByPlaceHolderId = new HashMap<String, MapButtonController>();
+	private final SparseArray<com.google.android.gms.maps.model.Polyline> gpolylineById =
+			new SparseArray<com.google.android.gms.maps.model.Polyline>();
 	
 	/**
 	 * Create a NativeMap object.
@@ -786,7 +789,61 @@ public class NativeMap {
      */
 	@JavascriptInterface
 	public void addPolyline(final String id, final String jsonPolyline) {
-		// TODO
+		final GoogleMap map = getGoogleMapSync(id);
+		
+		UIThreadExecutor.execute(new Runnable() {
+			@Override public void run() {
+				Polyline polyline;
+				try {
+					polyline = Polyline.fromJsonPolyline(new JSONObject(jsonPolyline));
+				} catch (JSONException e) {
+					exceptionListener.onException(false, e);
+					return;
+				}
+				
+				com.google.android.gms.maps.model.LatLng[] gpoints =
+						new com.google.android.gms.maps.model.LatLng[polyline.path.size()];
+				for (int i = 0; i < polyline.path.size(); i++) {
+					LatLng latlng = polyline.path.get(i);
+					gpoints[i] = new com.google.android.gms.maps.model.LatLng(latlng.lat, latlng.lng);
+				}
+				
+				com.google.android.gms.maps.model.Polyline gpolyline = map.addPolyline(new PolylineOptions()
+					.add(gpoints)
+					.color(polyline.color)
+					.width(polyline.width));
+				gpolylineById.put(polyline.id, gpolyline);
+			}
+		});
+	}
+	
+	/**
+     * Remove the given polyline on the map.
+     *
+     * @param id
+     *     Map place holder ID.
+     * @param jsonPolyline
+     *     Polyline to remove.
+     */
+	@JavascriptInterface
+	public void removePolyline(final String id, final String jsonPolyline) {
+		UIThreadExecutor.execute(new Runnable() {
+			@Override public void run() {
+				Polyline polyline;
+				try {
+					polyline = Polyline.fromJsonPolyline(new JSONObject(jsonPolyline));
+				} catch (JSONException e) {
+					exceptionListener.onException(false, e);
+					return;
+				}
+				
+				com.google.android.gms.maps.model.Polyline gpolyline = gpolylineById.get(polyline.id);
+				if (gpolyline != null) {
+					gpolyline.remove();
+					gpolylineById.remove(polyline.id);
+				}
+			}
+		});
 	}
 	
 	private class CustomInfoWindowAdapter implements InfoWindowAdapter {

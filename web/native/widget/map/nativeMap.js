@@ -103,6 +103,13 @@ define([
      */
     var mapButtonControllerByPlaceHolderId = {};
 
+    /**
+     * Google Polylines by Polyline IDs.
+     *
+     * @type {Array}
+     */
+    var gpolylineById = [];
+
 
     var nativeMap = {
         /**
@@ -589,23 +596,43 @@ define([
             }
 
             // Convert the opacity
-            var opacity = polyline.color & 0xFF000000;
+            var opacity = Math.round(polyline.color / 0x00FFFFFF);
             var strokeOpacity = opacity / 0xFF;
 
             // Convert the color
-            var colorR = (polyline.color & 0x00FF0000) / 0xFFFF;
-            var colorG = (polyline.color & 0x0000FF00) / 0xFF;
-            var colorB = (polyline.color & 0x000000FF);
-            var strokeOpacity = 'rgb(' + colorR + ', ' + colorG + ', ' + colorB + ')';
+            var colorR = Math.round((polyline.color & 0x00FF0000) / 0xFFFF);
+            var colorG = Math.round((polyline.color & 0x0000FF00) / 0xFF);
+            var colorB = Math.round( polyline.color & 0x000000FF);
+            var strokeColor = 'rgb(' + colorR + ', ' + colorG + ', ' + colorB + ')';
 
             // Create and show the poly line
             var gpolyline = new google.maps.Polyline({
                 path: gpath,
-                strokeColor: strokeOpacity,
+                strokeColor: strokeColor,
                 strokeOpacity: strokeOpacity,
-                strokeWeight: polyline.width
+                strokeWeight: polyline.width,
+                clickable: false
             });
             gpolyline.setMap(gmap);
+            gpolylineById[polyline.id] = gpolyline;
+        },
+
+        /**
+         * Remove the given polyline from the map.
+         *
+         * @param {String} id
+         *     Map place holder ID.
+         * @param {String} jsonPolyline
+         *     Polyline to remove.
+         */
+        'removePolyline': function(id, jsonPolyline) {
+            var polyline = JSON.parse(jsonPolyline);
+
+            var gpolyline = gpolylineById[polyline.id];
+            if (gpolyline) {
+                gpolyline.setMap(null);
+                delete gpolylineById[polyline.id];
+            }
         }
     };
 
