@@ -31,9 +31,9 @@ Tasks
 
 - Add time and price in the itinerary objects.
 
-- Create the function Map.updateMarkers.
+- Create Map.addPolygons() and removePolygons().
 
-- On the UML diagram, rename SvgPathMarkerIcon to VectorMarkerIcon and rename strokeWeight to strokeWidth.
+- Change Map.addPolyline() to Map.addPolylines(), Map.removePolyline() to Map.removePolylines().
 
 
 Develoment tasks

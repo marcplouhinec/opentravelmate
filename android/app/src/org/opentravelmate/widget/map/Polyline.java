@@ -53,7 +53,7 @@ public class Polyline {
 	 * Build a Polyline from a JSON-serialized representation.
 	 * 
 	 * @param jsonPolyline
-	 * @return Point
+	 * @return Polyline
 	 * @throws JSONException
 	 */
 	public static Polyline fromJsonPolyline(JSONObject jsonPolyline) throws JSONException {

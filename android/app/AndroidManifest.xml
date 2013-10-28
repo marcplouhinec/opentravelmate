@@ -33,7 +33,7 @@
         <!-- Google Maps debug key -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyAUaKuJMg_WgYbgxnMK8-8PvJwgP84AEkA" />
+            android:value="AIzaSyD_2vwQCsB-9scjc5jizpqTWZdxP82ObyI" />
 
         <activity
             android:name="org.opentravelmate.MainActivity"

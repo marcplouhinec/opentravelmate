@@ -110,6 +110,13 @@ define([
      */
     var gpolylineById = [];
 
+    /**
+     * Google Polygon by Polygon IDs.
+     *
+     * @type {Array}
+     */
+    var gpolygonById = [];
+
 
     var nativeMap = {
         /**
@@ -608,15 +615,10 @@ define([
                 gpath.push(new google.maps.LatLng(latLng.lat, latLng.lng));
             }
 
-            // Convert the opacity
-            var opacity = Math.round(polyline.color / 0x00FFFFFF);
-            var strokeOpacity = opacity / 0xFF;
-
             // Convert the color
-            var colorR = Math.round((polyline.color & 0x00FF0000) / 0xFFFF);
-            var colorG = Math.round((polyline.color & 0x0000FF00) / 0xFF);
-            var colorB = Math.round( polyline.color & 0x000000FF);
-            var strokeColor = 'rgb(' + colorR + ', ' + colorG + ', ' + colorB + ')';
+            var decomposedColor = this._decomposeColor(polyline.color);
+            var strokeOpacity = decomposedColor.opacity / 0xFF;
+            var strokeColor = 'rgb(' + decomposedColor.red + ', ' + decomposedColor.green + ', ' + decomposedColor.blue + ')';
 
             // Create and show the poly line
             var gpolyline = new google.maps.Polyline({
@@ -646,6 +648,95 @@ define([
                 gpolyline.setMap(null);
                 delete gpolylineById[polyline.id];
             }
+        },
+
+        /**
+         * Add the given polygons on the map.
+         *
+         * @param {String} id
+         *     Map place holder ID.
+         * @param {String} jsonPolygons
+         *     Polygons to add.
+         */
+        'addPolygons': function(id, jsonPolygons) {
+            var gmap = gmapByPlaceHolderId[id];
+            var polygons = JSON.parse(jsonPolygons);
+
+            for (var p = 0; p < polygons.length; p++) {
+                var polygon = polygons[p];
+
+                // Convert the path
+                var gpath = [];
+                for (var i = 0; i < polygon.path.length; i++) {
+                    var latLng = polygon.path[i];
+                    gpath.push(new google.maps.LatLng(latLng.lat, latLng.lng));
+                }
+
+                // Convert the fill and stroke color
+                var decomposedColor = this._decomposeColor(polygon.strokeColor);
+                var strokeOpacity = decomposedColor.opacity / 0xFF;
+                var strokeColor = 'rgb(' + decomposedColor.red + ', ' + decomposedColor.green + ', ' + decomposedColor.blue + ')';
+                decomposedColor = this._decomposeColor(polygon.fillColor);
+                var fillOpacity = decomposedColor.opacity / 0xFF;
+                var fillColor = 'rgb(' + decomposedColor.red + ', ' + decomposedColor.green + ', ' + decomposedColor.blue + ')';
+
+                // Create and show the polygon
+                var gpolygon = new google.maps.Polygon({
+                    path: gpath,
+                    fillColor: fillColor,
+                    fillOpacity: fillOpacity,
+                    strokeColor: strokeColor,
+                    strokeOpacity: strokeOpacity,
+                    strokeWeight: polygon.strokeWidth,
+                    clickable: false
+                });
+                gpolygon.setMap(gmap);
+                gpolygonById[polygon.id] = gpolygon;
+            }
+        },
+
+        /**
+         * Remove the given polygons from the map.
+         *
+         * @param {String} id
+         *     Map place holder ID.
+         * @param {String} jsonPolygons
+         *     Polygons to remove.
+         */
+        'removePolygons': function(id, jsonPolygons) {
+            var polygons = JSON.parse(jsonPolygons);
+
+            for (var p = 0; p < polygons.length; p++) {
+                var polygon = polygons[p];
+                var gpolygon = gpolygonById[polygon.id];
+                if (gpolygon) {
+                    gpolygon.setMap(null);
+                    delete gpolygonById[polygon.id];
+                }
+            }
+        },
+
+        /**
+         * Decompose a color in the format 0xOORRGGBB where
+         * OO is the opacity (FF = opaque, 00 = transparent),
+         * RR, GG, BB are the red, green and blue colors.
+         *
+         * @private
+         * @param {Number} color
+         * @return {{
+         *     opacity: Number,
+         *     red: Number,
+         *     green: Number,
+         *     blue: Number
+         * }} decomposed color (0 <= opacity <= 1, 0 <= red | green | blue <= 255)
+         */
+        '_decomposeColor': function(color) {
+            return {
+                opacity: Math.round( color / 0x00FFFFFF),
+                red:     Math.round((color & 0x00FF0000) / 0xFFFF),
+                green:   Math.round((color & 0x0000FF00) / 0xFF),
+                blue:    Math.round( color & 0x000000FF)
+            };
         }
     };
 

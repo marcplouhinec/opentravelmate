@@ -47,6 +47,7 @@ import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.maps.model.TileProvider;
@@ -86,6 +87,8 @@ public class NativeMap {
 	private final Map<String, MapButtonController> mapButtonControllerByPlaceHolderId = new HashMap<String, MapButtonController>();
 	private final SparseArray<com.google.android.gms.maps.model.Polyline> gpolylineById =
 			new SparseArray<com.google.android.gms.maps.model.Polyline>();
+	private final SparseArray<com.google.android.gms.maps.model.Polygon> gpolygonById =
+			new SparseArray<com.google.android.gms.maps.model.Polygon>();
 	
 	/**
 	 * Create a NativeMap object.
@@ -827,7 +830,8 @@ public class NativeMap {
 				com.google.android.gms.maps.model.Polyline gpolyline = map.addPolyline(new PolylineOptions()
 					.add(gpoints)
 					.color(polyline.color)
-					.width(polyline.width));
+					.width(polyline.width)
+					.zIndex(2000F));
 				gpolylineById.put(polyline.id, gpolyline);
 			}
 		});
@@ -857,6 +861,79 @@ public class NativeMap {
 				if (gpolyline != null) {
 					gpolyline.remove();
 					gpolylineById.remove(polyline.id);
+				}
+			}
+		});
+	}
+	
+	/**
+	 * Add the given polygons on the map.
+	 * 
+	 * @param id
+     *     Map place holder ID.
+	 * @param jsonPolygons
+     *     Polygons to add.
+	 */
+	@JavascriptInterface
+	public void addPolygons(final String id, final String jsonPolygons) {
+		final GoogleMap map = getGoogleMapSync(id);
+		
+		UIThreadExecutor.execute(new Runnable() {
+			@Override public void run() {
+				List<Polygon> polygons;
+				try {
+					polygons = Polygon.fromJsonPolygonArray(new JSONArray(jsonPolygons));
+				} catch (JSONException e) {
+					exceptionListener.onException(false, e);
+					return;
+				}
+				
+				for (Polygon polygon : polygons) {
+					com.google.android.gms.maps.model.LatLng[] gpoints =
+							new com.google.android.gms.maps.model.LatLng[polygon.path.size()];
+					for (int i = 0; i < polygon.path.size(); i++) {
+						LatLng latlng = polygon.path.get(i);
+						gpoints[i] = new com.google.android.gms.maps.model.LatLng(latlng.lat, latlng.lng);
+					}
+					
+					com.google.android.gms.maps.model.Polygon gpolygon = map.addPolygon(new PolygonOptions()
+						.add(gpoints)
+						.fillColor(polygon.fillColor)
+						.strokeColor(polygon.strokeColor)
+						.strokeWidth(polygon.strokeWidth)
+						.zIndex(1000F));
+					gpolygonById.put(polygon.id, gpolygon);
+				}
+			}
+		});
+	}
+	
+	/**
+	 * Remove the given polygons from the map.
+	 * 
+	 * @param id
+     *     Map place holder ID.
+	 * @param jsonPolygons
+     *     Polygons to remove.
+	 */
+	@JavascriptInterface
+	public void removePolygons(final String id, final String jsonPolygons) {
+		UIThreadExecutor.execute(new Runnable() {
+			@Override public void run() {
+				List<Polygon> polygons;
+				try {
+					polygons = Polygon.fromJsonPolygonArray(new JSONArray(jsonPolygons));
+				} catch (JSONException e) {
+					exceptionListener.onException(false, e);
+					return;
+				}
+				
+				for (Polygon polygon : polygons) {
+					com.google.android.gms.maps.model.Polygon gpolygon = gpolygonById.get(polygon.id);
+					if (gpolygon != null) {
+						gpolygon.remove();
+						gpolygonById.remove(polygon.id);
+					}
 				}
 			}
 		});
