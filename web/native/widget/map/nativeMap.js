@@ -335,11 +335,13 @@ define([
             for (var i = 0; i < markers.length; i += 1) {
                 var marker = markers[i];
                 var gmarker = gmarkerById[marker.id];
-                delete gmarkerById[marker.id];
+                if (gmarker) {
+                    delete gmarkerById[marker.id];
 
-                markerRTreeByPlaceHolderId[id].removeMarker(marker);
+                    markerRTreeByPlaceHolderId[id].removeMarker(marker);
 
-                gmarker.setMap(null);
+                    gmarker.setMap(null);
+                }
             }
         },
 

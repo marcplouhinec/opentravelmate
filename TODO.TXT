@@ -39,7 +39,9 @@ Tasks
   returned instead of the waypoint markers when the user click or put the cursor on it. So the waypoint
   is not highlighted and the selection menu is not shown.
 
-- Bug (android): the itinerary polygons are not correctly displayed after zooming.
+- Bug (android): the highlighted waypoints are not correctly displayed if the map zoom is not an integer.
+
+- When the user close the itinerary panel, show a confirmation message box and clear the itinerary.
 
 
 Develoment tasks
