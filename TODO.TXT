@@ -41,8 +41,6 @@ Tasks
 
 - Bug (android): the highlighted waypoints are not correctly displayed if the map zoom is not an integer.
 
-- When the user close the itinerary panel, show a confirmation message box and clear the itinerary.
-
 
 Develoment tasks
 ----------------
@@ -56,7 +54,7 @@ Develoment tasks
 6.  [X] Handle bus stop or found place selection on the map
 7.  [X] Create the "show/hide satellite" map button
 8.  [X] Create the "show current location" map button
-9.  [ ] Allow users to find itineraries
+9.  [X] Allow users to find itineraries
 10. [ ] Allow users to see timetables
 11. [ ] Create a notification system (show loading, errors, ...etc)
 12. [ ] Correctly handle the main menu (show the items until there is no place left and put other items in the "more" panel)
