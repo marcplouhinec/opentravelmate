@@ -31,8 +31,6 @@ Tasks
 
 - Add time and price in the itinerary objects.
 
-- Create Map.addPolygons() and removePolygons().
-
 - Change Map.addPolyline() to Map.addPolylines(), Map.removePolyline() to Map.removePolylines().
 
 - Bug (web version): when an itinerary is displayed and the map is zoomed, the flag markers are
