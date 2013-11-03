@@ -39,6 +39,8 @@ Tasks
 
 - Bug (android): the highlighted waypoints are not correctly displayed if the map zoom is not an integer.
 
+- The timetable view must be improved since it is easy to get lost in the times.
+
 
 Develoment tasks
 ----------------
