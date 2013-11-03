@@ -784,7 +784,7 @@ public class NativeMap {
      * @param id
      *     Map place holder ID.
      * @param mapType
-     *     'ROADMAP' or 'SATELLITE'.
+     *     'ROADMAP', 'HYBRID' or 'SATELLITE'.
      */
 	@JavascriptInterface
 	public void setMapType(final String id, final String mapType) {
@@ -792,7 +792,13 @@ public class NativeMap {
 		
 		UIThreadExecutor.execute(new Runnable() {
 			@Override public void run() {
-				map.setMapType("SATELLITE".equals(mapType) ? GoogleMap.MAP_TYPE_SATELLITE : GoogleMap.MAP_TYPE_NORMAL);
+				int gmapType = GoogleMap.MAP_TYPE_NORMAL;
+				if ("SATELLITE".equals(mapType)) {
+					gmapType = GoogleMap.MAP_TYPE_SATELLITE;
+				} else if ("HYBRID".equals(mapType)) {
+					gmapType = GoogleMap.MAP_TYPE_HYBRID;
+				}
+				map.setMapType(gmapType);
 				mapButtonControllerByPlaceHolderId.get(id).setMapType(mapType);
 			}
 		});

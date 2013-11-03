@@ -108,7 +108,7 @@ public class MapButtonController {
 	 * @param mapType SATELLITE or ROADMAP
 	 */
 	public void setMapType(String mapType) {
-		int backgroundResource = "SATELLITE".equals(mapType) ? R.drawable.mapbutton_selector_light : R.drawable.mapbutton_selector;
+		int backgroundResource = "ROADMAP".equals(mapType) ? R.drawable.mapbutton_selector : R.drawable.mapbutton_selector_light;
 		for (ImageButton button : imageButtons) {
 			button.setBackgroundResource(backgroundResource);
 		}

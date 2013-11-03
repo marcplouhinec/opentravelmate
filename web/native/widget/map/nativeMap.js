@@ -589,12 +589,24 @@ define([
          * @param {String} id
          *     Map place holder ID.
          * @param {String} mapType
-         *     'ROADMAP' or 'SATELLITE'.
+         *     'ROADMAP', 'HYBRID' or 'SATELLITE'.
          */
         'setMapType': function(id, mapType) {
             var gmap = gmapByPlaceHolderId[id];
+            var gmapType;
+            switch (mapType) {
+                case 'ROADMAP':
+                    gmapType = google.maps.MapTypeId.ROADMAP;
+                    break;
+                case 'HYBRID':
+                    gmapType = google.maps.MapTypeId.HYBRID;
+                    break;
+                default:
+                    gmapType = google.maps.MapTypeId.SATELLITE;
+                    break;
+            }
             gmap.setOptions({
-                mapTypeId: mapType === 'ROADMAP' ? google.maps.MapTypeId.ROADMAP : google.maps.MapTypeId.SATELLITE
+                mapTypeId: gmapType
             });
         },
 
