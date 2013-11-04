@@ -10,7 +10,7 @@ Tasks
 
 -Add params to nativeMap.buildView in order to set the default latitude/longitude/zoom.
 
--Document the AutoCompleteTextInput widget
+-Document the shared extensions.
 
 -Create 2 generic panels:
  - menu panel: displayed under the menu (shown on demand for small screens, always displayed for big screens)
@@ -53,7 +53,7 @@ Develoment tasks
 7.  [X] Create the "show/hide satellite" map button
 8.  [X] Create the "show current location" map button
 9.  [X] Allow users to find itineraries
-10. [ ] Allow users to see timetables
+10. [X] Allow users to see timetables
 11. [ ] Create a notification system (show loading, errors, ...etc)
 12. [ ] Correctly handle the main menu (show the items until there is no place left and put other items in the "more" panel)
 13. [ ] Create an extension gallery and allow the user to install extensions locally
