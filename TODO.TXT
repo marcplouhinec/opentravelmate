@@ -31,8 +31,6 @@ Tasks
 
 - Add time and price in the itinerary objects.
 
-- Change Map.addPolyline() to Map.addPolylines(), Map.removePolyline() to Map.removePolylines().
-
 - Bug (web version): when an itinerary is displayed and the map is zoomed, the flag markers are
   returned instead of the waypoint markers when the user click or put the cursor on it. So the waypoint
   is not highlighted and the selection menu is not shown.

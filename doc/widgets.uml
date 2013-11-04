@@ -1743,23 +1743,23 @@
 </XPD:OBJ>
 </XPD:OBJ>
 <XPD:OBJ name="Operations[21]" type="UMLOperation" guid="rWwMVcO/G0SGDLs6A7neWQAA">
-<XPD:ATTR name="Name" type="string">addPolyline</XPD:ATTR>
+<XPD:ATTR name="Name" type="string">addPolylines</XPD:ATTR>
 <XPD:REF name="Owner">9ScC0Qkmrkm6KIZFnBm5yQAA</XPD:REF>
 <XPD:ATTR name="#Parameters" type="integer">1</XPD:ATTR>
-<XPD:OBJ name="Parameters[0]" type="UMLParameter" guid="OqZ3AfEsR0mbcHmYyFHFOwAA">
-<XPD:ATTR name="Name" type="string">polyline</XPD:ATTR>
+<XPD:OBJ name="Parameters[0]" type="UMLParameter" guid="2JgqJg9PB0qHFbGyrbLkQQAA">
+<XPD:ATTR name="Name" type="string">polylines</XPD:ATTR>
+<XPD:ATTR name="TypeExpression" type="string">List&lt;Polyline&gt;</XPD:ATTR>
 <XPD:REF name="BehavioralFeature">rWwMVcO/G0SGDLs6A7neWQAA</XPD:REF>
-<XPD:REF name="Type_">GQmz+j7mgkqMjh+hXg0JXwAA</XPD:REF>
 </XPD:OBJ>
 </XPD:OBJ>
 <XPD:OBJ name="Operations[22]" type="UMLOperation" guid="1+zJT8CCykKNjDTeQHaeygAA">
-<XPD:ATTR name="Name" type="string">removePolyline</XPD:ATTR>
+<XPD:ATTR name="Name" type="string">removePolylines</XPD:ATTR>
 <XPD:REF name="Owner">9ScC0Qkmrkm6KIZFnBm5yQAA</XPD:REF>
 <XPD:ATTR name="#Parameters" type="integer">1</XPD:ATTR>
-<XPD:OBJ name="Parameters[0]" type="UMLParameter" guid="pS7MpvCZvUS4UdY9/qLc4AAA">
-<XPD:ATTR name="Name" type="string">polyline</XPD:ATTR>
+<XPD:OBJ name="Parameters[0]" type="UMLParameter" guid="GZf3uPPGskCEJm++cEHKJgAA">
+<XPD:ATTR name="Name" type="string">polylines</XPD:ATTR>
+<XPD:ATTR name="TypeExpression" type="string">List&lt;Polyline&gt;</XPD:ATTR>
 <XPD:REF name="BehavioralFeature">1+zJT8CCykKNjDTeQHaeygAA</XPD:REF>
-<XPD:REF name="Type_">GQmz+j7mgkqMjh+hXg0JXwAA</XPD:REF>
 </XPD:OBJ>
 </XPD:OBJ>
 <XPD:OBJ name="Operations[23]" type="UMLOperation" guid="IS/FEEoe60mxUswxUel/SAAA">
@@ -2492,8 +2492,8 @@
 <XPD:REF name="Views[2]">huPqAoiZWUyVjWe1YGgCOQAA</XPD:REF>
 <XPD:REF name="Views[3]">gNEh3FKZW0GUUihZt0ckbQAA</XPD:REF>
 <XPD:ATTR name="#TypedParameters" type="integer">2</XPD:ATTR>
-<XPD:REF name="TypedParameters[0]">pS7MpvCZvUS4UdY9/qLc4AAA</XPD:REF>
-<XPD:REF name="TypedParameters[1]">OqZ3AfEsR0mbcHmYyFHFOwAA</XPD:REF>
+<XPD:REF name="TypedParameters[0]" pathname="polyline">pS7MpvCZvUS4UdY9/qLc4AAA</XPD:REF>
+<XPD:REF name="TypedParameters[1]" pathname="polyline">OqZ3AfEsR0mbcHmYyFHFOwAA</XPD:REF>
 <XPD:ATTR name="#Associations" type="integer">1</XPD:ATTR>
 <XPD:REF name="Associations[0]">5pKNttjckkGdNiY5VEa24gAA</XPD:REF>
 <XPD:ATTR name="#Attributes" type="integer">4</XPD:ATTR>
@@ -2599,8 +2599,8 @@
 <XPD:REF name="Participant">ttYMsrUdOEqaoFF6PcL9HgAA</XPD:REF>
 <XPD:ATTR name="#Views" type="integer">4</XPD:ATTR>
 <XPD:REF name="Views[0]">oAr0uNt63kSL1Q5oLP/qzQAA</XPD:REF>
-<XPD:REF name="Views[1]">804RcfoHPEemIwGVcwzC+AAA</XPD:REF>
-<XPD:REF name="Views[2]">LsoEmHEahkC7tslfg4Z/8wAA</XPD:REF>
+<XPD:REF name="Views[1]">LsoEmHEahkC7tslfg4Z/8wAA</XPD:REF>
+<XPD:REF name="Views[2]">804RcfoHPEemIwGVcwzC+AAA</XPD:REF>
 <XPD:REF name="Views[3]">XvJU3jI2AkmFD7ukSBPvVQAA</XPD:REF>
 </XPD:OBJ>
 <XPD:OBJ name="Connections[1]" type="UMLAssociationEnd" guid="uq6HJBXRekeiInsE5pkFwAAA">
@@ -2610,8 +2610,8 @@
 <XPD:REF name="Participant">9ScC0Qkmrkm6KIZFnBm5yQAA</XPD:REF>
 <XPD:ATTR name="#Views" type="integer">4</XPD:ATTR>
 <XPD:REF name="Views[0]">RSltl6YSLUGVBb2V6eJIbwAA</XPD:REF>
-<XPD:REF name="Views[1]">xHw5Ar5sw0CffmXDbBnQuwAA</XPD:REF>
-<XPD:REF name="Views[2]">ItBqCA8kmUKOmEo/rKz9hAAA</XPD:REF>
+<XPD:REF name="Views[1]">ItBqCA8kmUKOmEo/rKz9hAAA</XPD:REF>
+<XPD:REF name="Views[2]">xHw5Ar5sw0CffmXDbBnQuwAA</XPD:REF>
 <XPD:REF name="Views[3]">kwGqYtDrdEOvJwRr8sxuAwAA</XPD:REF>
 </XPD:OBJ>
 </XPD:OBJ>

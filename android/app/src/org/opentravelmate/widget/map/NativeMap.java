@@ -805,68 +805,72 @@ public class NativeMap {
 	}
 	
 	/**
-     * Add the given polyline on the map.
+     * Show the given polylines on the map.
      *
      * @param id
      *     Map place holder ID.
-     * @param jsonPolyline
-     *     Polyline to add.
+     * @param jsonPolylines
+     *     Polylines to add.
      */
 	@JavascriptInterface
-	public void addPolyline(final String id, final String jsonPolyline) {
+	public void addPolylines(final String id, final String jsonPolylines) {
 		final GoogleMap map = getGoogleMapSync(id);
 		
 		UIThreadExecutor.execute(new Runnable() {
 			@Override public void run() {
-				Polyline polyline;
+				List<Polyline> polylines;
 				try {
-					polyline = Polyline.fromJsonPolyline(new JSONObject(jsonPolyline));
+					polylines = Polyline.fromJsonPolylines(new JSONArray(jsonPolylines));
 				} catch (JSONException e) {
 					exceptionListener.onException(false, e);
 					return;
 				}
 				
-				com.google.android.gms.maps.model.LatLng[] gpoints =
-						new com.google.android.gms.maps.model.LatLng[polyline.path.size()];
-				for (int i = 0; i < polyline.path.size(); i++) {
-					LatLng latlng = polyline.path.get(i);
-					gpoints[i] = new com.google.android.gms.maps.model.LatLng(latlng.lat, latlng.lng);
+				for (Polyline polyline : polylines) {
+					com.google.android.gms.maps.model.LatLng[] gpoints =
+							new com.google.android.gms.maps.model.LatLng[polyline.path.size()];
+					for (int i = 0; i < polyline.path.size(); i++) {
+						LatLng latlng = polyline.path.get(i);
+						gpoints[i] = new com.google.android.gms.maps.model.LatLng(latlng.lat, latlng.lng);
+					}
+					
+					com.google.android.gms.maps.model.Polyline gpolyline = map.addPolyline(new PolylineOptions()
+						.add(gpoints)
+						.color(polyline.color)
+						.width(polyline.width)
+						.zIndex(2000F));
+					gpolylineById.put(polyline.id, gpolyline);
 				}
-				
-				com.google.android.gms.maps.model.Polyline gpolyline = map.addPolyline(new PolylineOptions()
-					.add(gpoints)
-					.color(polyline.color)
-					.width(polyline.width)
-					.zIndex(2000F));
-				gpolylineById.put(polyline.id, gpolyline);
 			}
 		});
 	}
 	
 	/**
-     * Remove the given polyline on the map.
+     * Remove the given polylines from the map.
      *
      * @param id
      *     Map place holder ID.
-     * @param jsonPolyline
-     *     Polyline to remove.
+     * @param jsonPolylines
+     *     Polylines to remove.
      */
 	@JavascriptInterface
-	public void removePolyline(final String id, final String jsonPolyline) {
+	public void removePolylines(final String id, final String jsonPolylines) {
 		UIThreadExecutor.execute(new Runnable() {
 			@Override public void run() {
-				Polyline polyline;
+				List<Polyline> polylines;
 				try {
-					polyline = Polyline.fromJsonPolyline(new JSONObject(jsonPolyline));
+					polylines = Polyline.fromJsonPolylines(new JSONArray(jsonPolylines));
 				} catch (JSONException e) {
 					exceptionListener.onException(false, e);
 					return;
 				}
 				
-				com.google.android.gms.maps.model.Polyline gpolyline = gpolylineById.get(polyline.id);
-				if (gpolyline != null) {
-					gpolyline.remove();
-					gpolylineById.remove(polyline.id);
+				for (Polyline polyline : polylines) {
+					com.google.android.gms.maps.model.Polyline gpolyline = gpolylineById.get(polyline.id);
+					if (gpolyline != null) {
+						gpolyline.remove();
+						gpolylineById.remove(polyline.id);
+					}
 				}
 			}
 		});

@@ -611,56 +611,63 @@ define([
         },
 
         /**
-         * Add the given polyline on the map.
+         * Show the given polylines on the map.
          *
          * @param {String} id
          *     Map place holder ID.
-         * @param {String} jsonPolyline
-         *     Polyline to add.
+         * @param {String} jsonPolylines
+         *     Polylines to add.
          */
-        'addPolyline': function(id, jsonPolyline) {
+        'addPolylines': function(id, jsonPolylines) {
             var gmap = gmapByPlaceHolderId[id];
-            var polyline = JSON.parse(jsonPolyline);
+            var polylines = /** @type {Array} */ JSON.parse(jsonPolylines);
 
-            // Convert the path
-            var gpath = [];
-            for (var i = 0; i < polyline.path.length; i++) {
-                var latLng = polyline.path[i];
-                gpath.push(new google.maps.LatLng(latLng.lat, latLng.lng));
+            for (var p = 0; p < polylines.length; p++) {
+                var polyline = polylines[p];
+
+                // Convert the path
+                var gpath = [];
+                for (var i = 0; i < polyline.path.length; i++) {
+                    var latLng = polyline.path[i];
+                    gpath.push(new google.maps.LatLng(latLng.lat, latLng.lng));
+                }
+
+                // Convert the color
+                var decomposedColor = this._decomposeColor(polyline.color);
+                var strokeOpacity = decomposedColor.opacity / 0xFF;
+                var strokeColor = 'rgb(' + decomposedColor.red + ', ' + decomposedColor.green + ', ' + decomposedColor.blue + ')';
+
+                // Create and show the poly line
+                var gpolyline = new google.maps.Polyline({
+                    path: gpath,
+                    strokeColor: strokeColor,
+                    strokeOpacity: strokeOpacity,
+                    strokeWeight: polyline.width,
+                    clickable: false
+                });
+                gpolyline.setMap(gmap);
+                gpolylineById[polyline.id] = gpolyline;
             }
-
-            // Convert the color
-            var decomposedColor = this._decomposeColor(polyline.color);
-            var strokeOpacity = decomposedColor.opacity / 0xFF;
-            var strokeColor = 'rgb(' + decomposedColor.red + ', ' + decomposedColor.green + ', ' + decomposedColor.blue + ')';
-
-            // Create and show the poly line
-            var gpolyline = new google.maps.Polyline({
-                path: gpath,
-                strokeColor: strokeColor,
-                strokeOpacity: strokeOpacity,
-                strokeWeight: polyline.width,
-                clickable: false
-            });
-            gpolyline.setMap(gmap);
-            gpolylineById[polyline.id] = gpolyline;
         },
 
         /**
-         * Remove the given polyline from the map.
+         * Remove the given polylines from the map.
          *
          * @param {String} id
          *     Map place holder ID.
-         * @param {String} jsonPolyline
-         *     Polyline to remove.
+         * @param {String} jsonPolylines
+         *     Polylines to remove.
          */
-        'removePolyline': function(id, jsonPolyline) {
-            var polyline = JSON.parse(jsonPolyline);
+        'removePolylines': function(id, jsonPolylines) {
+            var polylines = /** @type {Array} */ JSON.parse(jsonPolylines);
 
-            var gpolyline = gpolylineById[polyline.id];
-            if (gpolyline) {
-                gpolyline.setMap(null);
-                delete gpolylineById[polyline.id];
+            for (var p = 0; p < polylines.length; p++) {
+                var polyline = polylines[p];
+                var gpolyline = gpolylineById[polyline.id];
+                if (gpolyline) {
+                    gpolyline.setMap(null);
+                    delete gpolylineById[polyline.id];
+                }
             }
         },
 
