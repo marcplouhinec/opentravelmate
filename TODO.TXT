@@ -37,6 +37,8 @@ Tasks
 
 - Bug (android): the highlighted waypoints are not correctly displayed if the map zoom is not an integer.
 
+- Bug: when selecting 'More information' on the 'Vannérus' bus stop (line 5), two lines 5 are shown whereas this line only stops to this station in one direction.
+
 
 Develoment tasks
 ----------------
