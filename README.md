@@ -55,7 +55,7 @@ Google Play services client library:
 
 Licence
 -------
-Copyright (C) 2013, Marc Plouhinec (marc.plouhinec@gmail.com)
+Copyright (C) 2013-2014, Marc Plouhinec (marc.plouhinec@gmail.com)
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
