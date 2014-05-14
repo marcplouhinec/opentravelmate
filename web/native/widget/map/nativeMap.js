@@ -138,6 +138,26 @@ define([
 			mapCanvas.style.height = layoutParams.height + 'px';
 			mapCanvas.style.visibility = layoutParams.visible ? 'visible' : 'hidden';
 			document.body.appendChild(mapCanvas);
+
+            // If necessary, create a CSS class to apply a gray-scale effect on tiles
+            var style = /** @type {HTMLStyleElement} */ document.getElementById('otm-native-map-style');
+            if (!style) {
+                // Thanks to http://www.karlhorky.com/2012/06/cross-browser-image-grayscale-with-css.html
+                style = document.createElement('style');
+                style.id = 'otm-native-map-style';
+                style.type = 'text/css';
+                style.innerHTML = '.otmNativeMapGrayscale {\n' +
+                    '    filter: url("data:image/svg+xml;utf8,' +
+                             '<svg xmlns=\'http://www.w3.org/2000/svg\'>' +
+                                 '<filter id=\'grayscale\'>' +
+                                     '<feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/>' +
+                                 '</filter>' +
+                             '</svg>#grayscale");\n' +
+                    '    filter: gray; /* IE6-9 */\n' +
+                    '    -webkit-filter: grayscale(100%); /* Chrome 19+, Safari 6+, Safari 6+ iOS */\n' +
+                    '}';
+                document.getElementsByTagName('head')[0].appendChild(style);
+            }
 			
 			// Initialize the map
             var gmap = new google.maps.Map(mapCanvas, {
@@ -218,6 +238,9 @@ define([
                     // Create a div block with the tile picture as a background picture (the web browser will load it automatically)
                     var divTile = /** @type {HTMLElement} */ ownerDocument.createElement('DIV');
                     divTile.setAttribute('id', zoom + '_' + coord.x + '_' + coord.y);
+                    if (tileOverlay.enableGrayscaleFilter) {
+                        divTile.className = 'otmNativeMapGrayscale';
+                    }
                     divTile.style.width = '256px';
                     divTile.style.height = '256px';
                     divTile.style.backgroundImage = 'url(' + tileUrl + ')';
@@ -227,6 +250,21 @@ define([
                     return divTile;
                 }
             });
+        },
+
+        /**
+         * Remove an overlay from the map.
+         *
+         * @param {String} id
+         *     Map place holder ID.
+         * @param {String} jsonTileOverlay
+         *     JSON serialized TileOverlay.
+         */
+        'removeTileOverlay': function(id, jsonTileOverlay) {
+            var tileOverlay = JSON.parse(jsonTileOverlay);
+            var gmap = gmapByPlaceHolderId[id];
+
+            gmap.overlayMapTypes.removeAt(tileOverlay.zIndex);
         },
 
         /**

@@ -89,6 +89,8 @@ public class NativeMap {
 			new SparseArray<com.google.android.gms.maps.model.Polyline>();
 	private final SparseArray<com.google.android.gms.maps.model.Polygon> gpolygonById =
 			new SparseArray<com.google.android.gms.maps.model.Polygon>();
+	private final SparseArray<com.google.android.gms.maps.model.TileOverlay> tileOverlayById =
+			new SparseArray<com.google.android.gms.maps.model.TileOverlay>();
 	
 	/**
 	 * Create a NativeMap object.
@@ -230,9 +232,36 @@ public class NativeMap {
 					TileOverlay tileOverlay = TileOverlay.fromJsonTileOverlay(new JSONObject(jsonTileOverlay));
 					
 					TileProvider tileProvider = new UrlPatternTileProvider(tileOverlay.tileUrlPattern);
-					map.addTileOverlay(new TileOverlayOptions()
+					com.google.android.gms.maps.model.TileOverlay gTileOverlay = map.addTileOverlay(new TileOverlayOptions()
 						.tileProvider(tileProvider)
 						.zIndex(tileOverlay.zIndex));
+					tileOverlayById.put(tileOverlay.id, gTileOverlay);
+				} catch (JSONException e) {
+					exceptionListener.onException(false, e);
+				}
+			}
+		});
+	}
+	
+	/**
+	 * Remove an overlay from the map.
+	 * 
+	 * @param id
+     *     Map place holder ID.
+	 * @param jsonTileOverlay
+	 *     JSON serialized TileOverlay.
+	 */
+	@JavascriptInterface
+	public void removeTileOverlay(final String id, final String jsonTileOverlay) {
+		UIThreadExecutor.execute(new Runnable() {
+			@Override public void run() {
+				try {
+					TileOverlay tileOverlay = TileOverlay.fromJsonTileOverlay(new JSONObject(jsonTileOverlay));
+					
+					com.google.android.gms.maps.model.TileOverlay gTileOverlay = tileOverlayById.get(tileOverlay.id);
+					if (gTileOverlay != null) {
+						gTileOverlay.remove();
+					}
 				} catch (JSONException e) {
 					exceptionListener.onException(false, e);
 				}

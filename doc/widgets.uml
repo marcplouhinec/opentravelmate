@@ -319,8 +319,8 @@
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
 <XPD:ATTR name="Left" type="integer">944</XPD:ATTR>
 <XPD:ATTR name="Top" type="integer">352</XPD:ATTR>
-<XPD:ATTR name="Width" type="integer">117</XPD:ATTR>
-<XPD:ATTR name="Height" type="integer">82</XPD:ATTR>
+<XPD:ATTR name="Width" type="integer">172</XPD:ATTR>
+<XPD:ATTR name="Height" type="integer">95</XPD:ATTR>
 <XPD:REF name="Model">VIBlCK0RGUySe80Jdw3ydQAA</XPD:REF>
 <XPD:OBJ name="NameCompartment" type="UMLNameCompartmentView" guid="aS4p3rb8EEmhwGtvgDhr1QAA">
 <XPD:OBJ name="NameLabel" type="LabelView" guid="TxZ4w4D1Vk+Zrboq+RGmDwAA">
@@ -348,7 +348,7 @@
 <XPD:OBJ name="OwnedViews[8]" type="UMLAssociationView" guid="nSJ2YRSqAki2E3830XnaNQAA">
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
-<XPD:ATTR name="Points" type="Points">944,408;868,429</XPD:ATTR>
+<XPD:ATTR name="Points" type="Points">944,419;868,437</XPD:ATTR>
 <XPD:REF name="Model">r5ZNZWPukkSfoEpeIg7NBQAA</XPD:REF>
 <XPD:REF name="Head">XI+OWSXR9U2Hozg3bm20DwAA</XPD:REF>
 <XPD:REF name="Tail">IWtZr10EekiyRfaK1P86fQAA</XPD:REF>
@@ -1832,7 +1832,7 @@
 <XPD:REF name="TypedParameters[0]">To7deq7tRE2uM+Jt7/LZFAAA</XPD:REF>
 <XPD:ATTR name="#Associations" type="integer">1</XPD:ATTR>
 <XPD:REF name="Associations[0]">FmPTS+jtEEGRFi2t7K9QqwAA</XPD:REF>
-<XPD:ATTR name="#Attributes" type="integer">3</XPD:ATTR>
+<XPD:ATTR name="#Attributes" type="integer">4</XPD:ATTR>
 <XPD:OBJ name="Attributes[0]" type="UMLAttribute" guid="jZfK7LPsa06e0rpvv6Bl3QAA">
 <XPD:ATTR name="Name" type="string">id</XPD:ATTR>
 <XPD:ATTR name="TypeExpression" type="string">Integer</XPD:ATTR>
@@ -1846,6 +1846,10 @@
 <XPD:OBJ name="Attributes[2]" type="UMLAttribute" guid="ScmAjtcN5UOxGUW3Cerd4AAA">
 <XPD:ATTR name="Name" type="string">tileUrlPattern</XPD:ATTR>
 <XPD:ATTR name="TypeExpression" type="string">String</XPD:ATTR>
+<XPD:REF name="Owner">VIBlCK0RGUySe80Jdw3ydQAA</XPD:REF>
+</XPD:OBJ>
+<XPD:OBJ name="Attributes[3]" type="UMLAttribute" guid="K/cB2cdxU0abbzdoih/MtgAA">
+<XPD:ATTR name="Name" type="string">enableGrayscaleFilter: Boolean</XPD:ATTR>
 <XPD:REF name="Owner">VIBlCK0RGUySe80Jdw3ydQAA</XPD:REF>
 </XPD:OBJ>
 </XPD:OBJ>
@@ -2491,9 +2495,6 @@
 <XPD:REF name="Views[1]">WAAN06jTOk2GEtBH16zz0AAA</XPD:REF>
 <XPD:REF name="Views[2]">huPqAoiZWUyVjWe1YGgCOQAA</XPD:REF>
 <XPD:REF name="Views[3]">gNEh3FKZW0GUUihZt0ckbQAA</XPD:REF>
-<XPD:ATTR name="#TypedParameters" type="integer">2</XPD:ATTR>
-<XPD:REF name="TypedParameters[0]" pathname="polyline">pS7MpvCZvUS4UdY9/qLc4AAA</XPD:REF>
-<XPD:REF name="TypedParameters[1]" pathname="polyline">OqZ3AfEsR0mbcHmYyFHFOwAA</XPD:REF>
 <XPD:ATTR name="#Associations" type="integer">1</XPD:ATTR>
 <XPD:REF name="Associations[0]">5pKNttjckkGdNiY5VEa24gAA</XPD:REF>
 <XPD:ATTR name="#Attributes" type="integer">4</XPD:ATTR>

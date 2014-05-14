@@ -24,6 +24,11 @@ public class TileOverlay {
 	 * URL to a given tile with the ${zoom}, ${x} and ${y} place-holders.
 	 */
 	public final String tileUrlPattern;
+	
+	/**
+	 * If true, display the TileOverlay in gray.
+	 */
+	public final boolean enableGrayscaleFilter;
 
 	/**
 	 * Create a new TileOverlay.
@@ -31,11 +36,13 @@ public class TileOverlay {
 	 * @param id
 	 * @param zIndex
 	 * @param tileUrlPattern
+	 * @param enableGrayscaleFilter
 	 */
-	public TileOverlay(int id, float zIndex, String tileUrlPattern) {
+	public TileOverlay(int id, float zIndex, String tileUrlPattern, boolean enableGrayscaleFilter) {
 		this.id = id;
 		this.zIndex = zIndex;
 		this.tileUrlPattern = tileUrlPattern;
+		this.enableGrayscaleFilter = enableGrayscaleFilter;
 	}
 	
 	/**
@@ -49,6 +56,7 @@ public class TileOverlay {
 		return new TileOverlay(
 				jsonTileOverlay.getInt("id"),
 				(float)jsonTileOverlay.getDouble("zIndex"),
-				jsonTileOverlay.getString("tileUrlPattern"));
+				jsonTileOverlay.getString("tileUrlPattern"),
+				jsonTileOverlay.getBoolean("enableGrayscaleFilter"));
 	}
 }
