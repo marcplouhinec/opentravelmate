@@ -14,6 +14,7 @@ import org.opentravelmate.geolocation.NativeGeolocation;
 import org.opentravelmate.httpserver.ExtensionRequestHandler;
 import org.opentravelmate.httpserver.HttpServer;
 import org.opentravelmate.httpserver.NativeRequestHandler;
+import org.opentravelmate.httpserver.ImageRequestHandler;
 import org.opentravelmate.widget.HtmlLayout;
 import org.opentravelmate.widget.HtmlLayoutParams;
 import org.opentravelmate.widget.map.NativeMap;
@@ -65,6 +66,8 @@ public class MainActivity extends FragmentActivity {
 		requestHandlerByPattern.put("/native/*", nativeRequestHandler);
 		ExtensionRequestHandler extensionRequestHandler = new ExtensionRequestHandler(getAssets());
 		requestHandlerByPattern.put("/extensions/*", extensionRequestHandler);
+		ImageRequestHandler tileRequestHandler = new ImageRequestHandler();
+		requestHandlerByPattern.put("/image/*", tileRequestHandler);
 		httpServer = new HttpServer(requestHandlerByPattern, exceptionListener);
 		try {
 			httpServer.start();

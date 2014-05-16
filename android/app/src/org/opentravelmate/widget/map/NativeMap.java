@@ -1,7 +1,9 @@
 package org.opentravelmate.widget.map;
 
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -1055,10 +1057,19 @@ public class NativeMap {
 
 		@Override
 		public URL getTileUrl(final int x, final int y, final int zoom) {
-			String url = tileUrlPattern
+			String originalUrl = tileUrlPattern
 					.replace("${zoom}", String.valueOf(zoom))
 					.replace("${x}", String.valueOf(x))
 					.replace("${y}", String.valueOf(y));
+			
+			// Use the image interceptor in order to cache the tile in the disk
+			String url;
+			try {
+				url = baseUrl + "image/source/" + URLEncoder.encode(originalUrl, "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				url = originalUrl;
+			}
+			
 			try {
 				return new URL(url);
 			} catch (MalformedURLException e) {

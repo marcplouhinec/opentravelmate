@@ -2,6 +2,7 @@ package org.opentravelmate.commons;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -43,14 +44,14 @@ public class IOUtils {
 	}
 	
 	/**
-	 * Close an input stream without throwing an exception.
+	 * Close an closeable without throwing an exception.
 	 * 
-	 * @param inputStream
+	 * @param closeable
 	 */
-	public static void closeQuietly(InputStream inputStream) {
-		if (inputStream != null) {
+	public static void closeQuietly(Closeable closeable) {
+		if (closeable != null) {
 			try {
-				inputStream.close();
+				closeable.close();
 			} catch (IOException e) {
 				// Do nothing
 			}
