@@ -69,7 +69,6 @@ public class NativeRequestHandler implements HttpRequestHandler {
 				throw new IOException("Unknown resource: " + url);
 			}
 			content = IOUtils.toByteArray(inputStream);
-			IOUtils.closeQuietly(inputStream);
 		}
 		
 		// Send the resource

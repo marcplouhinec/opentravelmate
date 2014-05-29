@@ -6,7 +6,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.http.ConnectionClosedException;
 import org.apache.http.HttpException;
@@ -46,7 +48,7 @@ public class HttpServer {
 	
 	private final Map<String, HttpRequestHandler> requestHandlerByPattern;
 	private final ExceptionListener exceptionListener;
-	private final ExecutorService executorService = Executors.newFixedThreadPool(4);
+	private final ExecutorService executorService = new ThreadPoolExecutor(4, 50, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
 	private ServerSocket serverSocket;
 	
 	/**

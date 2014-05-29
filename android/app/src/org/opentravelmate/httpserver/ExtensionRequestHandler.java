@@ -1,7 +1,6 @@
 package org.opentravelmate.httpserver;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URLDecoder;
 
 import org.apache.http.HttpException;
@@ -39,14 +38,7 @@ public class ExtensionRequestHandler implements HttpRequestHandler {
 		if (url != null && url.startsWith("/")) {
 			url = url.substring(1);
 		}
-		InputStream inputStream = null;
-		byte[] content;
-		try {
-			inputStream = assetManager.open(url);
-			content = IOUtils.toByteArray(inputStream);
-		} finally {
-			IOUtils.closeQuietly(inputStream);
-		}
+		byte[] content = IOUtils.toByteArray(assetManager.open(url));
 		
 		EntityTemplate entity = new EntityTemplate(new SimpleContentProducer(content));
 		response.setEntity(entity);

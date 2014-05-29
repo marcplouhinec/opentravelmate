@@ -233,7 +233,7 @@ public class NativeMap {
 				try {
 					TileOverlay tileOverlay = TileOverlay.fromJsonTileOverlay(new JSONObject(jsonTileOverlay));
 					
-					TileProvider tileProvider = new UrlPatternTileProvider(tileOverlay.tileUrlPattern);
+					TileProvider tileProvider = new UrlPatternTileProvider(tileOverlay.tileUrlPattern, tileOverlay.enableGrayscaleFilter);
 					com.google.android.gms.maps.model.TileOverlay gTileOverlay = map.addTileOverlay(new TileOverlayOptions()
 						.tileProvider(tileProvider)
 						.zIndex(tileOverlay.zIndex));
@@ -1044,15 +1044,18 @@ public class NativeMap {
 	private class UrlPatternTileProvider extends UrlTileProvider {
 		
 		private final String tileUrlPattern;
+		private final boolean enableGrayscaleFilter;
 
 		/**
 		 * Create a new UrlPatternTileProvider.
 		 * 
 		 * @param tileUrlPattern
+		 * @param enableGrayscaleFilter If true, apply a grayscale filter on the tiles
 		 */
-		public UrlPatternTileProvider(String tileUrlPattern) {
+		public UrlPatternTileProvider(String tileUrlPattern, boolean enableGrayscaleFilter) {
 			super(256, 256);
 			this.tileUrlPattern = tileUrlPattern;
+			this.enableGrayscaleFilter = enableGrayscaleFilter;
 		}
 
 		@Override
@@ -1068,6 +1071,9 @@ public class NativeMap {
 				url = baseUrl + "image/source/" + URLEncoder.encode(originalUrl, "UTF-8");
 			} catch (UnsupportedEncodingException e) {
 				url = originalUrl;
+			}
+			if (enableGrayscaleFilter) {
+				url += "?filter=grayscale";
 			}
 			
 			try {

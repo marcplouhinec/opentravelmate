@@ -24,23 +24,27 @@ import android.graphics.BitmapFactory;
 public class IOUtils {
 
 	/**
-	 * Read data from an input stream.
+	 * Read data from an input stream and close it quietly.
 	 * 
 	 * @param inputStream
 	 * @return byte array
 	 * @throws IOException
 	 */
 	public static byte[] toByteArray(InputStream inputStream) throws IOException {
-		BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
-		byte[] buffer = new byte[1024];
-		int len;
-		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		
-		while ((len = bufferedInputStream.read(buffer)) != -1) {
-			outputStream.write(buffer, 0, len);
+		try {
+			BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+			byte[] buffer = new byte[1024];
+			int len;
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			
+			while ((len = bufferedInputStream.read(buffer)) != -1) {
+				outputStream.write(buffer, 0, len);
+			}
+			
+			return outputStream.toByteArray();
+		} finally {
+			closeQuietly(inputStream);
 		}
-		
-		return outputStream.toByteArray();
 	}
 	
 	/**
@@ -67,19 +71,13 @@ public class IOUtils {
 	 * @throws IOException
 	 */
 	public static Bitmap toBitmap(String bitmapUrl) throws IOException {
-		InputStream inputStream = null;
-		try {
-			HttpGet httpRequest = new HttpGet(bitmapUrl);
-			HttpClient httpclient = new DefaultHttpClient();
-			HttpResponse response = (HttpResponse) httpclient.execute(httpRequest);
-			
-			HttpEntity entity = response.getEntity();
-			BufferedHttpEntity bufHttpEntity = new BufferedHttpEntity(entity);
-			inputStream = bufHttpEntity.getContent();
-			byte[] bitmapContent = toByteArray(inputStream);
-			return BitmapFactory.decodeByteArray(bitmapContent, 0, bitmapContent.length);
-		} finally {
-			closeQuietly(inputStream);
-		}
+		HttpGet httpRequest = new HttpGet(bitmapUrl);
+		HttpClient httpclient = new DefaultHttpClient();
+		HttpResponse response = (HttpResponse) httpclient.execute(httpRequest);
+		
+		HttpEntity entity = response.getEntity();
+		BufferedHttpEntity bufHttpEntity = new BufferedHttpEntity(entity);
+		byte[] bitmapContent = toByteArray(bufHttpEntity.getContent());
+		return BitmapFactory.decodeByteArray(bitmapContent, 0, bitmapContent.length);
 	}
 }
