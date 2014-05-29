@@ -41,6 +41,7 @@ public class MainActivity extends FragmentActivity {
 	private static final String LOG_TAG = MainActivity.class.getSimpleName();
 	private HttpServer httpServer;
 	private NativeMap nativeMap = null;
+	private ImageRequestHandler imageRequestHandler = null;
 
 	@SuppressLint("NewApi")
 	@Override
@@ -66,8 +67,8 @@ public class MainActivity extends FragmentActivity {
 		requestHandlerByPattern.put("/native/*", nativeRequestHandler);
 		ExtensionRequestHandler extensionRequestHandler = new ExtensionRequestHandler(getAssets());
 		requestHandlerByPattern.put("/extensions/*", extensionRequestHandler);
-		ImageRequestHandler tileRequestHandler = new ImageRequestHandler();
-		requestHandlerByPattern.put("/image/*", tileRequestHandler);
+		this.imageRequestHandler = new ImageRequestHandler(this);
+		requestHandlerByPattern.put("/image/*", imageRequestHandler);
 		httpServer = new HttpServer(requestHandlerByPattern, exceptionListener);
 		try {
 			httpServer.start();
@@ -103,6 +104,7 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	protected void onDestroy() {
 		httpServer.stop();
+		this.imageRequestHandler.close();
 		android.os.Process.killProcess(android.os.Process.myPid());
 		
 		super.onDestroy();

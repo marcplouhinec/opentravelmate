@@ -151,7 +151,6 @@ public class HttpServer {
 				try {
 					Socket socket = this.serverSocket.accept();
 					DefaultHttpServerConnection connection = new DefaultHttpServerConnection();
-					Log.i(LOG_TAG, "Incoming connection from " + socket.getInetAddress());
 					connection.bind(socket, this.httpParams);
 					executorService.execute(new RequestHandler(httpService, connection, exceptionListener));
 					
