@@ -1,7 +1,7 @@
 /**
  * Application startup script.
  *
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 
 // Compute the baseUrl
@@ -18,7 +18,7 @@ window.org_opentravelmate_widget_webview_webviewEntrypoint = './entryPoint';
 window.org_opentravelmate_widget_webview_webviewBaseUrl = baseUrl;
 
 // Load the core startup script
-require(['./extensions/core/widget/webview/startupScript']);
+require(['./extensions/org/opentravelmate/controller/widget/webview/startupScript']);
 
 
 

@@ -6,9 +6,8 @@
 
 define([
     'jquery',
-    'native/widget/map/google',
-    '../../../extensions/core/utils/browserUtils'
-], function($, google, browserUtils) {
+    'native/widget/map/google'
+], function($, google) {
     'use strict';
 
     /**
@@ -130,7 +129,7 @@ define([
         });
 
         // Move the button when the window is resized
-        browserUtils.onWindowResize(function handleWindowResize() {
+        $(window).resize(function handleWindowResize() {
             self._resetButtonsPosition();
         });
     }

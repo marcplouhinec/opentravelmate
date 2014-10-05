@@ -5,8 +5,9 @@
  */
 
 define([
-    'underscore', './../../../extensions/core/widget/map/projectionUtils',
-    './../../../extensions/core/utils/geometryUtils'
+    'lodash',
+    './../../../extensions/org/opentravelmate/controller/widget/map/projectionUtils',
+    './../../../extensions/org/opentravelmate/utils/geometryUtils'
 ], function(_, projectionUtils, geometryUtils) {
     'use strict';
 

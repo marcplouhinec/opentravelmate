@@ -6,12 +6,12 @@
 
 define([
     'jquery',
-    'extensions/core/utils/stringUtils',
+    'extensions/org/opentravelmate/utils/stringUtils',
     'native/widget/map/google',
     'native/widget/map/InfoBox',
     'native/widget/map/TileObserver',
     'native/widget/map/MarkerRTree',
-    'extensions/core/widget/map/projectionUtils',
+    'extensions/org/opentravelmate/controller/widget/map/projectionUtils',
     'native/widget/map/CustomInfoWindow',
     'native/widget/map/MapButtonController'
 ], function($, stringUtils, google, InfoBox, TileObserver, MarkerRTree, projectionUtils, CustomInfoWindow, MapButtonController) {
@@ -170,7 +170,7 @@ define([
             markerRTreeByPlaceHolderId[layoutParams.id] = new MarkerRTree(DEFAULT_MARKER_SIZE, DEFAULT_MARKER_ANCHOR);
             mapButtonControllerByPlaceHolderId[layoutParams.id] = new MapButtonController(gmap, layoutParams.id, baseUrl);
             mapButtonControllerByPlaceHolderId[layoutParams.id].onButtonClick(function(mapButton) {
-                require(['extensions/core/widget/Widget'], function (Widget) {
+                require(['extensions/org/opentravelmate/controller/widget/Widget'], function (Widget) {
                     var map = /** @type {Map} */ Widget.findById(layoutParams.id);
                     map.fireMapButtonClickEvent(mapButton.id);
                 });
@@ -424,7 +424,7 @@ define([
                 tileObserver = new TileObserver(gmap);
                 tileObserverByPlaceHolderId[id] = tileObserver;
 
-                require(['extensions/core/widget/Widget'], function (Widget) {
+                require(['extensions/org/opentravelmate/controller/widget/Widget'], function (Widget) {
                     var map = /** @type {Map} */ Widget.findById(id);
 
                     tileObserver.onTilesDisplayed(function(tileCoordinates) {
@@ -493,7 +493,7 @@ define([
 
             // Call the click listeners if the distance is low enough
             if (markerWithDistance && markerWithDistance.distance <= MAX_MOUSE_MARKER_DISTANCE) {
-                require(['extensions/core/widget/Widget'], function (Widget) {
+                require(['extensions/org/opentravelmate/controller/widget/Widget'], function (Widget) {
                     var map = /** @type {Map} */ Widget.findById(id);
                     map.fireMarkerEvent('CLICK', markerWithDistance.marker);
                 });
@@ -526,7 +526,7 @@ define([
             if (markerWithDistance && markerWithDistance.distance <= MAX_MOUSE_MARKER_DISTANCE) {
                 // Fire a MOUSE_LEAVE event if necessary
                 if (markerUnderMouse && markerUnderMouse.id !== markerWithDistance.marker.id) {
-                    require(['extensions/core/widget/Widget'], function (Widget) {
+                    require(['extensions/org/opentravelmate/controller/widget/Widget'], function (Widget) {
                         var map = /** @type {Map} */ Widget.findById(id);
                         map.fireMarkerEvent('MOUSE_LEAVE', markerUnderMouse);
                     });
@@ -536,7 +536,7 @@ define([
                 if (!markerUnderMouse || markerUnderMouse.id !== markerWithDistance.marker.id) {
                     markerUnderMouse = markerWithDistance.marker;
                     markerUnderMouseByPlaceHolderId[id] = markerUnderMouse;
-                    require(['extensions/core/widget/Widget'], function (Widget) {
+                    require(['extensions/org/opentravelmate/controller/widget/Widget'], function (Widget) {
                         var map = /** @type {Map} */ Widget.findById(id);
                         map.fireMarkerEvent('MOUSE_ENTER', markerUnderMouse);
                     });
@@ -549,7 +549,7 @@ define([
                 if (markerUnderMouse) {
                     delete markerUnderMouseByPlaceHolderId[id];
 
-                    require(['extensions/core/widget/Widget'], function (Widget) {
+                    require(['extensions/org/opentravelmate/controller/widget/Widget'], function (Widget) {
                         var map = /** @type {Map} */ Widget.findById(id);
                         map.fireMarkerEvent('MOUSE_LEAVE', markerUnderMouse);
                     });
@@ -599,7 +599,7 @@ define([
             var infoWindow = new CustomInfoWindow(content, anchor);
             infoWindow.open(gmap, gmarker);
             infoWindow.onClick(function() {
-                require(['extensions/core/widget/Widget'], function (Widget) {
+                require(['extensions/org/opentravelmate/controller/widget/Widget'], function (Widget) {
                     var map = /** @type {Map} */ Widget.findById(id);
                     map.fireInfoWindowClickEvent(marker);
                 });

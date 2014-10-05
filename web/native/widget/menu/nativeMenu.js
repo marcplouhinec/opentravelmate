@@ -55,7 +55,7 @@ define(['jquery', 'extensions/core/utils/FunctionDam'], function($, FunctionDam)
 				$(menuContainer).append(jqXHR.responseText);
 				
 				// Set the logo
-				$(menuContainer).find('img.otm-menu-logo-img').attr('src', baseUrl + 'extensions/core/widget/menu/image/ic_logo.png');
+				$(menuContainer).find('img.otm-menu-logo-img').attr('src', baseUrl + 'extensions/org/opentravelmate/controller/widget/menu/image/ic_logo.png');
 
                 // Add the menu items that have been potentially added when the menu was not initialized yet
                 menuReadyDam.setOpened(true);
@@ -66,7 +66,7 @@ define(['jquery', 'extensions/core/utils/FunctionDam'], function($, FunctionDam)
                 id: -1,
                 title: 'More',
                 tooltip: 'More',
-                iconUrl: baseUrl + 'extensions/core/widget/menu/image/ic_btn_more.png'
+                iconUrl: baseUrl + 'extensions/org/opentravelmate/controller/widget/menu/image/ic_btn_more.png'
             }));
         },
 
@@ -145,7 +145,7 @@ define(['jquery', 'extensions/core/utils/FunctionDam'], function($, FunctionDam)
                 event.stopPropagation();
                 event.preventDefault();
 
-                require(['extensions/core/widget/Widget'], function (Widget) {
+                require(['extensions/org/opentravelmate/controller/widget/Widget'], function (Widget) {
                     var menu = /** @type {Menu} */ Widget.findById(menuPlaceHolderId);
                     menu.fireClickEvent(item.id);
                 });

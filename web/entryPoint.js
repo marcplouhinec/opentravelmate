@@ -1,11 +1,11 @@
 /**
  * Define the main view wrapper entry point.
  *
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 
 define([
-    './extensions/core/widget/webview/webview'
+    './extensions/org/opentravelmate/controller/widget/webview/webview'
 ], function(webview) {
     'use strict';
 

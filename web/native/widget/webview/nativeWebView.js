@@ -38,8 +38,8 @@ define(function() {
 				iframe.contentWindow.org_opentravelmate_widget_webview_webviewBaseUrl = baseUrl;
                 iframe.contentWindow.org_opentravelmate_widget_webview_additionalParameters = layoutParams.additionalParameters;
 				var script = /** @type {HTMLScriptElement} */ iframe.contentDocument.createElement('script');
-				script.src = baseUrl + 'extensions/core/lib/require.min.js';
-				script.setAttribute('data-main', baseUrl + 'extensions/core/widget/webview/startupScript');
+				script.src = baseUrl + 'extensions/vendors/require.min.js';
+				script.setAttribute('data-main', baseUrl + 'extensions/org/opentravelmate/controller/widget/webview/startupScript');
                 iframe.contentDocument.body.appendChild(script);
 			};
 			
@@ -79,7 +79,7 @@ define(function() {
          * @param {String} jsonPayload
          */
         'fireExternalEvent': function(webViewPlaceHolderId, eventName, jsonPayload) {
-            window.parent.require(['extensions/core/widget/Widget'], function (Widget) {
+            window.parent.require(['extensions/org/opentravelmate/controller/widget/Widget'], function (Widget) {
                 var subWebView = /** @type {SubWebView} */ Widget.findById(webViewPlaceHolderId);
                 if (subWebView) {
                     var payload = JSON.parse(jsonPayload);
@@ -98,7 +98,7 @@ define(function() {
         'fireInternalEvent': function(webViewPlaceHolderId, eventName, jsonPayload) {
             var iframe = /** @type{HTMLIFrameElement} */ document.getElementById('webview-' + webViewPlaceHolderId);
             if (iframe && iframe.contentWindow && iframe.contentWindow.require) {
-                iframe.contentWindow.require(['extensions/core/widget/webview/webview'], function (webview) {
+                iframe.contentWindow.require(['extensions/org/opentravelmate/controller/widget/webview/webview'], function (webview) {
                     var payload = JSON.parse(jsonPayload);
                     webview.fireEventFromExternal(eventName, payload);
                 });

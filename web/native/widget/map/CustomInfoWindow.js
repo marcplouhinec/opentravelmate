@@ -7,7 +7,7 @@
 define([
     'jquery',
     './InfoBox',
-    '../../../extensions/core/utils/stringUtils',
+    '../../../extensions/org/opentravelmate/utils/stringUtils',
     './google'
 ], function($, InfoBox, stringUtils, google) {
     'use strict';
