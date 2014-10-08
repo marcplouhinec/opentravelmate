@@ -130,7 +130,7 @@ define([
 
         // Move the button when the window is resized
         $(window).resize(function handleWindowResize() {
-            self._resetButtonsPosition();
+            self.resetButtonsPosition();
         });
     }
 
@@ -213,6 +213,21 @@ define([
     };
 
     /**
+     * Move the buttons to the correct position.
+     */
+    MapButtonController.prototype.resetButtonsPosition = function() {
+        var mapOffset = this._$mapPlaceHolder.offset();
+        var mapWidth = this._$mapPlaceHolder.width();
+
+        for (var i = 0; i < this._mapButtonElements.length; i += 1) {
+            var mapButtonElement = this._mapButtonElements[i];
+
+            mapButtonElement.style.left = (mapOffset.left + mapWidth - MAP_BUTTON_MARGIN_RIGHT - MAP_BUTTON_WIDTH) + 'px';
+            mapButtonElement.style.top = (mapOffset.top + MAP_BUTTON_TOTAL_HEIGHT * i + MAP_BUTTON_MARGIN_TOP) + 'px';
+        }
+    };
+
+    /**
      * Set the buttons color to dark or light.
      *
      * @param {Boolean} darkColor
@@ -226,23 +241,6 @@ define([
         for (var i = 0; i < this._mapButtonElements.length; i += 1) {
             var mapButtonElement = this._mapButtonElements[i];
             mapButtonElement.style.backgroundColor = this._currentNormalButtonColor;
-        }
-    };
-
-    /**
-     * Move the buttons to the correct position.
-     *
-     * @private
-     */
-    MapButtonController.prototype._resetButtonsPosition = function() {
-        var mapOffset = this._$mapPlaceHolder.offset();
-        var mapWidth = this._$mapPlaceHolder.width();
-
-        for (var i = 0; i < this._mapButtonElements.length; i += 1) {
-            var mapButtonElement = this._mapButtonElements[i];
-
-            mapButtonElement.style.left = (mapOffset.left + mapWidth - MAP_BUTTON_MARGIN_RIGHT - MAP_BUTTON_WIDTH) + 'px';
-            mapButtonElement.style.top = (mapOffset.top + MAP_BUTTON_TOTAL_HEIGHT * i + MAP_BUTTON_MARGIN_TOP) + 'px';
         }
     };
 
