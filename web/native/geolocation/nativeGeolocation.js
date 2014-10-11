@@ -1,7 +1,7 @@
 /**
  * Web implementation of the nativeGeolocation interface.
  *
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 
 define(function() {
@@ -16,7 +16,7 @@ define(function() {
     var nativeGeolocation = {
 
         /**
-         * @type {Object.<String, Number>}
+         * @type {Object.<string, Number>}
          * @private
          */
         '_watchIdByCallbacksId': {},
@@ -24,26 +24,26 @@ define(function() {
         /**
          * Get the current device location.
          *
-         * @param {String} callbacksId
+         * @param {string} callbacksId
          *     ID of geolocation success and error callbacks.
-         * @param {String} jsonOptions
+         * @param {string} jsonOptions
          *     JSON-serialized PositionOptions.
          */
         'getCurrentPosition': function(callbacksId, jsonOptions) {
             if (!navigator.geolocation) {
-                require(['extensions/core/geolocation/geolocation'], function (geolocation) {
-                    geolocation.fireCurrentPositionEvent(callbacksId, null, {code: POSITION_UNAVAILABLE, message: 'Geolocation is not supported by this browser.'});
+                require(['extensions/org/opentravelmate/service/geolocationService'], function (geolocationService) {
+                    geolocationService._fireCurrentPositionEvent(callbacksId, null, {code: POSITION_UNAVAILABLE, message: 'Geolocation is not supported by this browser.'});
                 });
                 return;
             }
 
             navigator.geolocation.getCurrentPosition(function(position) {
-                require(['extensions/core/geolocation/geolocation'], function (geolocation) {
-                    geolocation.fireCurrentPositionEvent(callbacksId, position, null);
+                require(['extensions/org/opentravelmate/service/geolocationService'], function (geolocationService) {
+                    geolocationService._fireCurrentPositionEvent(callbacksId, position, null);
                 });
             }, function(positionError) {
-                require(['extensions/core/geolocation/geolocation'], function (geolocation) {
-                    geolocation.fireCurrentPositionEvent(callbacksId, null, positionError);
+                require(['extensions/org/opentravelmate/service/geolocationService'], function (geolocationService) {
+                    geolocationService._fireCurrentPositionEvent(callbacksId, null, positionError);
                 });
             }, JSON.parse(jsonOptions));
         },
@@ -51,26 +51,26 @@ define(function() {
         /**
          * Watch the device location.
          *
-         * @param {String} callbacksId
+         * @param {string} callbacksId
          *     ID of geolocation success and error callbacks.
-         * @param {String} jsonOptions
+         * @param {string} jsonOptions
          *     JSON-serialized PositionOptions.
          */
         'watchPosition': function(callbacksId, jsonOptions) {
             if (!navigator.geolocation) {
-                require(['extensions/core/geolocation/geolocation'], function (geolocation) {
-                    geolocation.fireWatchPositionEvent(callbacksId, null, {code: POSITION_UNAVAILABLE, message: 'Geolocation is not supported by this browser.'});
+                require(['extensions/org/opentravelmate/service/geolocationService'], function (geolocationService) {
+                    geolocationService._fireWatchPositionEvent(callbacksId, null, {code: POSITION_UNAVAILABLE, message: 'Geolocation is not supported by this browser.'});
                 });
                 return;
             }
 
             var watchId = navigator.geolocation.watchPosition(function(position) {
-                require(['extensions/core/geolocation/geolocation'], function (geolocation) {
-                    geolocation.fireWatchPositionEvent(callbacksId, position, null);
+                require(['extensions/org/opentravelmate/service/geolocationService'], function (geolocationService) {
+                    geolocationService._fireWatchPositionEvent(callbacksId, position, null);
                 });
             }, function(positionError) {
-                require(['extensions/core/geolocation/geolocation'], function (geolocation) {
-                    geolocation.fireWatchPositionEvent(callbacksId, null, positionError);
+                require(['extensions/org/opentravelmate/service/geolocationService'], function (geolocationService) {
+                    geolocationService._fireWatchPositionEvent(callbacksId, null, positionError);
                 });
             }, JSON.parse(jsonOptions));
 
@@ -80,7 +80,7 @@ define(function() {
         /**
          * Stop watching the device position.
          *
-         * @param {String} callbacksId
+         * @param {string} callbacksId
          *     ID of geolocation success and error callbacks.
          */
         'clearWatch': function(callbacksId) {
