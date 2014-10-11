@@ -193,6 +193,7 @@ define([
             mapCanvas.style.visibility = layoutParams.visible ? 'visible' : 'hidden';
 
             mapButtonControllerByPlaceHolderId[layoutParams.id].resetButtonsPosition();
+            mapButtonControllerByPlaceHolderId[layoutParams.id].setButtonsVisible(layoutParams.visible);
         },
 
         /**

@@ -228,6 +228,19 @@ define([
     };
 
     /**
+     * Show or hide the buttons.
+     *
+     * @param {boolean} visible
+     */
+    MapButtonController.prototype.setButtonsVisible = function(visible) {
+        for (var i = 0; i < this._mapButtonElements.length; i += 1) {
+            var mapButtonElement = this._mapButtonElements[i];
+
+            mapButtonElement.style.display = visible ? 'block' : 'none';
+        }
+    };
+
+    /**
      * Set the buttons color to dark or light.
      *
      * @param {Boolean} darkColor
