@@ -411,6 +411,18 @@ define([
         },
 
         /**
+         * Remove a button from the map top-right corner.
+         *
+         * @param {String} id
+         *     Map place holder ID.
+         * @param {String} jsonMapButton
+         *     JSON serialized MapButton.
+         */
+        'removeMapButton': function(id, jsonMapButton) {
+            mapButtonControllerByPlaceHolderId[id].removeButton(JSON.parse(jsonMapButton));
+        },
+
+        /**
          * Start observing tiles and forward the TILES_DISPLAYED and TILES_RELEASED events to the
          * map defined by the given place-holder ID.
          * Note: this function does nothing if the tiles are already observed.

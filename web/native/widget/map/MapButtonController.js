@@ -204,6 +204,25 @@ define([
     };
 
     /**
+     * Remove the given button from the map.
+     *
+     * @param {MapButton} mapButton
+     */
+    MapButtonController.prototype.removeButton = function(mapButton) {
+        for (var index = 0 ; index < this._mapButtons.length; index += 1) {
+            if (this._mapButtons[index].id === mapButton.id) {
+                var mapButtonElement = this._mapButtonElements[index];
+                mapButtonElement.parentNode.removeChild(mapButtonElement);
+                this._mapButtonElements.splice(index, 1);
+                this._mapButtonImgElements.splice(index, 1);
+                this._mapButtons.splice(index, 1);
+                break;
+            }
+        }
+        this.resetButtonsPosition();
+    };
+
+    /**
      * Register a listener for a button click event.
      *
      * @param {function(mapButton: MapButton)} listener
