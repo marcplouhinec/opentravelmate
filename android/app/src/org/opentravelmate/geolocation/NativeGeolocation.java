@@ -15,7 +15,7 @@ import android.webkit.WebView;
 /**
  * Injected object.
  * 
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 public class NativeGeolocation {
 	
@@ -71,8 +71,8 @@ public class NativeGeolocation {
 				try {
 					WebView mainWebView = (WebView)htmlLayout.findViewByPlaceHolderId(HtmlLayout.MAIN_WEBVIEW_ID);
 					mainWebView.loadUrl("javascript:(function(){" +
-							"    require(['extensions/core/geolocation/geolocation'], function (geolocation) {" +
-							"        geolocation.fireCurrentPositionEvent(\"" + callbacksId + "\", " + position.toJson().toString(2) + ", null);" +
+							"    require(['extensions/org/opentravelmate/service/geolocationService'], function (geolocation) {" +
+							"        geolocation._fireCurrentPositionEvent(\"" + callbacksId + "\", " + position.toJson().toString(2) + ", null);" +
 							"    });" +
 							"})();");
 				} catch (JSONException e) {
@@ -84,8 +84,8 @@ public class NativeGeolocation {
 				try {
 					WebView mainWebView = (WebView)htmlLayout.findViewByPlaceHolderId(HtmlLayout.MAIN_WEBVIEW_ID);
 					mainWebView.loadUrl("javascript:(function(){" +
-							"    require(['extensions/core/geolocation/geolocation'], function (geolocation) {" +
-							"        geolocation.fireCurrentPositionEvent(\"" + callbacksId + "\", null, " + positionError.toJson().toString(2) + ");" +
+							"    require(['extensions/org/opentravelmate/service/geolocationService'], function (geolocation) {" +
+							"        geolocation._fireCurrentPositionEvent(\"" + callbacksId + "\", null, " + positionError.toJson().toString(2) + ");" +
 							"    });" +
 							"})();");
 				} catch (JSONException e) {
@@ -130,8 +130,8 @@ public class NativeGeolocation {
 				try {
 					WebView mainWebView = (WebView)htmlLayout.findViewByPlaceHolderId(HtmlLayout.MAIN_WEBVIEW_ID);
 					mainWebView.loadUrl("javascript:(function(){" +
-							"    require(['extensions/core/geolocation/geolocation'], function (geolocation) {" +
-							"        geolocation.fireWatchPositionEvent(\"" + callbacksId + "\", " + position.toJson().toString(2) + ", null);" +
+							"    require(['extensions/org/opentravelmate/service/geolocationService'], function (geolocation) {" +
+							"        geolocation._fireWatchPositionEvent(\"" + callbacksId + "\", " + position.toJson().toString(2) + ", null);" +
 							"    });" +
 							"})();");
 				} catch (JSONException e) {
@@ -143,8 +143,8 @@ public class NativeGeolocation {
 				try {
 					WebView mainWebView = (WebView)htmlLayout.findViewByPlaceHolderId(HtmlLayout.MAIN_WEBVIEW_ID);
 					mainWebView.loadUrl("javascript:(function(){" +
-							"    require(['extensions/core/geolocation/geolocation'], function (geolocation) {" +
-							"        geolocation.fireWatchPositionEvent(\"" + callbacksId + "\", null, " + positionError.toJson().toString(2) + ");" +
+							"    require(['extensions/org/opentravelmate/service/geolocationService'], function (geolocation) {" +
+							"        geolocation._fireWatchPositionEvent(\"" + callbacksId + "\", null, " + positionError.toJson().toString(2) + ");" +
 							"    });" +
 							"})();");
 				} catch (JSONException e) {

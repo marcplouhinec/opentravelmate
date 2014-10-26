@@ -19,7 +19,7 @@ import android.graphics.BitmapFactory;
 /**
  * Utilities for IO and HTTP.
  * 
- * @author @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 public class IOUtils {
 

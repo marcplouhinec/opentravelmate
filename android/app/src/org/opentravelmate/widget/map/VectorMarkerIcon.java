@@ -6,7 +6,7 @@ import org.json.JSONObject;
 /**
  * Define an marker icon defined with an SVG path element.
  *
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 public class VectorMarkerIcon extends MarkerIcon {
 

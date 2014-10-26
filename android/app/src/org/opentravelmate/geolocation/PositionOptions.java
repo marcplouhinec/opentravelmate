@@ -6,7 +6,7 @@ import org.json.JSONObject;
 /**
  * Define position options.
  *
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 public class PositionOptions {
 	public final boolean enableHighAccuracy;

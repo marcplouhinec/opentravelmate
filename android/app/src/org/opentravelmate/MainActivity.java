@@ -18,7 +18,6 @@ import org.opentravelmate.httpserver.ImageRequestHandler;
 import org.opentravelmate.widget.HtmlLayout;
 import org.opentravelmate.widget.HtmlLayoutParams;
 import org.opentravelmate.widget.map.NativeMap;
-import org.opentravelmate.widget.menu.NativeMenu;
 import org.opentravelmate.widget.webview.NativeWebView;
 
 import android.annotation.SuppressLint;
@@ -34,7 +33,7 @@ import android.util.Log;
 /**
  * Main activity of the Open Travel Mate application.
  * 
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 public class MainActivity extends FragmentActivity {
 	
@@ -61,7 +60,6 @@ public class MainActivity extends FragmentActivity {
 		Map<String, HttpRequestHandler> requestHandlerByPattern = new LinkedHashMap<String, HttpRequestHandler>();
 		final NativeRequestHandler nativeRequestHandler = new NativeRequestHandler();
 		nativeRequestHandler.registerInjectedJavaObject(NativeWebView.SCRIPT_URL, NativeWebView.GLOBAL_OBJECT_NAME);
-		nativeRequestHandler.registerInjectedJavaObject(NativeMenu.SCRIPT_URL, NativeMenu.GLOBAL_OBJECT_NAME);
 		nativeRequestHandler.registerInjectedJavaObject(NativeMap.SCRIPT_URL, NativeMap.GLOBAL_OBJECT_NAME);
 		nativeRequestHandler.registerInjectedJavaObject(NativeGeolocation.SCRIPT_URL, NativeGeolocation.GLOBAL_OBJECT_NAME);
 		requestHandlerByPattern.put("/native/*", nativeRequestHandler);
@@ -82,18 +80,17 @@ public class MainActivity extends FragmentActivity {
 		String baseUrl = "http://localhost:" + httpServer.getPort() + "/";
 		HtmlLayout htmlLayout = new HtmlLayout(this);
 		this.setContentView(htmlLayout);
-		NativeMenu nativeMenu = new NativeMenu(exceptionListener, htmlLayout, baseUrl);
 		nativeMap = new NativeMap(exceptionListener, htmlLayout, this.getSupportFragmentManager(), baseUrl);
 		Geolocation geolocation = new Geolocation((LocationManager) this.getSystemService(Context.LOCATION_SERVICE));
 		NativeGeolocation nativeGeolocation = new NativeGeolocation(exceptionListener, htmlLayout, geolocation);
-		NativeWebView nativeWebView = new NativeWebView(exceptionListener, htmlLayout, baseUrl, nativeMenu, nativeMap, nativeGeolocation);
+		NativeWebView nativeWebView = new NativeWebView(exceptionListener, htmlLayout, baseUrl, nativeMap, nativeGeolocation);
 		
 		// Initialize the root web view
 		HtmlLayoutParams layoutParams = new HtmlLayoutParams(HtmlLayout.MAIN_WEBVIEW_ID, 0, 0, 1, 1, true, new HashMap<String, String>(){
 			private static final long serialVersionUID = -2001726600946643058L;
 		{
-			put("url", "extensions/core/mainwebview/mainwebview.html");
-			put("entrypoint", "extensions/core/mainwebview/mainwebview");
+			put("url", "extensions/org/opentravelmate/view/main/main.html");
+			put("entrypoint", "extensions/org/opentravelmate/entrypoint");
 		}}, 1, 1);
 		nativeWebView.buildView(layoutParams);
 	}

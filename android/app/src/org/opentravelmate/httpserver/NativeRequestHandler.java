@@ -17,7 +17,7 @@ import org.opentravelmate.commons.IOUtils;
 /**
  * Handle requests to JavaScript APIs implemented in Java.
  * 
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 public class NativeRequestHandler implements HttpRequestHandler {
 	

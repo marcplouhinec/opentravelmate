@@ -6,7 +6,7 @@ import org.json.JSONObject;
 /**
  * Define a position error.
  *
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 public class PositionError {
 	public static final int PERMISSION_DENIED = 1;

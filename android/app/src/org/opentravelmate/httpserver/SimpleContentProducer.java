@@ -8,7 +8,7 @@ import org.apache.http.entity.ContentProducer;
 /**
  * Simply write a byte array into an output stream.
  * 
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 class SimpleContentProducer implements ContentProducer {
 	

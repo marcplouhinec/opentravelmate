@@ -58,7 +58,7 @@ import com.google.android.gms.maps.model.UrlTileProvider;
 /**
  * Injected object.
  * 
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 public class NativeMap {
 	
@@ -200,7 +200,7 @@ public class NativeMap {
 				mapButtonController.onButtonClick(new MapButtonController.ClickListener() {
 					@Override public void onClick(MapButton mapButton) {
 						mainWebView.loadUrl("javascript:(function(){" +
-								"    require(['extensions/core/widget/Widget'], function (Widget) {" +
+								"    require(['extensions/org/opentravelmate/controller/widget/Widget'], function (Widget) {" +
 								"        var map = Widget.findById('" + layoutParams.id + "');" +
 								"        map.fireMapButtonClickEvent(" + mapButton.id + ");" +
 								"    });" +
@@ -522,6 +522,36 @@ public class NativeMap {
 	}
 	
 	/**
+     * Remove a button from the map top-right corner.
+     *
+     * @param {String} id
+     *     Map place holder ID.
+     * @param {String} jsonMapButton
+     *     JSON serialized MapButton.
+     */
+	@JavascriptInterface
+	public void removeMapButton(final String id, final String jsonMapButton) {
+		UIThreadExecutor.execute(new Runnable() {
+			@Override public void run() {
+				// Postpone the function execution if the map is not yet ready
+				OnReadyExecutor onReadyExecutor = onReadyExecutorByPlaceHolderId.get(id);
+				if (!onReadyExecutor.isReady()) {
+					onReadyExecutor.execute(this);
+					return;
+				}
+				
+				
+				try {
+					MapButton mapButton = MapButton.fromJsonMapButton(new JSONObject(jsonMapButton));
+					mapButtonControllerByPlaceHolderId.get(id).removeButton(mapButton);
+				} catch (JSONException e) {
+					exceptionListener.onException(false, e);
+				}
+			}
+		});
+	}
+	
+	/**
 	 * Start observing tiles and forward the TILES_DISPLAYED and TILES_RELEASED events to the
      * map defined by the given place-holder ID.
      * Note: this function does nothing if the tiles are already observed.
@@ -547,9 +577,9 @@ public class NativeMap {
 							try {
 								JSONArray jsonTileCoordinates = TileCoordinates.toJson(tileCoordinates);
 								mainWebView.loadUrl("javascript:(function(){" +
-										"    require(['extensions/core/widget/Widget'], function (Widget) {" +
+										"    require(['extensions/org/opentravelmate/controller/widget/Widget'], function (Widget) {" +
 										"        var map = Widget.findById('" + id + "');" +
-										"         map.fireTileEvent('TILES_DISPLAYED', " + jsonTileCoordinates.toString(2) + ");" +
+										"        map.fireTileEvent('TILES_DISPLAYED', " + jsonTileCoordinates.toString(2) + ");" +
 										"    });" +
 										"})();");
 							} catch(JSONException e) {
@@ -563,9 +593,9 @@ public class NativeMap {
 							try {
 								JSONArray jsonTileCoordinates = TileCoordinates.toJson(tileCoordinates);
 								mainWebView.loadUrl("javascript:(function(){" +
-										"    require(['extensions/core/widget/Widget'], function (Widget) {" +
+										"    require(['extensions/org/opentravelmate/controller/widget/Widget'], function (Widget) {" +
 										"        var map = Widget.findById('" + id + "');" +
-										"         map.fireTileEvent('TILES_RELEASED', " + jsonTileCoordinates.toString(2) + ");" +
+										"        map.fireTileEvent('TILES_RELEASED', " + jsonTileCoordinates.toString(2) + ");" +
 										"    });" +
 										"})();");
 							} catch(JSONException e) {
@@ -650,7 +680,7 @@ public class NativeMap {
 			Marker marker = markerByGmarker.get(gmarker);
 			try {
 				mainWebView.loadUrl("javascript:(function(){" +
-						"    require(['extensions/core/widget/Widget'], function (Widget) {" +
+						"    require(['extensions/org/opentravelmate/controller/widget/Widget'], function (Widget) {" +
 						"        var map = Widget.findById('" + placeHolderId + "');" +
 						"        map.fireMarkerEvent('CLICK', " + marker.toJson().toString(2) + ");" +
 						"    });" +
@@ -679,7 +709,7 @@ public class NativeMap {
 			Marker marker = markerByGmarker.get(gmarker);
 			try {
 				mainWebView.loadUrl("javascript:(function(){" +
-						"    require(['extensions/core/widget/Widget'], function (Widget) {" +
+						"    require(['extensions/org/opentravelmate/controller/widget/Widget'], function (Widget) {" +
 						"        var map = Widget.findById('" + placeHolderId + "');" +
 						"        map.fireInfoWindowClickEvent(" + marker.toJson().toString(2) + ");" +
 						"    });" +

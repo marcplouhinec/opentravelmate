@@ -42,7 +42,7 @@ import android.util.Log;
  * 
  * Thanks to: http://www.docjar.com/html/api/org/apache/http/examples/ElementalHttpServer.java.html
  * 
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 public class HttpServer {
 	

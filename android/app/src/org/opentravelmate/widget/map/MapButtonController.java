@@ -94,6 +94,27 @@ public class MapButtonController {
 	}
 	
 	/**
+	 * Remove the given button from the map.
+	 * 
+	 * @param mapButton
+	 */
+	public void removeButton(final MapButton mapButton) {
+		int buttonIndex = -1;
+		for (int index = 0; index < mapButtons.size(); index++) {
+			if (mapButtons.get(index).id == mapButton.id) {
+				buttonIndex = index;
+				break;
+			}
+		}
+		
+		if (buttonIndex > 0) {
+			htmlLayout.removeView(imageButtons.get(buttonIndex));
+			mapButtons.remove(buttonIndex);
+			imageButtons.remove(buttonIndex);
+		}
+	}
+	
+	/**
 	 * Register a listener for a button click event.
 	 * 
 	 * @param listener

@@ -16,7 +16,7 @@ import android.content.res.AssetManager;
 /**
  * Handle requests to extension resources.
  * 
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 public class ExtensionRequestHandler implements HttpRequestHandler {
 	

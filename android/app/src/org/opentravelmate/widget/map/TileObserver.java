@@ -15,7 +15,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 /**
  * Observe the tile life-cycles (displayed, released).
  *
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 public class TileObserver {
 	

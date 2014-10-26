@@ -3,7 +3,7 @@ package org.opentravelmate.commons;
 /**
  * Listener called when an exception occurs.
  * 
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 public interface ExceptionListener {
 	

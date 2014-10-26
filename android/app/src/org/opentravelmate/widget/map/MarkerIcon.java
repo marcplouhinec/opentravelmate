@@ -3,7 +3,7 @@ package org.opentravelmate.widget.map;
 /**
  * Define a map marker icon.
  *
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 public abstract class MarkerIcon {
 	

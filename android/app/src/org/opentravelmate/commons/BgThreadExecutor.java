@@ -6,7 +6,7 @@ import java.util.concurrent.Executors;
 /**
  * Run code in a background thread.
  * 
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 public class BgThreadExecutor {
 	

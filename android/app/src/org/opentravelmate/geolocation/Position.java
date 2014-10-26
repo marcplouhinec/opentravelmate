@@ -6,7 +6,7 @@ import org.json.JSONObject;
 /**
  * Represent geolocation position.
  *
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 public class Position {
 	

@@ -12,7 +12,7 @@ import android.webkit.WebView;
 /**
  * Display the widgets according to their location on the HTML document.
  * 
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 @SuppressLint("ViewConstructor")
 public class HtmlLayout extends ViewGroup {

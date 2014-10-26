@@ -38,7 +38,7 @@ import com.jakewharton.disklrucache.DiskLruCache.Snapshot;
  * The URL must be in the format: /image/source/<source URL>?filter=grayscale
  * The query part after the ? (included) is optional.
  * 
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 public class ImageRequestHandler implements HttpRequestHandler {
 	

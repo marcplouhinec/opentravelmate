@@ -6,7 +6,7 @@ import org.json.JSONObject;
 /**
  * Define an overlay that will be displayed on top of the map.
  *
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 public class TileOverlay {
 	

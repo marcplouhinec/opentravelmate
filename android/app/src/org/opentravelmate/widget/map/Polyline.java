@@ -10,7 +10,7 @@ import org.json.JSONObject;
 /**
  * Define a polyline to show on the map.
  *
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 public class Polyline {
 	

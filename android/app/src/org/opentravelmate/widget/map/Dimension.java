@@ -6,7 +6,7 @@ import org.json.JSONObject;
 /**
  * Define a rectangle dimension with width and height.
  *
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 public class Dimension {
 	

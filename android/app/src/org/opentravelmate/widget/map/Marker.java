@@ -10,7 +10,7 @@ import org.json.JSONObject;
 /**
  * Define a map marker.
  *
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 public class Marker {
 	

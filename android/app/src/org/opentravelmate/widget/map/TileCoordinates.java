@@ -9,7 +9,7 @@ import org.json.JSONObject;
 /**
  * Tile coordinates.
  * 
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 public class TileCoordinates {
 	

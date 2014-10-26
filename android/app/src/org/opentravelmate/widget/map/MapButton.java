@@ -6,7 +6,7 @@ import org.json.JSONObject;
 /**
  * Define a button that will be displayed on the map.
  * 
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 public class MapButton {
 	

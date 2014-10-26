@@ -19,7 +19,7 @@ import android.graphics.Rect;
 /**
  * Load marker icons.
  * 
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 public class UrlMarkerIconLoader {
 	

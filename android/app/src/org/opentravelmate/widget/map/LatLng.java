@@ -10,7 +10,7 @@ import org.json.JSONObject;
 /**
  * Define a geographic location with latitude and longitude coordinates.
  *
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 public class LatLng {
 	

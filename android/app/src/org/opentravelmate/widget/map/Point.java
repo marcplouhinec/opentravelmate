@@ -6,7 +6,7 @@ import org.json.JSONObject;
 /**
  * Define a position with x and y coordinates.
  *
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 public class Point {
 	

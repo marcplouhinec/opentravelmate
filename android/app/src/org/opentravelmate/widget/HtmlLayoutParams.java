@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 /**
  * Define a set of HTML layout parameters.
  *
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 public class HtmlLayoutParams extends ViewGroup.LayoutParams {
 	

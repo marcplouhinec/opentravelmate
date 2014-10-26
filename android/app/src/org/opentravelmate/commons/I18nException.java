@@ -5,7 +5,7 @@ import android.content.Context;
 /**
  * Create an exception with an internationalized exception message.
  * 
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 public class I18nException extends Exception {
 

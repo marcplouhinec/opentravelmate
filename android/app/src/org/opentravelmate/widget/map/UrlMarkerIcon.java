@@ -6,7 +6,7 @@ import org.json.JSONObject;
 /**
  * Define an URL map marker icon.
  *
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 public class UrlMarkerIcon extends MarkerIcon {
 

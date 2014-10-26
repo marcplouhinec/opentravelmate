@@ -7,7 +7,7 @@ import android.os.Handler;
 /**
  * Run code in the UI thread.
  * 
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 public class UIThreadExecutor {
 	
