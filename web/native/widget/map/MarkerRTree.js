@@ -1,7 +1,7 @@
 /**
  * Define a collection of markers.
  *
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 
 define([

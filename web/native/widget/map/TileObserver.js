@@ -1,7 +1,7 @@
 /**
  * Observe the tile life-cycles (displayed, released).
  *
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 
 define(['jquery', 'lodash', './../../../extensions/org/opentravelmate/controller/widget/map/projectionUtils'], function($, _, projectionUtils) {

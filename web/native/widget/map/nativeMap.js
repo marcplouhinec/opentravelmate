@@ -1,7 +1,7 @@
 /**
  * Web implementation of the nativeMap interface.
  *
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 
 define([

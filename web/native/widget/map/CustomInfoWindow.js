@@ -1,7 +1,7 @@
 /**
  * Define a customized version of the InfoWindow based on an InfoBox.
  *
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 
 define([

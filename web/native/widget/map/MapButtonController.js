@@ -1,7 +1,7 @@
 /**
  * Handle map buttons.
  *
- * @author marc.plouhinec@gmail.com (Marc Plouhinec)
+ * @author Marc Plouhinec
  */
 
 define([
