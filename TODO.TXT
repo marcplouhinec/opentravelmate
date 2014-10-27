@@ -13,8 +13,19 @@ Tasks
 
 - The footer should overlap the side panel
 
-- Show the route type (with the walk or bus icon) and the time in the Itinerary footer
+- Show the start and end time of each leg in the Itinerary footer
 
 - Clear the found places when the place finder is closed
 
 - Update the documentation (no menu widget anymore, new function nativeMap.removeMapButton())
+
+- On the itinerary details (footer panel), show the origin and destination places that have been entered in the side panel
+
+- When an itinerary is shown, zoom out if the itinerary is not completely visible.
+
+- In the itinerary finder, allow the user to tell if the date time is the departure time or the arrival time.
+
+- In the itinerary finder, add '-30min' and '+30min' buttons.
+
+- When an itinerary is displayed on the map, make the gray tile overlay lighter.
+
