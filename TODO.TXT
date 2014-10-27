@@ -1,60 +1,20 @@
 Tasks
 -----
 
--Document place-holders:
-<div
-	id="main-view"
-	data-otm-widget="WebView"
-	data-otm-url="extension/org/opentravelmate/mainview/mainview.html"
-	data-otm-entrypoint="extension/org/opentravelmate/mainview/mainview"/>
-
--Add params to nativeMap.buildView in order to set the default latitude/longitude/zoom.
-
--Document the shared extensions.
-
--Create 2 generic panels:
- - menu panel: displayed under the menu (shown on demand for small screens, always displayed for big screens)
- - details panel: displayed like a new activity on mobile, displayed on the left on big screens
-
-- Find a better name for FunctionDam
-
-- On Android, typing text in an Auto-complete input make the auto-complete dialog to "blink". It is because
-  AutoCompleteTextInput._setDialogLayoutParams() is called each time a key is typed.
-  --> Call this method ONLY if the layout change.
-  --> Even if this function is called several times, improve the webview.layout() function to avoid flickering.
+- Add params to nativeMap.buildView in order to set the default latitude/longitude/zoom.
 
 - Implement TileOverlay.removeTileOverlay.
 
-- On the web version, the InfoWindow is not removed when the marker is removed.
+- Make the "More" menu
 
-- In currentPositionButtonHandler, show an error message when the geolocation API return an error.
+- Properly align footer panel title and minimized side panel title on Android
 
-- Add time and price in the itinerary objects.
+- In find itineraries, scroll the date time suggestions correctly on Android
 
-- Bug (web version): when an itinerary is displayed and the map is zoomed, the flag markers are
-  returned instead of the waypoint markers when the user click or put the cursor on it. So the waypoint
-  is not highlighted and the selection menu is not shown.
+- The footer should overlap the side panel
 
-- Bug (android): the highlighted waypoints are not correctly displayed if the map zoom is not an integer.
+- Show the route type (with the walk or bus icon) and the time in the Itinerary footer
 
-- Bug: when selecting 'More information' on the 'Vannérus' bus stop (line 5), two lines 5 are shown whereas this line only stops to this station in one direction.
+- Clear the found places when the place finder is closed
 
-
-Develoment tasks
-----------------
-
-1.  [X] Refactor the place-finder
-2.  [X] Refactor the autocompletion dialog
-2b. [X] Split core/commons into core/utils and core/style
-3.  [X] Create an autocompletion input widget and use it in the place-finder
-4.  [X] Display found places on the map
-5.  [X] Display the Luxembourg bus lines on the map
-6.  [X] Handle bus stop or found place selection on the map
-7.  [X] Create the "show/hide satellite" map button
-8.  [X] Create the "show current location" map button
-9.  [X] Allow users to find itineraries
-10. [X] Allow users to see timetables
-11. [ ] Create a notification system (show loading, errors, ...etc)
-12. [ ] Correctly handle the main menu (show the items until there is no place left and put other items in the "more" panel)
-13. [ ] Create an extension gallery and allow the user to install extensions locally
-
+- Update the documentation (no menu widget anymore, new function nativeMap.removeMapButton())
