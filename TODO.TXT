@@ -33,3 +33,6 @@ Tasks
 
 - When the Android application is started, the nativemap waits several seconds before starting downloading tiles. The downloading map button should be displayed as soon as the application starts.
 
+- On the web version (Safari on Ipad), the webapplication takes more than 100% of the window. Moreover, the itinerary details in the footer panel is not scrollable.
+
+
