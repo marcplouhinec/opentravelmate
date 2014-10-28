@@ -29,3 +29,7 @@ Tasks
 
 - When an itinerary is displayed on the map, make the gray tile overlay lighter.
 
+- On the Android version, delay operations on the nativeMap when it is not visible (if not the application crashes).
+
+- When the Android application is started, the nativemap waits several seconds before starting downloading tiles. The downloading map button should be displayed as soon as the application starts.
+
