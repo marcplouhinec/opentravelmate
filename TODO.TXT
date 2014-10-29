@@ -1,9 +1,16 @@
 Tasks
 -----
 
-- Add params to nativeMap.buildView in order to set the default latitude/longitude/zoom.
+Critical:
 
-- Implement TileOverlay.removeTileOverlay.
+- Show the start and end time of each leg in the Itinerary footer
+
+- On the Android version, delay operations on the nativeMap when it is not visible (if not the application crashes).
+
+- On the web version (Safari on Ipad), the web application takes more than 100% of the window. Moreover, the itinerary details in the footer panel is not scrollable.
+
+
+Major:
 
 - Make the "More" menu
 
@@ -11,25 +18,24 @@ Tasks
 
 - In find itineraries, scroll the date time suggestions correctly on Android
 
-- Show the start and end time of each leg in the Itinerary footer
-
 - Clear the found places when the place finder is closed
-
-- Update the documentation (no menu widget anymore, new function nativeMap.removeMapButton())
 
 - On the itinerary details (footer panel), show the origin and destination places that have been entered in the side panel
 
 - When an itinerary is shown, zoom out if the itinerary is not completely visible.
 
+
+Minor:
+
+- Add params to nativeMap.buildView in order to set the default latitude/longitude/zoom.
+
+- Implement TileOverlay.removeTileOverlay.
+
+- Update the documentation (no menu widget anymore, new function nativeMap.removeMapButton())
+
 - In the itinerary finder, allow the user to tell if the date time is the departure time or the arrival time.
 
 - In the itinerary finder, add '-30min' and '+30min' buttons.
 
-- On the Android version, delay operations on the nativeMap when it is not visible (if not the application crashes).
-
 - When the Android application is started, the nativemap waits several seconds before starting downloading tiles. The downloading map button should be displayed as soon as the application starts.
-
-- On the web version (Safari on Ipad), the webapplication takes more than 100% of the window. Moreover, the itinerary details in the footer panel is not scrollable.
-
-- On the side panel, show the close button when the panel is minimized.
 
