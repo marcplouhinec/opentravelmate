@@ -161,7 +161,16 @@ public class ImageRequestHandler implements HttpRequestHandler {
 		Canvas canvas = new Canvas(bmpGrayscale);
 		Paint paint = new Paint();
 		ColorMatrix colorMatrix = new ColorMatrix();
-		colorMatrix.setSaturation(0);
+		colorMatrix.set(new float[] { // Brighter
+				1,0,0,0,70f,
+		        0,1,0,0,70f,
+		        0,0,1,0,70f,
+		        0,0,0,1,0,
+		        0,0,0,0,1
+		        });
+		ColorMatrix colorMatrixGray = new ColorMatrix();
+		colorMatrixGray.setSaturation(0); // Gray
+		colorMatrix.postConcat(colorMatrixGray);
 		ColorMatrixColorFilter filter = new ColorMatrixColorFilter(colorMatrix);
 		paint.setColorFilter(filter);
 		canvas.drawBitmap(bmpOriginal, 0, 0, paint);
