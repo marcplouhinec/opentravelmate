@@ -11,8 +11,6 @@ Tasks
 
 - In find itineraries, scroll the date time suggestions correctly on Android
 
-- The footer should overlap the side panel
-
 - Show the start and end time of each leg in the Itinerary footer
 
 - Clear the found places when the place finder is closed
