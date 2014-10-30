@@ -3,8 +3,6 @@ Tasks
 
 Critical:
 
-- On the Android version, delay operations on the nativeMap when it is not visible (if not the application crashes).
-
 - On the web version (Safari on Ipad), the web application takes more than 100% of the window. Moreover, the itinerary details in the footer panel is not scrollable.
 
 
@@ -21,6 +19,12 @@ Major:
 - On the itinerary details (footer panel), show the origin and destination places that have been entered in the side panel
 
 - When an itinerary is shown, zoom out if the itinerary is not completely visible.
+
+- On Android, the input text cursor is sometime invisible. Reproductible procedure:
+  1- Open the application.
+  2- Select a place and select "start from this place".
+  3- The itinerary finder opens with the "from" input filled and the "to" one empty.
+  4- Touch the "to" input text --> the virtual keyboard show up but there is no cursor.
 
 
 Minor:

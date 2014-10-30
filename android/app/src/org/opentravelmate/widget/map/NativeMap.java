@@ -5,8 +5,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -94,6 +98,9 @@ public class NativeMap {
 	private final SparseArray<com.google.android.gms.maps.model.TileOverlay> tileOverlayById =
 			new SparseArray<com.google.android.gms.maps.model.TileOverlay>();
 	
+	private final Set<String> invisibleMapPlaceholderIds = new HashSet<String>();
+	private final Map<String, Queue<Runnable>> postponedRunnablesByPlaceHolderId = new HashMap<String, Queue<Runnable>>();
+	
 	/**
 	 * Create a NativeMap object.
 	 */
@@ -140,6 +147,14 @@ public class NativeMap {
 					View view = htmlLayout.findViewByPlaceHolderId(layoutParams.id);
 					if (view != null) {
 						view.setLayoutParams(layoutParams);
+						
+						// Mark or un-mark the map ID placeholder as invisible if necessary
+						if (!layoutParams.visible) {
+							invisibleMapPlaceholderIds.add(layoutParams.id);
+						} else if (invisibleMapPlaceholderIds.contains(layoutParams.id)) {
+							invisibleMapPlaceholderIds.remove(layoutParams.id);
+							executedPostponedRunnables(layoutParams.id);
+						}
 						
 						// Change the map buttons position
 						MapButtonController mapButtonController = mapButtonControllerByPlaceHolderId.get(layoutParams.id);
@@ -228,7 +243,7 @@ public class NativeMap {
 	public void addTileOverlay(final String id, final String jsonTileOverlay) {
 		final GoogleMap map = getGoogleMapSync(id);
 		
-		UIThreadExecutor.execute(new Runnable() {
+		UIThreadExecutor.execute(postponeWhenMapIsInvisible(id, new Runnable() {
 			@Override public void run() {
 				try {
 					TileOverlay tileOverlay = TileOverlay.fromJsonTileOverlay(new JSONObject(jsonTileOverlay));
@@ -242,7 +257,7 @@ public class NativeMap {
 					exceptionListener.onException(false, e);
 				}
 			}
-		});
+		}));
 	}
 	
 	/**
@@ -255,7 +270,7 @@ public class NativeMap {
 	 */
 	@JavascriptInterface
 	public void removeTileOverlay(final String id, final String jsonTileOverlay) {
-		UIThreadExecutor.execute(new Runnable() {
+		UIThreadExecutor.execute(postponeWhenMapIsInvisible(id, new Runnable() {
 			@Override public void run() {
 				try {
 					TileOverlay tileOverlay = TileOverlay.fromJsonTileOverlay(new JSONObject(jsonTileOverlay));
@@ -268,7 +283,7 @@ public class NativeMap {
 					exceptionListener.onException(false, e);
 				}
 			}
-		});
+		}));
 	}
 	
 	/**
@@ -283,7 +298,7 @@ public class NativeMap {
 	public void panTo(final String id, final String jsonCenter) {
 		final GoogleMap map = getGoogleMapSync(id);
 		
-		UIThreadExecutor.execute(new Runnable() {
+		UIThreadExecutor.execute(postponeWhenMapIsInvisible(id, new Runnable() {
 			@Override public void run() {
 				try {
 					LatLng center = LatLng.fromJsonLatLng(new JSONObject(jsonCenter));
@@ -296,7 +311,7 @@ public class NativeMap {
 					exceptionListener.onException(false, e);
 				}
 			}
-		});
+		}));
 	}
 	
 	/**
@@ -366,7 +381,7 @@ public class NativeMap {
 	@JavascriptInterface
 	public void addMarkers(final String id, final String jsonMarkers) {
 		final GoogleMap map = getGoogleMapSync(id);
-		UIThreadExecutor.execute(new Runnable() {
+		UIThreadExecutor.execute(postponeWhenMapIsInvisible(id, new Runnable() {
 			@Override public void run() {
 				List<Marker> markers;
 				try {
@@ -388,11 +403,11 @@ public class NativeMap {
 						// Load the icon
 						markerIconLoader.loadIcon(marker.icon, scaleRatio, new UrlMarkerIconLoader.OnIconLoadListener() {
 							@Override public void onIconLoad(final Bitmap bitmap) {
-								UIThreadExecutor.execute(new Runnable() {
+								UIThreadExecutor.execute(postponeWhenMapIsInvisible(id, new Runnable() {
 									@Override public void run() {
 										addMarker(map, marker, bitmap);
 									}
-								});
+								}));
 							}
 						});
 					} else if (marker.icon instanceof VectorMarkerIcon) {
@@ -411,7 +426,7 @@ public class NativeMap {
 					}
 				}
 			}
-		});
+		}));
 	}
 	
 	/**
@@ -446,7 +461,7 @@ public class NativeMap {
 	 */
 	@JavascriptInterface
 	public void removeMarkers(final String id, final String jsonMarkers) {
-		UIThreadExecutor.execute(new Runnable() {
+		UIThreadExecutor.execute(postponeWhenMapIsInvisible(id, new Runnable() {
 			@Override public void run() {
 				try {
 					List<Marker> markers = Marker.fromJsonMarkers(new JSONArray(jsonMarkers));
@@ -460,7 +475,7 @@ public class NativeMap {
 					exceptionListener.onException(false, e);
 				}
 			}
-		});
+		}));
 	}
 	
 	/**
@@ -473,7 +488,7 @@ public class NativeMap {
      */
 	@JavascriptInterface
 	public void addMapButton(final String id, final String jsonMapButton) {
-		UIThreadExecutor.execute(new Runnable() {
+		UIThreadExecutor.execute(postponeWhenMapIsInvisible(id, new Runnable() {
 			@Override public void run() {
 				// Postpone the function execution if the map is not yet ready
 				OnReadyExecutor onReadyExecutor = onReadyExecutorByPlaceHolderId.get(id);
@@ -489,7 +504,7 @@ public class NativeMap {
 					exceptionListener.onException(false, e);
 				}
 			}
-		});
+		}));
 	}
 	
 	/**
@@ -502,7 +517,7 @@ public class NativeMap {
      */
 	@JavascriptInterface
 	public void updateMapButton(final String id, final String jsonMapButton) {
-		UIThreadExecutor.execute(new Runnable() {
+		UIThreadExecutor.execute(postponeWhenMapIsInvisible(id, new Runnable() {
 			@Override public void run() {
 				// Postpone the function execution if the map is not yet ready
 				OnReadyExecutor onReadyExecutor = onReadyExecutorByPlaceHolderId.get(id);
@@ -518,7 +533,7 @@ public class NativeMap {
 					exceptionListener.onException(false, e);
 				}
 			}
-		});
+		}));
 	}
 	
 	/**
@@ -531,7 +546,7 @@ public class NativeMap {
      */
 	@JavascriptInterface
 	public void removeMapButton(final String id, final String jsonMapButton) {
-		UIThreadExecutor.execute(new Runnable() {
+		UIThreadExecutor.execute(postponeWhenMapIsInvisible(id, new Runnable() {
 			@Override public void run() {
 				// Postpone the function execution if the map is not yet ready
 				OnReadyExecutor onReadyExecutor = onReadyExecutorByPlaceHolderId.get(id);
@@ -548,7 +563,7 @@ public class NativeMap {
 					exceptionListener.onException(false, e);
 				}
 			}
-		});
+		}));
 	}
 	
 	/**
@@ -563,7 +578,7 @@ public class NativeMap {
 	public void observeTiles(final String id) {
 		final GoogleMap map = getGoogleMapSync(id);
 		
-		UIThreadExecutor.execute(new Runnable() {
+		UIThreadExecutor.execute(postponeWhenMapIsInvisible(id, new Runnable() {
 			@Override public void run() {
 				TileObserver tileObserver = tileObserverByPlaceHolderId.get(id);
 				
@@ -605,7 +620,7 @@ public class NativeMap {
 					});
 				}
 			}
-		});
+		}));
 	}
 	
 	/**
@@ -649,7 +664,7 @@ public class NativeMap {
 	public void observeMarkers(final String id) {
 		final GoogleMap map = getGoogleMapSync(id);
 		
-		UIThreadExecutor.execute(new Runnable() {
+		UIThreadExecutor.execute(postponeWhenMapIsInvisible(id, new Runnable() {
 			@Override public void run() {
 				// Observe marker click
 				map.setOnMarkerClickListener(new CustomMarkerClickListener(id));
@@ -660,7 +675,7 @@ public class NativeMap {
 				// Observe InfoWindow click
 				map.setOnInfoWindowClickListener(new CustomInfoWindowClickListener(id));
 			}
-		});
+		}));
 	}
 	
 	/**
@@ -740,7 +755,7 @@ public class NativeMap {
 	public void showInfoWindow(final String id, final String jsonMarker, final String content, final String jsonAnchor) {
 		final GoogleMap map = getGoogleMapSync(id);
 		
-		UIThreadExecutor.execute(new Runnable() {
+		UIThreadExecutor.execute(postponeWhenMapIsInvisible(id, new Runnable() {
 			@Override public void run() {
 				Marker marker;
 				Point anchor;
@@ -817,7 +832,7 @@ public class NativeMap {
 				CameraUpdate cameraUpdate = CameraUpdateFactory.scrollBy(scrollX, scrollY);
 				map.animateCamera(cameraUpdate, 500, null);
 			}
-		});
+		}));
 	}
 	
 	/**
@@ -828,7 +843,7 @@ public class NativeMap {
      */
 	@JavascriptInterface
 	public void closeInfoWindow(final String id) {
-		UIThreadExecutor.execute(new Runnable() {
+		UIThreadExecutor.execute(postponeWhenMapIsInvisible(id, new Runnable() {
 			@Override public void run() {
 				com.google.android.gms.maps.model.Marker existingInfoWindowMarker = infoWindowMarkerByPlaceHolderId.get(id);
 				if (existingInfoWindowMarker != null) {
@@ -836,7 +851,7 @@ public class NativeMap {
 					markerByGmarker.remove(existingInfoWindowMarker);
 				}
 			}
-		});
+		}));
 	}
 	
 	/**
@@ -851,7 +866,7 @@ public class NativeMap {
 	public void setMapType(final String id, final String mapType) {
 		final GoogleMap map = getGoogleMapSync(id);
 		
-		UIThreadExecutor.execute(new Runnable() {
+		UIThreadExecutor.execute(postponeWhenMapIsInvisible(id, new Runnable() {
 			@Override public void run() {
 				int gmapType = GoogleMap.MAP_TYPE_NORMAL;
 				if ("SATELLITE".equals(mapType)) {
@@ -862,7 +877,7 @@ public class NativeMap {
 				map.setMapType(gmapType);
 				mapButtonControllerByPlaceHolderId.get(id).setMapType(mapType);
 			}
-		});
+		}));
 	}
 	
 	/**
@@ -877,7 +892,7 @@ public class NativeMap {
 	public void addPolylines(final String id, final String jsonPolylines) {
 		final GoogleMap map = getGoogleMapSync(id);
 		
-		UIThreadExecutor.execute(new Runnable() {
+		UIThreadExecutor.execute(postponeWhenMapIsInvisible(id, new Runnable() {
 			@Override public void run() {
 				List<Polyline> polylines;
 				try {
@@ -903,7 +918,7 @@ public class NativeMap {
 					gpolylineById.put(polyline.id, gpolyline);
 				}
 			}
-		});
+		}));
 	}
 	
 	/**
@@ -916,7 +931,7 @@ public class NativeMap {
      */
 	@JavascriptInterface
 	public void removePolylines(final String id, final String jsonPolylines) {
-		UIThreadExecutor.execute(new Runnable() {
+		UIThreadExecutor.execute(postponeWhenMapIsInvisible(id, new Runnable() {
 			@Override public void run() {
 				List<Polyline> polylines;
 				try {
@@ -934,7 +949,7 @@ public class NativeMap {
 					}
 				}
 			}
-		});
+		}));
 	}
 	
 	/**
@@ -949,7 +964,7 @@ public class NativeMap {
 	public void addPolygons(final String id, final String jsonPolygons) {
 		final GoogleMap map = getGoogleMapSync(id);
 		
-		UIThreadExecutor.execute(new Runnable() {
+		UIThreadExecutor.execute(postponeWhenMapIsInvisible(id, new Runnable() {
 			@Override public void run() {
 				List<Polygon> polygons;
 				try {
@@ -976,7 +991,7 @@ public class NativeMap {
 					gpolygonById.put(polygon.id, gpolygon);
 				}
 			}
-		});
+		}));
 	}
 	
 	/**
@@ -989,7 +1004,7 @@ public class NativeMap {
 	 */
 	@JavascriptInterface
 	public void removePolygons(final String id, final String jsonPolygons) {
-		UIThreadExecutor.execute(new Runnable() {
+		UIThreadExecutor.execute(postponeWhenMapIsInvisible(id, new Runnable() {
 			@Override public void run() {
 				List<Polygon> polygons;
 				try {
@@ -1005,6 +1020,67 @@ public class NativeMap {
 						gpolygon.remove();
 						gpolygonById.remove(polygon.id);
 					}
+				}
+			}
+		}));
+	}
+	
+	/**
+	 * Get the map. Wait if the map is not ready.
+	 * 
+	 * @param id
+	 *     Map place holder ID.
+	 * @return map
+	 */
+	private GoogleMap getGoogleMapSync(String id) {
+		long watchDog = 100;
+		GoogleMap googleMap = null;
+		while (googleMap == null && watchDog-- > 0) {
+			googleMap = mapByPlaceHolderId.get(id);
+			try { Thread.sleep(100); } catch (InterruptedException e) { }
+		}
+		return googleMap;
+	}
+	
+	
+	/**
+	 * Intercept the execution of a {@link Runnable} in order to check if the map with the given placeholder ID is visible or not.
+	 * 
+	 * @param runnable Runnable to be executed only when the map is visible
+	 * @param id Map placeholder ID
+	 * @return Wrapped {@link Runnable}
+	 */
+	private Runnable postponeWhenMapIsInvisible(final String id, final Runnable runnable) {
+		return new Runnable() {
+			@Override public void run() {
+				if (invisibleMapPlaceholderIds.contains(id)) {
+					Queue<Runnable> postponedRunnables = postponedRunnablesByPlaceHolderId.get(id);
+					if (postponedRunnables == null) {
+						postponedRunnables = new LinkedList<Runnable>();
+						postponedRunnablesByPlaceHolderId.put(id, postponedRunnables);
+					}
+					postponedRunnables.add(runnable);
+				} else {
+					runnable.run();
+				}
+			}
+		};
+	}
+	
+	/**
+	 * Execute all the postponed {@link Runnable}s for the map with the given placeholder ID.
+	 * 
+	 * @param id Map placeholder ID
+	 */
+	private void executedPostponedRunnables(String id) {
+		final Queue<Runnable> postponedRunnables = postponedRunnablesByPlaceHolderId.get(id);
+		if (postponedRunnables == null) { return; }
+		
+		UIThreadExecutor.execute(new Runnable() {
+			@Override public void run() {
+				Runnable postponedRunnable;
+				while ((postponedRunnable = postponedRunnables.poll()) != null) {
+					postponedRunnable.run();
 				}
 			}
 		});
@@ -1049,23 +1125,6 @@ public class NativeMap {
 			bounds.bottom += PADDING_TOP + PADDING_BOTTOM;
 			return bounds;
 		}
-	}
-	
-	/**
-	 * Get the map. Wait if the map is not ready.
-	 * 
-	 * @param id
-	 *     Map place holder ID.
-	 * @return map
-	 */
-	private GoogleMap getGoogleMapSync(String id) {
-		long watchDog = 100;
-		GoogleMap googleMap = null;
-		while (googleMap == null && watchDog-- > 0) {
-			googleMap = mapByPlaceHolderId.get(id);
-			try { Thread.sleep(100); } catch (InterruptedException e) { }
-		}
-		return googleMap;
 	}
 	
 	/**
