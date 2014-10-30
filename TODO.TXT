@@ -3,8 +3,6 @@ Tasks
 
 Critical:
 
-- Show the start and end time of each leg in the Itinerary footer
-
 - On the Android version, delay operations on the nativeMap when it is not visible (if not the application crashes).
 
 - On the web version (Safari on Ipad), the web application takes more than 100% of the window. Moreover, the itinerary details in the footer panel is not scrollable.
@@ -38,4 +36,6 @@ Minor:
 - In the itinerary finder, add '-30min' and '+30min' buttons.
 
 - When the Android application is started, the nativemap waits several seconds before starting downloading tiles. The downloading map button should be displayed as soon as the application starts.
+
+- Improve the way the downloading map button is displayed: if several onTilesDisplayed events are sent, the first response will hide the button even if more responses are expected. Hide the button when all the responses have been received.
 
