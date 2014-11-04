@@ -8,8 +8,6 @@ Critical:
 
 Major:
 
-- Make the "More" menu
-
 - Properly align footer panel title and minimized side panel title on Android
 
 - In find itineraries, scroll the date time suggestions correctly on Android
