@@ -8,8 +8,6 @@ Critical:
 
 Major:
 
-- Properly align footer panel title and minimized side panel title on Android
-
 - In find itineraries, scroll the date time suggestions correctly on Android
 
 - Clear the found places when the place finder is closed
