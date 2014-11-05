@@ -1,11 +1,6 @@
 Tasks
 -----
 
-Critical:
-
-- On the web version (Safari on Ipad), the web application takes more than 100% of the window. Moreover, the itinerary details in the footer panel is not scrollable.
-
-
 Major:
 
 - In find itineraries, scroll the date time suggestions correctly on Android
