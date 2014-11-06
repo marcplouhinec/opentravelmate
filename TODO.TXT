@@ -5,8 +5,6 @@ Major:
 
 - In find itineraries, scroll the date time suggestions correctly on Android
 
-- Clear the found places when the place finder is closed
-
 - On the itinerary details (footer panel), show the origin and destination places that have been entered in the side panel
 
 - When an itinerary is shown, zoom out if the itinerary is not completely visible.
@@ -17,6 +15,9 @@ Major:
   3- The itinerary finder opens with the "from" input filled and the "to" one empty.
   4- Touch the "to" input text --> the virtual keyboard show up but there is no cursor.
 
+- Improve the way the downloading map button is displayed: if several onTilesDisplayed events are sent, the first response will hide the button even if more responses are expected. Hide the button when all the responses have been received.
+
+- Update the documentation (no menu widget anymore, new function nativeMap.removeMapButton())
 
 Minor:
 
@@ -24,13 +25,10 @@ Minor:
 
 - Implement TileOverlay.removeTileOverlay.
 
-- Update the documentation (no menu widget anymore, new function nativeMap.removeMapButton())
-
 - In the itinerary finder, allow the user to tell if the date time is the departure time or the arrival time.
 
 - In the itinerary finder, add '-30min' and '+30min' buttons.
 
 - When the Android application is started, the nativemap waits several seconds before starting downloading tiles. The downloading map button should be displayed as soon as the application starts.
 
-- Improve the way the downloading map button is displayed: if several onTilesDisplayed events are sent, the first response will hide the button even if more responses are expected. Hide the button when all the responses have been received.
 
