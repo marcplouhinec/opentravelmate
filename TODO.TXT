@@ -23,6 +23,5 @@ Minor:
 
 - In the itinerary finder, add '-30min' and '+30min' buttons.
 
-- When the Android application is started, the nativemap waits several seconds before starting downloading tiles. The downloading map button should be displayed as soon as the application starts.
 
 
