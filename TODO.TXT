@@ -15,8 +15,6 @@ Major:
 
 - Improve the way the downloading map button is displayed: if several onTilesDisplayed events are sent, the first response will hide the button even if more responses are expected. Hide the button when all the responses have been received.
 
-- Update the documentation (no menu widget anymore, new function nativeMap.removeMapButton())
-
 Minor:
 
 - Add params to nativeMap.buildView in order to set the default latitude/longitude/zoom.
