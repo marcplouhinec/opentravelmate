@@ -52,6 +52,7 @@ import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -315,6 +316,31 @@ public class NativeMap {
 	}
 	
 	/**
+	 * Get the map zoom level.
+     *
+     * @param id
+     *     Map place holder ID.
+     * @return zoom level
+	 */
+	@JavascriptInterface
+	public float getZoom(final String id) {
+		final GoogleMap map = getGoogleMapSync(id);
+		
+		try {
+			Float zoom = UIThreadExecutor.executeSync(new Callable<Float>() {
+				@Override public Float call() throws Exception {
+					return map.getCameraPosition().zoom;
+				}
+			}, 100);
+			return zoom;
+		} catch (Exception e) {
+			exceptionListener.onException(false, e);
+		}
+		
+		return 0;
+	}
+	
+	/**
 	 * Get the map bounds (South-West and North-East points).
      *
      * @param id
@@ -368,6 +394,37 @@ public class NativeMap {
 		}
 		
 		return "{}";
+	}
+	
+	/**
+	 * Move the map to match the given bounds.
+	 * 
+	 * @param id
+	 *     Map place holder ID.
+	 * @param jsonBounds
+	 *     JSON serialized {sw: LatLng, ne: LatLng}.
+	 */
+	@JavascriptInterface
+	public void panToBounds(final String id, final String jsonBounds) {
+		final GoogleMap map = getGoogleMapSync(id);
+		
+		UIThreadExecutor.execute(postponeWhenMapIsInvisible(id, new Runnable() {
+			@Override public void run() {
+				try {
+					JSONObject jsonObjectBounds = new JSONObject(jsonBounds);
+					JSONObject jsonSW = jsonObjectBounds.getJSONObject("sw");
+					JSONObject jsonNE = jsonObjectBounds.getJSONObject("ne");
+					LatLng southWest = LatLng.fromJsonLatLng(jsonSW);
+					LatLng northEast = LatLng.fromJsonLatLng(jsonNE);
+					LatLngBounds latLngBounds = new LatLngBounds(
+							new com.google.android.gms.maps.model.LatLng(southWest.lat, southWest.lng),
+							new com.google.android.gms.maps.model.LatLng(northEast.lat, northEast.lng));
+					map.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 10));
+				} catch (JSONException e) {
+					exceptionListener.onException(false, e);
+				}
+			}
+		}));
 	}
 	
 	/**

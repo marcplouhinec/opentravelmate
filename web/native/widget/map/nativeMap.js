@@ -286,6 +286,18 @@ define([
         },
 
         /**
+         * Get the map zoom level.
+         *
+         * @param {String} id
+         *     Map place holder ID.
+         * @return {number} zoom level
+         */
+        'getZoom': function(id) {
+            var gmap = gmapByPlaceHolderId[id];
+            return gmap.getZoom();
+        },
+
+        /**
          * Get the map bounds (South-West and North-East points).
          *
          * @param {String} id
@@ -303,6 +315,24 @@ define([
                 lat: gBounds.getNorthEast().lat(),
                 lng: gBounds.getNorthEast().lng()
             }});
+        },
+
+        /**
+         * Move the map to match the given bounds.
+         *
+         * @param id
+         *     Map place holder ID.
+         * @param jsonBounds
+         *     JSON serialized {sw: LatLng, ne: LatLng}.
+         */
+        'panToBounds': function(id, jsonBounds){
+            var gmap = gmapByPlaceHolderId[id];
+            var bounds = JSON.parse(jsonBounds);
+            var latLngBounds = new google.maps.LatLngBounds(
+                new google.maps.LatLng(bounds.sw.lat, bounds.sw.lng),
+                new google.maps.LatLng(bounds.ne.lat, bounds.ne.lng)
+            );
+            gmap.fitBounds(latLngBounds);
         },
 
         /**
