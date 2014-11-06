@@ -5,8 +5,6 @@ Major:
 
 - In find itineraries, scroll the date time suggestions correctly on Android
 
-- On the itinerary details (footer panel), show the origin and destination places that have been entered in the side panel
-
 - When an itinerary is shown, zoom out if the itinerary is not completely visible.
 
 - On Android, the input text cursor is sometime invisible. Reproductible procedure:
