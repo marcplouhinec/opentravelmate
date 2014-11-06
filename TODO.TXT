@@ -13,8 +13,6 @@ Major:
   3- The itinerary finder opens with the "from" input filled and the "to" one empty.
   4- Touch the "to" input text --> the virtual keyboard show up but there is no cursor.
 
-- Improve the way the downloading map button is displayed: if several onTilesDisplayed events are sent, the first response will hide the button even if more responses are expected. Hide the button when all the responses have been received.
-
 Minor:
 
 - Add params to nativeMap.buildView in order to set the default latitude/longitude/zoom.
