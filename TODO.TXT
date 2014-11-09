@@ -1,9 +1,6 @@
 Tasks
 -----
 
-Critical:
-- In the itinerary finder, the duration column must also contain the hours if they are not equal to 0.
-
 Major:
 
 - In find itineraries, scroll the date time suggestions correctly on Android
