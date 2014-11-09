@@ -11,6 +11,10 @@ Major:
   3- The itinerary finder opens with the "from" input filled and the "to" one empty.
   4- Touch the "to" input text --> the virtual keyboard show up but there is no cursor.
 
+- When no internet connection is available (or when the RequireJS scripts take too long time to load (timeout)), show an error message and close the application.
+
+- Add a forum where users can communicate about Open Travel Mate.
+
 Minor:
 
 - Add params to nativeMap.buildView in order to set the default latitude/longitude/zoom.
