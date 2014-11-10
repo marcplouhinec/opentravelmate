@@ -3,8 +3,6 @@ Tasks
 
 Major:
 
-- In find itineraries, scroll the date time suggestions correctly on Android
-
 - On Android, the input text cursor is sometime invisible. Reproductible procedure:
   1- Open the application.
   2- Select a place and select "start from this place".
@@ -12,8 +10,6 @@ Major:
   4- Touch the "to" input text --> the virtual keyboard show up but there is no cursor.
 
 - When no internet connection is available (or when the RequireJS scripts take too long time to load (timeout)), show an error message and close the application.
-
-- Add a forum where users can communicate about Open Travel Mate.
 
 Minor:
 
@@ -25,5 +21,5 @@ Minor:
 
 - In the itinerary finder, add '-30min' and '+30min' buttons.
 
-
+- Add a forum where users can communicate about Open Travel Mate.
 
